@@ -1,0 +1,19 @@
+.view-icon {
+    font-size: 24px;
+}
+
+.view-icon :hover {
+    cursor: pointer;
+}
+
+.listIcon {
+    margin-left: 21px;
+}
+
+.Mui-selected {
+    color: 'secondary.main !important';
+}
+
+/* .linear-gradient {
+    color: linear-gradient(to-right, #493071 , #54c1ba ) !important;
+} */

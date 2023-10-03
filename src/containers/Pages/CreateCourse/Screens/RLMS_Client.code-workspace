@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../../../.."
+		},
+		{
+			"path": "../../../../../../RLMS_Backend"
+		},
+		{
+			"path": "../../../../../../RLMS_ADMIN"
+		}
+	],
+	"settings": {
+		"files.autoSave": "off"
+	}
+}

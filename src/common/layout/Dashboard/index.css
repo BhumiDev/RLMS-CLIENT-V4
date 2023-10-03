@@ -1,0 +1,97 @@
+.navlink-wrapper a {
+    color: #ffff;
+}
+
+/* .custom-placeholder {
+} */
+
+.custom-placeholder::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #c4c4c4;
+    /* font-size: 10px; */
+
+    /* line-height: 12px; */
+    letter-spacing: 0.4px;
+}
+
+.custom-placeholder:-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #264e7d;
+}
+
+.custom-placeholder::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #264e7d;
+}
+
+.custom-placeholder:-ms-input-placeholder {
+    /* Internet Explorer 10+ */
+    color: #264e7d;
+}
+
+.active {
+    font-size: 21px !important;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    position: relative;
+    /* border-bottom: 4px solid #fff; */
+}
+
+.box-shadow2 {
+    filter: drop-shadow(0px 7px 9px rgba(28, 28, 28, 0.2));
+}
+
+.active::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+}
+
+.searchIcon {
+    cursor: pointer;
+}
+
+.box-shadow {
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.7));
+}
+
+/* .footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+} */
+
+.css-tw7mgo-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+    margin-top: 12px;
+    background-color: #eef4f6;
+}
+
+/* .MuiTouchRipple-root-css-8je8zh-MuiTouchRipple-root{
+
+    padding-right: 0;
+} */
+
+
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:link,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:visited,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:hover,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd:active {
+    display: none
+}
+
+
+.goog-te-gadget {
+    font-size: 0px !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+    border-radius: 3px;
+    border: none;
+}

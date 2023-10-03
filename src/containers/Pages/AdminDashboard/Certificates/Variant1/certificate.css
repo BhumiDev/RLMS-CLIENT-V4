@@ -1,0 +1,47 @@
+.merriweather {
+    font-family: Merriweather, serif !important;
+    color: #313076;
+    /* font-weight: bold; */
+}
+
+.achievement {
+    font-size: 50px;
+}
+
+.signature-body {
+    font-size: 13px;
+}
+
+.pinyon {
+    font-family: Pinyon Script !important;
+    color: #4c6b6a
+}
+
+.certify {
+    font-size: 14px
+}
+
+.course-name {
+    font-size: 23px;
+    color: #2e7dbd
+}
+
+.certificate-id {
+    color: #5bb0f6;
+}
+
+.pass-percentage {
+    color: #2e7dbd
+}
+
+.email {
+    font-size: 11px;
+}
+
+#name1 {
+    font-family: Allerta Stencil !important;
+    color: #145e9c;
+    /* font-weight: bold; */
+    letter-spacing: 2px;
+    font-size: 42px;
+}

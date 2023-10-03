@@ -1,0 +1,29 @@
+.quill {
+    /* margin: 1rem 4rem; */
+    
+  }
+  
+  .quill .ql-container {
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    /* background: #fefcfc; */
+  }
+  
+  /* Snow Theme */
+  .quill .ql-snow.ql-toolbar {
+    display: block;
+    /* background: #eaecec; */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  /* Bubble Theme */
+  .quill .ql-bubble .ql-editor {
+    border: 1px solid #121212;
+
+    border-radius: 0.5em;
+  }
+  
+  .quill .ql-editor {
+    min-height: 18em;
+  }
