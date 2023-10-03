@@ -15,3 +15,16 @@ export const deleteMachine = async (machineId) => {
     );
     return response.data;
 };
+
+export const getAllMachines = async () => {
+    const response = await Axios.get(
+        'http://124.123.17.12:7000/api/ctf/game/list/',
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+    console.log('response of get all machines', response?.data);
+    return response?.data;
+};

@@ -1,7 +1,7 @@
 // export default Apiconfig;
 
 // export const url = 'http://10.1.76.126:5000';
-export const url = 'http://124.123.17.68:5000';
+export const url = 'http://192.168.1.43:5000';
 
 // export const url = 'http://localhost:5000';
 
