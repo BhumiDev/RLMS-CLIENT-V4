@@ -1363,3 +1363,20 @@ export const checkAssessmentAvailabitlity = async () => {
         console.log('err', err);
     }
 };
+
+export const getLecturesBySection = async (sectionId) => {
+    try {
+        const response = await Axios.get(
+            `${ApiConfig.course.getLectureBySection}/${sectionId}`,
+            {
+                headers: {
+                    Accept: '*',
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        return response?.data?.data;
+    } catch (error) {
+        console.log('error in get lectures by section', error);
+    }
+};
