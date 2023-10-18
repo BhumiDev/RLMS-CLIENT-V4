@@ -78,6 +78,7 @@ const ViewCourse = () => {
     const [open2, setOpen2] = useState(null);
 
     const [disabled, setDisabled] = useState(false);
+    const [submitDisabled, setSubmitDisabled] = useState(true);
 
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
@@ -227,7 +228,7 @@ const ViewCourse = () => {
                             }}
                             onClick={() => navigate(-1)}
                         >
-                            My Courses
+                            Back
                         </Button>
 
                         {user?.role === 'instructor' && (
@@ -454,13 +455,17 @@ const ViewCourse = () => {
                                 <Typography>
                                     {allReviews?.length} reviews
                                 </Typography>
-                                <Button
-                                    color="secondary"
-                                    variant="contained"
-                                    onClick={() => setShowReview(!showReview)}
-                                >
-                                    Leave a Review
-                                </Button>
+                                {fromMyCourse !== 'allCourse' && (
+                                    <Button
+                                        color="secondary"
+                                        variant="contained"
+                                        onClick={() =>
+                                            setShowReview(!showReview)
+                                        }
+                                    >
+                                        Leave a Review
+                                    </Button>
+                                )}
                             </Box>
                             {showReview && (
                                 <>
@@ -476,6 +481,9 @@ const ViewCourse = () => {
                                                         newValue
                                                     ) => {
                                                         setRating(newValue);
+                                                        setSubmitDisabled(
+                                                            !submitDisabled
+                                                        );
                                                     }}
                                                 />
                                                 <Grid
@@ -499,6 +507,9 @@ const ViewCourse = () => {
                                                             )
                                                         }
                                                         height="200px !important"
+                                                        disabled={
+                                                            submitDisabled
+                                                        }
                                                     />
 
                                                     <Button
@@ -509,6 +520,9 @@ const ViewCourse = () => {
                                                                 '16px !important'
                                                         }}
                                                         onClick={postReview}
+                                                        disabled={
+                                                            submitDisabled
+                                                        }
                                                     >
                                                         Submit
                                                     </Button>
@@ -516,83 +530,77 @@ const ViewCourse = () => {
                                             </>
                                         )}
                                     </Grid>
-
-                                    <Grid mt={2}>
-                                        {allReviews?.map((review) => {
-                                            return (
-                                                <>
-                                                    <Grid
-                                                        item
-                                                        display="flex"
-                                                        gap={2}
-                                                        alignItems="center"
-                                                    >
-                                                        <Avatar
-                                                            src={
-                                                                Apiconfig.url +
-                                                                review?.user
-                                                                    ?.profilePath
-                                                            }
-                                                        />
-                                                        <Typography
-                                                            variant="h6"
-                                                            sx={{
-                                                                fontSize: '13px'
-                                                            }}
-                                                        >
-                                                            {review.user.name}
-                                                        </Typography>
-                                                        <Rating
-                                                            size="small"
-                                                            name="simple-controlled"
-                                                            value={review.stars}
-                                                        />
-                                                    </Grid>
-                                                    {user?._id ===
-                                                    review.user._id ? (
-                                                        <EdiText
-                                                            cancelOnUnfocus
-                                                            type="text"
-                                                            viewProps={{
-                                                                style: {
-                                                                    fontSize:
-                                                                        '14px',
-                                                                    marginLeft:
-                                                                        '65px'
-                                                                }
-                                                            }}
-                                                            onCancel={(v) =>
-                                                                console.log(
-                                                                    'CANCELLED: ',
-                                                                    v
-                                                                )
-                                                            }
-                                                            onSave={(v) =>
-                                                                updateReview(
-                                                                    review._id,
-                                                                    v
-                                                                )
-                                                            }
-                                                            value={
-                                                                review.review
-                                                            }
-                                                        />
-                                                    ) : (
-                                                        <Typography
-                                                            variant="body1"
-                                                            sx={{
-                                                                marginLeft: 5
-                                                            }}
-                                                        >
-                                                            {review.review}
-                                                        </Typography>
-                                                    )}
-                                                </>
-                                            );
-                                        })}
-                                    </Grid>
                                 </>
                             )}
+                            <Grid mt={2}>
+                                {allReviews?.map((review) => {
+                                    return (
+                                        <>
+                                            <Grid
+                                                item
+                                                display="flex"
+                                                gap={2}
+                                                alignItems="center"
+                                            >
+                                                <Avatar
+                                                    src={
+                                                        Apiconfig.url +
+                                                        review?.user
+                                                            ?.profilePath
+                                                    }
+                                                />
+                                                <Typography
+                                                    variant="h6"
+                                                    sx={{
+                                                        fontSize: '13px'
+                                                    }}
+                                                >
+                                                    {review.user.name}
+                                                </Typography>
+                                                <Rating
+                                                    size="small"
+                                                    name="simple-controlled"
+                                                    value={review.stars}
+                                                />
+                                            </Grid>
+                                            {user?._id === review.user._id ? (
+                                                <EdiText
+                                                    cancelOnUnfocus
+                                                    type="text"
+                                                    viewProps={{
+                                                        style: {
+                                                            fontSize: '14px',
+                                                            marginLeft: '65px'
+                                                        }
+                                                    }}
+                                                    onCancel={(v) =>
+                                                        console.log(
+                                                            'CANCELLED: ',
+                                                            v
+                                                        )
+                                                    }
+                                                    onSave={(v) =>
+                                                        updateReview(
+                                                            review._id,
+                                                            v
+                                                        )
+                                                    }
+                                                    value={review.review}
+                                                />
+                                            ) : (
+                                                <Typography
+                                                    variant="body1"
+                                                    sx={{
+                                                        marginLeft: 5
+                                                    }}
+                                                >
+                                                    {review.review}
+                                                </Typography>
+                                            )}
+                                        </>
+                                    );
+                                })}
+                            </Grid>
                         </Box>
                     )}
 

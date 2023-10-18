@@ -14,7 +14,8 @@ import {
     InputAdornment,
     IconButton,
     Tab,
-    Typography
+    Typography,
+    Stack
 } from '@mui/material';
 import { AttachFile, Send } from '@mui/icons-material';
 import { io } from 'socket.io-client';
@@ -24,13 +25,22 @@ import jwt_decode from 'jwt-decode';
 import Message from './Message';
 import Apiconfig from '../../../config/ApiConfig';
 import { useCallback } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import Board from './Board'
 // import { socket as currSocket&&currSocket } from '../studentDashboard/index';
 import { useCurrentChatContext } from './ChatContext';
 import { TabPanel, TabContext, TabList } from '@mui/lab';
 import { DiscussionForum } from './Forum';
-import { getAlreadyInConversationChat, getConversation, getGroup, getMessage, postConversations, postMessage, userSearch } from '../../../API/Chat';
-
+import {
+    getAlreadyInConversationChat,
+    getConversation,
+    getGroup,
+    getMessage,
+    postConversations,
+    postMessage,
+    userSearch
+} from '../../../API/Chat';
 
 const Messenger = () => {
     const [conversations, setConversations] = useState([]);
@@ -60,33 +70,33 @@ const Messenger = () => {
         // console.log("call getmessege and 10.1.76.54 socket")
         // currSocket&&currSocket = io('ws://localhost:8900');
         // console.log(currSocket&&currSocket);
-        currSocket && currSocket.on('getMessage', (data) => {
-            // if sendId present in current chat then you can add messege otherwise not
-            // console.log("if gropu user present",currentChat?.members.includes(data.senderId))
-            // console.log("current chat",currentChat)
-            // if(currentChat?.members.includes(data.senderId)){
-            //   setArrivalMessage({
-            //     sender: data.senderId,
-            //     text: data.text,
-            //     createdAt: Date.now(),
-            //   });
-            // }
+        currSocket &&
+            currSocket.on('getMessage', (data) => {
+                // if sendId present in current chat then you can add messege otherwise not
+                // console.log("if gropu user present",currentChat?.members.includes(data.senderId))
+                // console.log("current chat",currentChat)
+                // if(currentChat?.members.includes(data.senderId)){
+                //   setArrivalMessage({
+                //     sender: data.senderId,
+                //     text: data.text,
+                //     createdAt: Date.now(),
+                //   });
+                // }
 
-            console.log('hereeeeee');
-            setArrivalMessage({
-                sender: data.senderId,
-                text: data.text,
-                media: data.media,
-                mediaFormat: data.mediaFormat,
-                createdAt: Date.now(),
-                chatId: data.conversationId
+                console.log('hereeeeee');
+                setArrivalMessage({
+                    sender: data.senderId,
+                    text: data.text,
+                    media: data.media,
+                    mediaFormat: data.mediaFormat,
+                    createdAt: Date.now(),
+                    chatId: data.conversationId
+                });
             });
-        });
 
         return () => {
             setCurrentChat(null);
-        }
-
+        };
     }, []);
 
     useEffect(() => {
@@ -97,25 +107,25 @@ const Messenger = () => {
             currentChat,
             arrivalMessage?.sender
         );
-        console.log("messages", messages)
+        console.log('messages', messages);
         arrivalMessage &&
             currentChat?.members.includes(arrivalMessage.sender) &&
             arrivalMessage.chatId === currentChat._id &&
             setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
 
-    
     // we need to this useeffect coz use should be check to get socket id to whom i have to send message
     useEffect(() => {
         // currSocket && currSocket.emit('addUser', user._id, user.userName);
-        currSocket && currSocket.on('getUsers', (users) => {
-            console.log('Socket users found', users);
-            setOnlineUsers(
-                // users,
-                users.filter((f) => f.userId !== user._id)
-            );
-            console.log('Groups', groups);
-        });
+        currSocket &&
+            currSocket.on('getUsers', (users) => {
+                console.log('Socket users found', users);
+                setOnlineUsers(
+                    // users,
+                    users.filter((f) => f.userId !== user._id)
+                );
+                console.log('Groups', groups);
+            });
     }, [user._id, user.userName, groups]);
 
     useEffect(() => {
@@ -166,7 +176,7 @@ const Messenger = () => {
             //     console.log(err);
             // }
             const res = await getMessage(currentChat?._id);
-            console.log("res in getmessages", res);
+            console.log('res in getmessages', res);
             setMessages(res.data);
         };
         getMessages();
@@ -212,7 +222,7 @@ const Messenger = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let mediaData = '';
-        console.log("newMessage", newMessage)
+        console.log('newMessage', newMessage);
         const curr_msg = newMessage;
         console.log('media data', media);
         console.log('msg data', curr_msg);
@@ -238,7 +248,7 @@ const Messenger = () => {
             conversationId: currentChat._id
         };
 
-        console.log("messagessd", message)
+        console.log('messagessd', message);
 
         // const receiverId = currentChat.members.find(
         //   (member) => member !== user._id
@@ -252,18 +262,18 @@ const Messenger = () => {
         console.log('reciever id', receiverId, user._id);
         // const receiverId = currentChat.members
         /// when group chat so you have to send id of every person in group in reciever id
-        currSocket && currSocket.emit('sendMessage', {
-            senderId: user._id,
-            receiverId,
-            text: newMessage,
-            media: mediaData.url,
-            mediaFormat: mediaData.resource_type,
-            conversationId: currentChat._id
-        });
+        currSocket &&
+            currSocket.emit('sendMessage', {
+                senderId: user._id,
+                receiverId,
+                text: newMessage,
+                media: mediaData.url,
+                mediaFormat: mediaData.resource_type,
+                conversationId: currentChat._id
+            });
 
         try {
-
-            if (curr_msg !== "" || mediaData !== "") {
+            if (curr_msg !== '' || mediaData !== '') {
                 // const res = await axios.post(
                 //     'http://10.1.76.126:5000/messages',
                 //     message
@@ -272,6 +282,7 @@ const Messenger = () => {
                 setMessages([...messages, res?.data]);
             }
             setNewMessage('');
+            setMedia('');
         } catch (err) {
             console.log(err);
         }
@@ -281,14 +292,13 @@ const Messenger = () => {
         let timer;
         return function (...args) {
             const context = this;
-            if (timer)
-                clearTimeout(timer);
+            if (timer) clearTimeout(timer);
             timer = setTimeout(() => {
                 timer = null;
-                func.apply(context, args)
-            }, 500)
-        }
-    }
+                func.apply(context, args);
+            }, 500);
+        };
+    };
 
     const handleSearch = async (e) => {
         if (e.target.value !== '') {
@@ -296,13 +306,13 @@ const Messenger = () => {
             //     `http://10.1.76.126:5000/user/search/${e.target.value}`
             // );
             const response = await userSearch(e.target.value);
-            console.log(response.data.data)
+            console.log(response.data.data);
 
             if (response.data.data.length > 0) {
                 let searched_users = response.data.data.filter(
                     (x) => x._id !== user._id
                 );
-                console.log(searched_users)
+                console.log(searched_users);
                 setSearchedUser(searched_users);
             }
         } else {
@@ -312,17 +322,18 @@ const Messenger = () => {
 
     const debounceOnChange = useCallback(debounce(handleSearch), []);
 
-   
-
     const CreateChat = async (sender, receiver) => {
-        console.log("searched user", searchedUser)
+        console.log('searched user', searchedUser);
         console.log('given create chat data', sender, receiver);
         const senderId = sender.id;
         const receiverId = receiver.id;
         // const alreadyConv = await axios.get(
         //     `http://10.1.76.126:5000/conversations/find/${sender.id}/${receiver.id}`
         // );
-        const alreadyConv = await getAlreadyInConversationChat(senderId, receiverId);
+        const alreadyConv = await getAlreadyInConversationChat(
+            senderId,
+            receiverId
+        );
         console.log('already if chat present', alreadyConv);
 
         if (!alreadyConv.data) {
@@ -335,7 +346,12 @@ const Messenger = () => {
             //         receiverId
             //     }
             // );
-            const res = await postConversations(sender, receiver, senderId, receiverId);
+            const res = await postConversations(
+                sender,
+                receiver,
+                senderId,
+                receiverId
+            );
             console.log('conversations... response', res);
             setFake(!fake);
         }
@@ -343,7 +359,7 @@ const Messenger = () => {
 
     useEffect(() => {
         // scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
-        let container = document.getElementById("chatContainer");
+        let container = document.getElementById('chatContainer');
         container.scrollTop = container.scrollHeight;
     }, [messages]);
 
@@ -361,7 +377,7 @@ const Messenger = () => {
         >
             <Box px={{ md: 9, sm: 2, xs: 2 }} mt={4}>
                 <TabContext value={value}>
-                    <Box >
+                    <Box>
                         <TabList
                             onChange={handleTabChange}
                             textColor="primary.light"
@@ -374,11 +390,7 @@ const Messenger = () => {
                         </TabList>
                     </Box>
                     <TabPanel value="1">
-                        <Grid
-                            container
-                            display="flex"
-                            gap={4}
-                        >
+                        <Grid container display="flex" gap={4}>
                             <Grid item md={3} sm={12} xs={12}>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <TextField
@@ -398,41 +410,66 @@ const Messenger = () => {
                                             }
                                         }}
                                     />
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                                    <Stack
+                                        sx={{
+                                            flexDirection: 'column',
+                                            alignItems: 'start'
+                                        }}
+                                    >
                                         {searchedUser.map((data, i) => (
                                             <Button
                                                 key={i}
                                                 onClick={() =>
                                                     CreateChat(
-                                                        { id: user._id, name: user.userName },
-                                                        { id: data._id, name: data.name }
+                                                        {
+                                                            id: user._id,
+                                                            name: user.userName
+                                                        },
+                                                        {
+                                                            id: data._id,
+                                                            name: data.name
+                                                        }
                                                     )
                                                 }
                                             >
                                                 {data.name}
                                             </Button>
                                         ))}
-                                    </div>
+                                    </Stack>
                                     <Card
                                         sx={{
-                                            backgroundColor: 'background.default',
-                                            mt: 4
+                                            backgroundColor:
+                                                'background.default',
+                                            mt: 4,
+                                            height: '65vh',
+                                            overflow: 'auto'
                                         }}
                                     >
                                         {' '}
                                         {conversations.map((c) => (
                                             <CardContent>
-                                                <Button onClick={() => setCurrentChat(c)} color='secondary'>
+                                                <Button
+                                                    onClick={() =>
+                                                        setCurrentChat(c)
+                                                    }
+                                                    color="secondary"
+                                                >
                                                     {/* {onlineUsers.filter((obj) => {
                                     console.log('Dom userId', obj.userId);
                                     obj.userId === c.members[1];
                                     return obj.userName && obj.userName;
                                 })} */}
-                                                    {c.members[0].id === user._id && (
-                                                        <p>{c.members[1].name}</p>
+                                                    {c.members[0].id ===
+                                                        user._id && (
+                                                        <p>
+                                                            {c.members[1].name}
+                                                        </p>
                                                     )}
-                                                    {c.members[0].id !== user._id && (
-                                                        <p>{c.members[0].name}</p>
+                                                    {c.members[0].id !==
+                                                        user._id && (
+                                                        <p>
+                                                            {c.members[0].name}
+                                                        </p>
                                                     )}
                                                     {/* <Conversation
                                     // conversation={c}
@@ -443,8 +480,8 @@ const Messenger = () => {
                                         ))}
                                     </Card>
 
-                                    <div>
-                                        {/* {groups.map((c) => ( 
+                                    {/* <div> */}
+                                    {/* {groups.map((c) => ( 
                                 <Button onClick={() => setCurrentChat(c)}>
                                     {c?.groupName}
                                     group
@@ -454,7 +491,7 @@ const Messenger = () => {
                                     /> 
                                 </Button> 
                             ))} */}
-                                    </div>
+                                    {/* </div> */}
                                     {/* <div>
                             <h3>Online Users available</h3>
                             {onlineUsers.map((onlineUser) => (
@@ -471,12 +508,22 @@ const Messenger = () => {
                             </Grid>
                             {/* <Grid item className="chatBox" xl={8.2} lg={8} md={8.5} sm={12} xs={12}>
                     <Box> */}
-                            <Grid item className="chatBox" id="chatContainer" md={8.6} sm={12} xs={12} height='65vh' overflow='auto' borderRadius={2}>
-                                <Box >
+                            <Grid
+                                item
+                                className="chatBox"
+                                id="chatContainer"
+                                md={8.6}
+                                sm={12}
+                                xs={12}
+                                //  height='65vh' overflow='auto'
+                                borderRadius={2}
+                            >
+                                <Box>
                                     <Card
                                         className="chatBoxWrapper"
                                         sx={{
-                                            backgroundColor: 'background.default',
+                                            backgroundColor:
+                                                'background.default',
                                             borderRadius: 2,
                                             height: '100%',
                                             overflow: 'auto',
@@ -486,13 +533,18 @@ const Messenger = () => {
                                         <CardContent>
                                             {currentChat ? (
                                                 <>
-                                                    <div className="chatBoxTop">
+                                                    <Stack
+                                                        className="chatBoxTop"
+                                                        height="65vh"
+                                                        overflow="auto"
+                                                    >
                                                         {messages.map((m) => (
                                                             <Box
                                                                 className="map-container"
                                                                 display="flex"
                                                                 justifyContent={
-                                                                    m?.sender === user._id &&
+                                                                    m?.sender ===
+                                                                        user._id &&
                                                                     'end'
                                                                 }
                                                                 ref={scrollRef}
@@ -506,7 +558,7 @@ const Messenger = () => {
                                                                 />
                                                             </Box>
                                                         ))}
-                                                    </div>
+                                                    </Stack>
                                                     <Box
                                                         display="flex"
                                                         justifyContent="center"
@@ -518,62 +570,105 @@ const Messenger = () => {
                                                             width="100%"
                                                         >
                                                             <TextField
+                                                                multiline
                                                                 className="chatMessagesInput"
                                                                 placeholder="write something..."
-                                                                multiline
                                                                 variant="filled"
                                                                 // fullWidth
-                                                                sx={{ width: '100%' }}
-                                                                // rows={4}
+                                                                sx={{
+                                                                    width: '100%'
+                                                                }}
+                                                                rows={2}
                                                                 onChange={(e) =>
                                                                     setNewMessage(
-                                                                        e.target.value
+                                                                        e.target
+                                                                            .value
                                                                     )
                                                                 }
-                                                                value={newMessage}
+                                                                value={
+                                                                    newMessage
+                                                                }
                                                                 InputProps={{
-                                                                    endAdornment: (
-                                                                        <Box
-                                                                            className="upload-btn-wrapper"
-                                                                            style={{
-                                                                                marginTop: '-15px',
-                                                                                display: 'flex',
-                                                                                alignItems: 'center',
-                                                                                gap: 10,
-                                                                            }}
-                                                                        >
-                                                                            {/* <button>
+                                                                    endAdornment:
+                                                                        (
+                                                                            <Box
+                                                                                className="upload-btn-wrapper"
+                                                                                style={{
+                                                                                    marginTop:
+                                                                                        '-15px',
+                                                                                    display:
+                                                                                        'flex',
+                                                                                    alignItems:
+                                                                                        'center',
+                                                                                    gap: 10
+                                                                                }}
+                                                                            >
+                                                                                {/* <button>
                                                                     Upload a
                                                                     file
                                                                 </button> */}
-                                                                            <IconButton
-                                                                                className="btn"
-                                                                            // onClick={
-                                                                            //     handleClickShowPassword
-                                                                            // }
-                                                                            >
-                                                                                <AttachFile />
-                                                                                <input
-                                                                                    type="file"
-                                                                                    name="myfile"
-                                                                                    onChange={(e) => {
-                                                                                        setMedia(e.target.files[0]);
-                                                                                        console.log('Media Attached', e.target.files[0]);
+                                                                                <IconButton
+                                                                                    className="btn"
+                                                                                    // onClick={handleClickShowPassword}
+                                                                                >
+                                                                                    <AttachFile />
+                                                                                    <input
+                                                                                        type="file"
+                                                                                        name="myfile"
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) => {
+                                                                                            const file =
+                                                                                                e
+                                                                                                    .target
+                                                                                                    .files[0];
+                                                                                            console.log(
+                                                                                                'Media Attached',
+                                                                                                file
+                                                                                            );
+
+                                                                                            if (
+                                                                                                !(
+                                                                                                    file &&
+                                                                                                    (file.type ===
+                                                                                                        'image/jpeg' ||
+                                                                                                        file.type ===
+                                                                                                            'image/jpg' ||
+                                                                                                        file.type ===
+                                                                                                            'image/png')
+                                                                                                )
+                                                                                            ) {
+                                                                                                // Show error toast
+                                                                                                toast.error(
+                                                                                                    'Please! upload images only.'
+                                                                                                );
+                                                                                            } else {
+                                                                                                // Set media if the condition is satisfied
+                                                                                                setMedia('');
+                                                                                            }
+                                                                                        }}
+                                                                                        required
+                                                                                    />
+                                                                                </IconButton>
+                                                                                <Typography
+                                                                                    style={{
+                                                                                        width: 'min-content',
+                                                                                        maxHeight:
+                                                                                            '50px',
+                                                                                        textOverflow:
+                                                                                            'ellipsis',
+                                                                                        overflow:
+                                                                                            'hidden',
+                                                                                        fontSize:
+                                                                                            '12px'
                                                                                     }}
-                                                                                    required
-                                                                                />
-                                                                            </IconButton>
-                                                                            <Typography style={{
-                                                                                width: 'min-content',
-                                                                                maxHeight: '50px',
-                                                                                textOverflow: 'ellipsis',
-                                                                                overflow: 'hidden',
-                                                                                fontSize: '12px'
-                                                                            }}>
-                                                                                {media?.name}
-                                                                            </Typography>
-                                                                        </Box>
-                                                                    )
+                                                                                >
+                                                                                    {
+                                                                                        media?.name
+                                                                                    }
+                                                                                </Typography>
+                                                                            </Box>
+                                                                        )
                                                                 }}
                                                             />
 
@@ -593,7 +688,9 @@ const Messenger = () => {
                                                             </div>
                                                             <IconButton
                                                                 aria-label="toggle password visibility"
-                                                                onClick={handleSubmit}
+                                                                onClick={
+                                                                    handleSubmit
+                                                                }
                                                                 // onClick={
                                                                 //     handleClickShowPassword
                                                                 // }
@@ -604,7 +701,8 @@ const Messenger = () => {
                                                                     width: '40px',
                                                                     height: '40px',
                                                                     padding: 2,
-                                                                    borderRadius: '50%',
+                                                                    borderRadius:
+                                                                        '50%',
                                                                     marginLeft: 3
                                                                 }}
                                                             >
@@ -615,7 +713,8 @@ const Messenger = () => {
                                                 </>
                                             ) : (
                                                 <span className="noConversationText">
-                                                    Open a conversation to start a chat.
+                                                    Open a conversation to start
+                                                    a chat.
                                                 </span>
                                             )}
                                         </CardContent>
@@ -640,8 +739,7 @@ const Messenger = () => {
                 </TabContext>
             </Box>
             {/* <Topbar /> */}
-
-        </Box >
+        </Box>
     );
 };
 

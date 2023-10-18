@@ -149,29 +149,70 @@ export default function LearningPath() {
         }
     };
 
+    // const handleChange = (event) => {
+    //     const {
+    //         target: { name, value }
+    //     } = event;
+    //     console.log('value', value);
+
+    //     const obj = {
+    //         name: value[value.length - 1].courseName,
+    //         id: value[value.length - 1]._id
+    //     };
+
+    //     if (name === 'courses') {
+    //         selected.courses.findIndex((x) => x.id === obj.id) == -1
+    //             ? selected.courses.push(obj)
+    //             : console.log('course already choosen');
+
+    //         // console.log('setting selected');
+    //         setSelected({ ...selected }, selected);
+    //     } else if (name === 'category') {
+    //         setSelected({ ...selected, category: value });
+    //         getStudentByCategory(value).then((data) => setUsers(data));
+    //     } else {
+    //         console.log("selecteddd", selected)
+    //         setSelected({ ...selected, title: value });
+    //     }
+    // };
     const handleChange = (event) => {
         const {
             target: { name, value }
         } = event;
-        console.log('value', value);
-
-        const obj = {
-            name: value[value.length - 1].courseName,
-            id: value[value.length - 1]._id
-        };
 
         if (name === 'courses') {
-            selected.courses.findIndex((x) => x.id === obj.id) == -1
-                ? selected.courses.push(obj)
-                : console.log('course already choosen');
+            // Get the last character of the value
+            const lastCharacter = value[value.length - 1];
 
-            // console.log('setting selected');
-            setSelected({ ...selected }, selected);
+            // Create the object with the correct properties
+            const obj = {
+                name: lastCharacter.courseName,
+                id: lastCharacter._id
+            };
+
+            // Check if the id already exists in the selected.courses array
+            const index = selected.courses.findIndex((x) => x.id === obj.id);
+
+            if (index === -1) {
+                // If not, push the new object
+                setSelected((prevState) => ({
+                    ...prevState,
+                    courses: [...prevState.courses, obj]
+                }));
+            } else {
+                console.log('Course already chosen');
+            }
         } else if (name === 'category') {
-            setSelected({ ...selected, category: value });
+            setSelected((prevState) => ({
+                ...prevState,
+                category: value
+            }));
             getStudentByCategory(value).then((data) => setUsers(data));
         } else {
-            setSelected({ ...selected, title: value });
+            setSelected((prevState) => ({
+                ...prevState,
+                title: value
+            }));
         }
     };
 
@@ -281,8 +322,7 @@ export default function LearningPath() {
                     ))}
                 </Select>
             </FormControl>
-
-            {value && (
+            {users.length !== 0 && value && (
                 <div>
                     <Box sx={{ height: 400, width: '100%' }}>
                         <DataGrid

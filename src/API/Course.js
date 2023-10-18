@@ -744,6 +744,25 @@ export const getCurrentUser = async () => {
     return response;
 };
 
+// export const editProfilephoto = async (excelfile, userName) => {
+//     const formData = new FormData();
+//     console.log('excelfile', excelfile, userName);
+//     if (excelfile) formData.append('excelfile', excelfile);
+//     if (userName) {
+//         formData.append('userName', userName);
+//     }
+
+//     console.log('data', formData);
+//     const token = localStorage.getItem('token');
+//     let response = await Axios.post(`${ApiConfig.users.editUser}`, formData, {
+//         headers: {
+//             Accept: '*',
+//             Authorization: `Bearer ${token}`,
+//             'Content-Type': 'multipart/form-data'
+//         }
+//     });
+//     return response;
+// };
 export const editProfilephoto = async (excelfile, userName) => {
     const formData = new FormData();
     console.log('excelfile', excelfile, userName);
@@ -754,14 +773,31 @@ export const editProfilephoto = async (excelfile, userName) => {
 
     console.log('data', formData);
     const token = localStorage.getItem('token');
-    let response = await Axios.post(`${ApiConfig.users.editUser}`, formData, {
-        headers: {
-            Accept: '*',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    });
-    return response;
+
+    try {
+        let response = await Axios.post(
+            `${ApiConfig.users.editUser}`,
+            formData,
+            {
+                headers: {
+                    Accept: '*',
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+
+        // Show success toast
+        toast.success('Profile updated successfully');
+        return response;
+    } catch (error) {
+        // Show error toast
+        toast.error(
+            'Error updating profile.Please! check your file extension.'
+        );
+
+        throw error; // Rethrow the error so that it can be handled by the caller if needed
+    }
 };
 
 export const createReviews = async (data, courseId) => {

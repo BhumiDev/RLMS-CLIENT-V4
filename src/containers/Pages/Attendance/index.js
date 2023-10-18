@@ -237,7 +237,7 @@ export const Attendance = () => {
                     justifyContent="center"
                 >
                     <Typography
-                        variant="h5"
+                        variant="h3"
                         color="text.primary"
                         sx={{
                             fontWeight: 600
@@ -248,7 +248,7 @@ export const Attendance = () => {
                         justifyContent="center"
                         gap={1}
                     >
-                        <GroupsIcon /> Attendance
+                        <GroupsIcon sx={{ fontSize: '40px' }} /> Attendance
                     </Typography>
                 </Box>
 
@@ -263,16 +263,16 @@ export const Attendance = () => {
                 >
                     {user?.role === 'instructor' && (
                         <TextField
-                            label="Search User"
+                            label="Search By UserID/Name"
                             value={searchValue}
                             onChange={(e) => handleChange(e)}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment>
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                )
-                            }}
+                            // InputProps={{
+                            //     endAdornment: (
+                            //         <InputAdornment>
+                            //             <SearchIcon />
+                            //         </InputAdornment>
+                            //     )
+                            // }}
                         />
                     )}
                     <Box sx={{ minWidth: 270 }}>
@@ -423,7 +423,9 @@ export const Attendance = () => {
                                                             component="th"
                                                             scope="row"
                                                         >
-                                                            {row?.loginDate}
+                                                            {new Date(
+                                                                row?.loginDate
+                                                            ).toLocaleDateString()}
                                                         </TableCell>
                                                         <TableCell
                                                             align="center"

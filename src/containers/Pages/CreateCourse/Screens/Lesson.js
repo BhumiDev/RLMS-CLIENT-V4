@@ -463,7 +463,9 @@ const Lesson = () => {
 
     const handleFormChange = (e) => {
         shouldResetForm && dispatch(resetCurrentScreenForm(false));
+        const trimmedValue = e.target.value.replace(/^\s+/, ''); // Trim spaces before any character
         formik.handleChange(e);
+        formik.setFieldValue('title', trimmedValue);
     };
 
     console.log('value', formik.values);
@@ -955,7 +957,16 @@ const Lesson = () => {
                                     style={{
                                         marginBottom: '20px'
                                     }}
-                                    onChange={formik.handleChange}
+                                    // onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        const trimmedValue =
+                                            e.target.value.replace(/^\s+/, ''); // Trim spaces before any character
+                                        formik.handleChange(e);
+                                        formik.setFieldValue(
+                                            'resourceTitle',
+                                            trimmedValue
+                                        );
+                                    }}
                                 />
                             </Box>
                             <Box>

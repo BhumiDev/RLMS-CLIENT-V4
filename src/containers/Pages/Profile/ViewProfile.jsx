@@ -31,12 +31,27 @@ export const ViewProfile = () => {
     const [userName, setUserName] = useState("");
 
     const [open, setOpen] = useState(false);
+    const [disableSave, setDisableSave] = useState(true);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const getUser = async () => {
         const res = await getCurrentUser();
         setUser(res?.data?.data)
+    }
+
+    const handleFileChange = (e) => {
+        console.log("name", e.target.files[0])
+        setImage(e.target.files[0])
+        const isEmptyPlaceholder = e.target.files[0] === "";
+        setDisableSave(isEmptyPlaceholder || !e.target.files[0])
+    }
+
+    const handleNameChange = (e) => {
+       
+        setUserName(e.target.value)
+        const isEmptyPlaceholder = e.target.value === "";
+        setDisableSave(isEmptyPlaceholder || !e.target.value.trim())
     }
 
     const formData = new FormData();
@@ -121,20 +136,21 @@ export const ViewProfile = () => {
                                 label="Update Profile Photo"
                                 type='file'
                                 InputLabelProps={{ shrink: true }}
-                                onChange={(e) => setImage(e.target.files[0])}
+                                onChange={handleFileChange}
+                                helperText="Image should be in .jpeg, .jpg or .png"
                             />
                             <TextField
                                 value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
+                                onChange={handleNameChange}
                                 fullWidth
                                 label="Update Username"
                             />
                         </Grid>
                         <Grid display="flex" justifyContent='flex-end' mt={2} gap={2}>
-                            <Button variant="outlined" sx={{ color: 'secondary.main' }} onClick={handleClose}>
+                            <Button variant="outlined" color='error'onClick={handleClose}>
                                 Cancel
                             </Button>
-                            <Button variant="contained" sx={{ backgroundColor: 'secondary.main' }} onClick={editPhoto}>
+                            <Button variant="contained" sx={{ backgroundColor: 'secondary.main' }} disabled={disableSave} onClick={editPhoto}>
                                 Save
                             </Button>
                         </Grid>

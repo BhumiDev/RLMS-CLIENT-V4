@@ -34,6 +34,8 @@ export const ForumComponent = ({ data, fake, setFake }) => {
     const [comment, setComment] = useState([]);
     const [needsMoreButton, setNeedsMoreButton] = useState(false);
     const [showMoreComments, setShowMoreComments] = useState(false);
+    const [showReplyBox, setShowReplyBox] = useState(false);
+    const [showViewBox, setShowViewBox] = useState(false);
     const [showReply, setShowReply] = useState(false);
     const [reply, setReply] = useState([]);
 
@@ -68,6 +70,12 @@ export const ForumComponent = ({ data, fake, setFake }) => {
         await submitDiscussionLikes(id);
         setFake(!fake);
     }
+
+    const handleShowReplyBox = (discussionIndex, answerIndex) => {
+        setShowReplyBox({ discussionIndex, answerIndex });
+    };
+        // } else setShowReplyBox(e);
+    
 
     const handleShowReply = (e) => {
         if (showReply === e) {
@@ -189,6 +197,20 @@ export const ForumComponent = ({ data, fake, setFake }) => {
                                                                         {item?.reply.length}
                                                                     </Typography>
                                                                 </Typography>
+                                                                  {/* <Typography variant="body2" color='secondary.main' sx={{
+                                                                    display: 'flex', alignItems: 'center', gap: 1, textDecoration:"underline"
+                                                                }}
+                                                                    onClick={() => setShowReplyBox(!showReplyBox)}
+                                                                >
+                                                                    <ShortcutRoundedIcon /> Reply
+                                                                </Typography> */}
+                                                                <Typography variant="body2" color='secondary.main' sx={{
+                                                                   display: 'flex', alignItems: 'center', gap: 1, textDecoration:"underline"
+                                                               }}
+                                                                   onClick={() => handleShowReplyBox(index, idx)} // Pass the indices to the function
+                                                               >
+                                                                   <ShortcutRoundedIcon /> Reply
+                                                               </Typography>
                                                             </Box>
 
                                                             <Box sx={{
@@ -222,6 +244,7 @@ export const ForumComponent = ({ data, fake, setFake }) => {
                                                                         </Box>
                                                                     ))}
                                                                 </Box>
+                                                                {showReplyBox && showReplyBox.discussionIndex === index && showReplyBox.answerIndex === idx && ( 
                                                                 <Box pl={4} mt={2}>
                                                                     <TextField
                                                                         sx={{
@@ -264,7 +287,7 @@ export const ForumComponent = ({ data, fake, setFake }) => {
                                                                             )
                                                                         }}
                                                                     />
-                                                                </Box>
+                                                                </Box>) }
                                                             </Box>
                                                         </Box>
                                                     )

@@ -133,7 +133,7 @@ export const LeaderBoard = () => {
     console.log('select course', selectCourse);
 
     const handleSearchChange = (e) => {
-        setSearched(e.target.value);
+        setSearched(e.target.value.toLowerCase());
         // const filtered = studentsEnrolledInThisCourse.filter((item) => {
         //     if (!e.target.value) return true;
         //     if (item?._doc?.name
@@ -164,15 +164,16 @@ export const LeaderBoard = () => {
                     >
                         <Typography
                             color="primary"
+                            variant="h3"
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                fontSize: '24px !important',
+                                // fontSize: '24px !important',
                                 gap: 1,
                                 fontWeight: 'bold'
                             }}
                         >
-                            <EmojiEventsIcon sx={{ fontSize: '24px' }} />{' '}
+                            <EmojiEventsIcon sx={{ fontSize: '32px' }} />{' '}
                             Leaderboard
                         </Typography>
                     </Box>
@@ -217,27 +218,31 @@ export const LeaderBoard = () => {
                                         onChange={handleChange}
                                         aria-label="lab API tabs example"
                                     >
-                                        <Tab label="Learners" value="1" />
+                                        {selectCourse ? (
+                                            <Tab label="Learners" value="1" />
+                                        ) : null}
                                     </TabList>
                                 </Box>
                             </TabContext>
                         </Box>
                         <Box width={{ md: '50%' }}>
-                            <TextField
-                                fullWidth
-                                label="Search Name"
-                                name="name"
-                                size="small"
-                                value={searched}
-                                onChange={(e) => handleSearchChange(e)}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment>
-                                            <SearchIcon />
-                                        </InputAdornment>
-                                    )
-                                }}
-                            />
+                            {selectCourse ? (
+                                <TextField
+                                    fullWidth
+                                    label="Search By Name"
+                                    name="name"
+                                    size="small"
+                                    value={searched}
+                                    onChange={(e) => handleSearchChange(e)}
+                                    // InputProps={{
+                                    //     endAdornment: (
+                                    //         <InputAdornment>
+                                    //             <SearchIcon />
+                                    //         </InputAdornment>
+                                    //     )
+                                    // }}
+                                />
+                            ) : null}
                         </Box>
                     </Box>
                     <Box mt={5}>

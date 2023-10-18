@@ -29,7 +29,14 @@ export function LoginFailed(errorMessage) {
     };
 }
 
-export const login = (values, setLoading, navigate, location) => {
+export const login = (
+    values,
+    setLoading,
+    navigate,
+    location,
+    toast,
+    handleLoginError
+) => {
     console.log('calling api');
     console.log('values', values);
     return async () => {
@@ -41,6 +48,7 @@ export const login = (values, setLoading, navigate, location) => {
 
             if (!response.data.success) {
                 toast.error(response.data.error);
+                handleLoginError(); // Call the new error handler
             }
             localStorage.setItem('token', response.data.data.token);
             const user =
@@ -67,7 +75,8 @@ export const login = (values, setLoading, navigate, location) => {
         } catch (error) {
             console.log('error', error);
             setLoading(false);
-            // toast.error(error.response.data.message);
+            toast.error(error.response.data.errors[0].msg);
+            handleLoginError(); // Call the new error handler
         }
 
         // console.log(response);

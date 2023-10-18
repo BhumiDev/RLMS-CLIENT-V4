@@ -1395,7 +1395,7 @@ const DashboardLayout = (props) => {
                 sx={{ backgroundColor: 'primary.main', p: 2, color: '#fff' }}
             >
                 <Typography variant="body1">
-                    Copyright © BhumiiTech 2021-2022
+                    Copyright © BhumiiTech 2022-2023
                 </Typography>
             </Box>
         </Box>

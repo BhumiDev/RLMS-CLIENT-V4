@@ -62,7 +62,7 @@ const Dashboard = () => {
             );
             console.log('response', res);
 
-            setData(res.data.data);
+            setData(res.data.data.reverse());
         } catch (err) {
             console.log(err);
         }

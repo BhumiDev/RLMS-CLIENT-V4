@@ -37,22 +37,27 @@ const ScheduleLiveClasses = () => {
     const [agendas, setAgenda] = React.useState('');
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
+    const [openDelete, setOpenDelete] = React.useState(false);
     const [cour, setCourses] = React.useState();
+    const [scheduleLiveDIsable, setScheduleLiveDIsable] = React.useState(true);
     const token = localStorage.getItem('token');
-    const [reload, setReload] = useState(true)
+    const [reload, setReload] = useState(true);
     let user = token && jwtDecode(token);
 
     useEffect(() => {
-        console.log('reload', reload)
-    }, [reload])
+        console.log('reload', reload);
+    }, [reload]);
     const handleChange = (event) => {
-        console.log(event.target.value);
+        console.log("handleChange",event.target.value);
         setCourse(event.target.value);
         for (let i = 0; i < cour.length; i++) {
             if (cour[i].courseName == event.target.value) {
                 setcategory(cour[i].majorCategory);
             }
         }
+        
+        // const isEmptyPlaceholder = event.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleLive = async (id) => {
@@ -103,6 +108,7 @@ const ScheduleLiveClasses = () => {
             const res = await Axios.delete(
                 `${url}/live/deleteLiveClasses/${id}`
             );
+            setOpenDelete(false);
         } catch (err) {
             console.log(err);
         }
@@ -114,6 +120,8 @@ const ScheduleLiveClasses = () => {
 
     const handleChangeTitle = (event) => {
         setTitle(event.target.value);
+        const isEmptyPlaceholder = event.target.value === "";
+        setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleChangeInstructor = (event) => {
@@ -122,14 +130,20 @@ const ScheduleLiveClasses = () => {
 
     const handleChangeAgenda = (event) => {
         setAgenda(event.target.value);
+        // const isEmptyPlaceholder = event.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleChangeDate = (e) => {
         setDate(e.target.value);
+        // const isEmptyPlaceholder = e.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !e.target.value.trim())
     };
 
     const handleChangeTime = (e) => {
         setTime(e.target.value);
+        // const isEmptyPlaceholder = e.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !e.target.value.trim())
     };
 
     const handleClickOpen = async () => {
@@ -163,11 +177,19 @@ const ScheduleLiveClasses = () => {
         );
         console.log('RESPONSE', response);
         setReload(!reload);
-        setTitle("");
-        setDate("");
-        setTime("");
-        setCourse("");
-        setAgenda("");
+        setTitle('');
+        setDate('');
+        setTime('');
+        setCourse('');
+        setAgenda('');
+    };
+
+    const handleClickOpenDelete = () => {
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
     };
 
     const handleClose = () => {
@@ -311,18 +333,23 @@ const ScheduleLiveClasses = () => {
                     <div>
                         {/* dialog box */}
                         {/* <Button onClick={handleClickOpen} variant="contained" sx={{backgroundColor:"secondary.main"}}> */}
-                        <Box display='flex' gap={2}>
+                        <Box display="flex" gap={2}>
                             <Button
                                 onClick={handleClickOpen}
-                                size='small'
+                                size="small"
                                 variant="contained"
                                 color="secondary"
                                 sx={{ marginLeft: '8px' }}
+                                disabled={scheduleLiveDIsable}
                             >
                                 SCHEDULE LIVE
                             </Button>
-                            <UploadExcelDialog setReload={setReload} reload={reload} />
+                            <UploadExcelDialog
+                                setReload={setReload}
+                                reload={reload}
+                            />
                         </Box>
+                        <Typography variant="caption" sx={{ml:"5px"}} style={{color:"red"}}>*Please fill title, date and time.otherwise, the class will not be schedules.</Typography>
                         <Dialog
                             open={open}
                             onClose={handleClose}
@@ -408,13 +435,48 @@ const ScheduleLiveClasses = () => {
                                     align="center"
                                     height="30px"
                                     variant="contained"
-                                    onClick={() => {
-                                        deleteclass(item._id);
-                                    }}
+                                    onClick={handleClickOpenDelete}
                                     color="secondary"
                                 >
                                     <DeleteIcon />
                                 </Button>
+                                <Dialog
+                                    open={openDelete}
+                                    onClose={handleCloseDelete}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure you want to delete this
+                                            scheduled class ?
+                                        </DialogContentText>
+                                    </DialogContent>
+
+                                    <DialogActions>
+                                        <Button
+                                            onClick={handleCloseDelete}
+                                            autoFocus
+                                            variant="outlined"
+                                            size="small"
+                                            color="secondary"
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                deleteclass(item._id);
+                                            }}
+                                            autoFocus
+                                            variant="contained"
+                                            color="error"
+                                            size="small"
+                                        >
+                                            Delete
+                                            <DeleteIcon />
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Stack>
                             <Stack direction="row" justifyContent="center">
                                 <Button

@@ -43,7 +43,7 @@ export const createManual = async (courseId, title, dispatch) => {
 export const deleteManual = async (sectionId, dispatch) => {
     dispatch(setCurrentScreenLoading(true));
     const token = localStorage.getItem('token');
-    await Axios.delete(`${ApiConfig.section.delete}/${sectionId}`, {
+    await Axios.delete(`${ApiConfig.section.deleteSection}/${sectionId}`, {
         headers: {
             Accept: '*',
             Authorization: `Bearer ${token}`

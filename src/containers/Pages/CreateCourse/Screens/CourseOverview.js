@@ -239,7 +239,19 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
                                         name="courseCode"
                                         variant="outlined"
                                         value={formik.values.courseCode}
-                                        onChange={formik.handleChange}
+                                        // onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            const trimmedValue =
+                                                e.target.value.replace(
+                                                    /^\s+/,
+                                                    ''
+                                                ); // Trim spaces before any character
+                                            formik.handleChange(e);
+                                            formik.setFieldValue(
+                                                'courseCode',
+                                                trimmedValue
+                                            );
+                                        }}
                                         error={
                                             formik.touched.courseCode &&
                                             Boolean(formik.errors.courseCode)
@@ -258,7 +270,18 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
                                         variant="outlined"
                                         inputProps={{ maxLength: 50 }}
                                         value={formik.values.courseName}
-                                        onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            const trimmedValue =
+                                                e.target.value.replace(
+                                                    /^\s+/,
+                                                    ''
+                                                ); // Trim spaces before any character
+                                            formik.handleChange(e);
+                                            formik.setFieldValue(
+                                                'courseName',
+                                                trimmedValue
+                                            );
+                                        }}
                                         error={
                                             formik.touched.courseName &&
                                             Boolean(formik.errors.courseName)

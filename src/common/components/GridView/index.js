@@ -546,7 +546,8 @@ const GridView = ({
                                                                         Do you
                                                                         want to
                                                                         delete
-                                                                        totalSeconds
+                                                                        total
+                                                                        Seconds
                                                                         Course
                                                                         permanently?
                                                                         totalSeconds
