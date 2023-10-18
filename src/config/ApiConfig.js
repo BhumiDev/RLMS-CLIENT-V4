@@ -3,7 +3,7 @@
 // export const url = "http://10.1.76.100:5000";
 // export const url = 'https://backendpxp.bhumiitech.com';
 
-export const url = 'http://10.1.76.181:5000';
+export const url = 'http://10.1.76.169:5000';
 
 // export const OpenStackUrl = 'http://10.1.76.3:8000';
 // export const OpenStackUrl = "http://124.123.17.12:7000";
