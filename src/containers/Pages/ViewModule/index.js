@@ -2247,9 +2247,14 @@ const ViewModule = () => {
                                             <TextField
                                                 label="Leave a comment"
                                                 value={comments}
-                                                onChange={(e) =>
-                                                    setComment(e.target.value)
-                                                }
+                                                onChange={(e) => {
+                                                    const trimmedValue =
+                                                        e.target.value.replace(
+                                                            /^\s+/,
+                                                            ''
+                                                        );
+                                                    setComment(trimmedValue);
+                                                }}
                                                 fullWidth
                                                 InputProps={{
                                                     endAdornment: (
