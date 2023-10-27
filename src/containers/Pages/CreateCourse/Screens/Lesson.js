@@ -13,7 +13,8 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    IconButton
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { Field, FormikProvider, useFormik } from 'formik';
@@ -50,6 +51,7 @@ import {
 import { store } from '../../../../store';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -72,6 +74,8 @@ const Lesson = () => {
     const [resourceToBeDeletedId, setResourceToBeDeletedId] = useState([]);
 
     const [showQuestionForm, setShowQuestionForm] = useState(false);
+    const [disableSubmitAssessment, setDisableSubmitAssessment] =
+        useState(true);
     const [lectureId, setLectureId] = useState();
     const [disabled, setDisabled] = useState(true);
 
@@ -133,20 +137,41 @@ const Lesson = () => {
         setShowQuestionForm(false);
     };
 
+    // const handleChange = (e, index) => {
+    //     const { name, value } = e.target;
+    //     const data = [...formData.questions];
+
+    //     data[index].lectureId = lectureId;
+    //     setFormData({ ...formData, questions: data });
+
+    //     if (name.slice(0, 6) === 'option') {
+    //         data[index].options[name] = value;
+    //         setFormData({ ...formData, questions: data });
+    //     } else {
+    //         data[index][name] = value;
+    //         setFormData({ ...formData, questions: data });
+    //     }
+
+    //     console.log('formData', formData);
+    // };
+
     const handleChange = (e, index) => {
         const { name, value } = e.target;
         const data = [...formData.questions];
 
         data[index].lectureId = lectureId;
-        setFormData({ ...formData, questions: data });
 
-        if (name.slice(0, 6) === 'option') {
-            data[index].options[name] = value;
-            setFormData({ ...formData, questions: data });
+        // Trim leading spaces from name and value
+        const trimmedName = name.replace(/^\s+/, '');
+        const trimmedValue = value.replace(/^\s+/, '');
+
+        if (trimmedName.slice(0, 6) === 'option') {
+            data[index].options[trimmedName] = trimmedValue;
         } else {
-            data[index][name] = value;
-            setFormData({ ...formData, questions: data });
+            data[index][trimmedName] = trimmedValue;
         }
+
+        setFormData({ ...formData, questions: data });
 
         console.log('formData', formData);
     };
@@ -188,6 +213,7 @@ const Lesson = () => {
         } else {
             const res = await createQuizAssessment(lectureId, formData);
             console.log('res of quiz', res);
+            toast.success('Video assessment has been created successfully.');
             setFormData({
                 // title: '',
                 questions: [
@@ -214,6 +240,7 @@ const Lesson = () => {
         validationSchema,
         onSubmit: async (values, { resetForm }) => {
             // console.log('values', values);
+
             if (shouldResetForm) {
                 // console.log('Wiping data');
                 resetForm();
@@ -282,42 +309,49 @@ const Lesson = () => {
                     // if (!video || video === '' || video === null) {
                     //     toast.error('Video is not valid or is empty');
                     // } else {
-                    const lectureId = await createLessons(
-                        values,
-                        courseId,
-                        sectionId,
-                        video,
-                        dispatch
-                    );
-                    console.log('lecture id', lectureId);
-                    setLectureId(lectureId);
-                    // for uploading video we need to call edit lesson API here:'
-                    await editLesson(
-                        lectureId,
-                        video,
-                        values,
-                        dispatch
-                        // toggleUpdate
-                    );
+                    if (!video) {
+                        toast.error('please upload video.');
+                    } else {
+                        const lectureId = await createLessons(
+                            values,
+                            courseId,
+                            sectionId,
+                            video,
+                            dispatch
+                        );
+                        console.log('lecture id', lectureId);
+                        setLectureId(lectureId);
+                        // for uploading video we need to call edit lesson API here:'
+                        await editLesson(
+                            lectureId,
+                            video,
+                            values,
+                            dispatch
+                            // toggleUpdate
+                        );
 
-                    resourceToBeCreated.map((resource) => {
-                        if (resource.type === 'application/pdf') {
-                            console.log('About to hit createResource API');
+                        resourceToBeCreated.map((resource) => {
+                            if (resource.type === 'application/pdf') {
+                                console.log('About to hit createResource API');
 
-                            createResource(
-                                lectureId,
-                                courseId,
-                                resource,
-                                values.resourceTitle
-                            );
-                        }
-                    });
+                                createResource(
+                                    lectureId,
+                                    courseId,
+                                    resource,
+                                    values.resourceTitle
+                                );
+                            }
+                        });
+                        console.log(
+                            'resource to be created',
+                            resourceToBeCreated
+                        );
+                    }
                     // toast.success('lecture created Successfully');
                     // }
 
                     // allResourcesToCheck.map(())
                     // console.log('Resources to be created', resourceToBeCreated);
-                    console.log('resource to be created', resourceToBeCreated);
 
                     // resourceToBeCreated
                     // await editLesson(
@@ -486,6 +520,17 @@ const Lesson = () => {
     const [showLinkInput, setShowLinkInput] = useState(false);
 
     console.log('lectureId', lectureId);
+    const deleteQuestion = (index) => {
+        if (formData.questions.length > 1) {
+            const updatedQuestions = [...formData.questions];
+            updatedQuestions.splice(index, 1);
+
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                questions: updatedQuestions
+            }));
+        }
+    };
 
     return (
         <>
@@ -689,6 +734,39 @@ const Lesson = () => {
                                                                         </MenuItem>
                                                                     </Select>
                                                                 </FormControl> */}
+                                                                    <Stack
+                                                                        sx={{
+                                                                            justifyContent:
+                                                                                'end',
+                                                                            alignItems:
+                                                                                'end'
+                                                                        }}
+                                                                    >
+                                                                        <IconButton
+                                                                            aria-label="delete"
+                                                                            onClick={() => {
+                                                                                console.log(
+                                                                                    'deleteQuestion',
+                                                                                    index
+                                                                                );
+                                                                                deleteQuestion(
+                                                                                    index
+                                                                                );
+                                                                            }}
+                                                                            disabled={
+                                                                                formData
+                                                                                    ?.questions
+                                                                                    ?.length <=
+                                                                                1
+                                                                            }
+                                                                        >
+                                                                            <DeleteIcon
+                                                                                style={{
+                                                                                    color: 'red'
+                                                                                }}
+                                                                            />
+                                                                        </IconButton>
+                                                                    </Stack>
                                                                     <TextField
                                                                         fullWidth
                                                                         multiline
@@ -813,6 +891,13 @@ const Lesson = () => {
                                                                                 e,
                                                                                 index
                                                                             );
+                                                                            setDisableSubmitAssessment(
+                                                                                currentItem?.answer.replace(
+                                                                                    /\s/g,
+                                                                                    ''
+                                                                                ) ===
+                                                                                    ''
+                                                                            );
                                                                         }}
                                                                     />
                                                                 </Box>
@@ -844,6 +929,7 @@ const Lesson = () => {
                                         color="secondary"
                                         variant="contained"
                                         onClick={handleSubmitForm}
+                                        disabled={disableSubmitAssessment}
                                     >
                                         Submit
                                     </Button>
@@ -922,6 +1008,14 @@ const Lesson = () => {
                                                 </InputAdornment>
                                             )
                                         }}
+                                        // error={
+                                        //     formik.touched.video &&
+                                        //     Boolean(formik.errors.video)
+                                        // }
+                                        // helperText={
+                                        //     formik.touched.video &&
+                                        //     formik.errors.video
+                                        // }
                                     />
                                 </Box>
                             )}
@@ -942,6 +1036,14 @@ const Lesson = () => {
                                             display: 'flex',
                                             flexWrap: 'wrap'
                                         }}
+                                        // error={
+                                        //     formik.touched.video &&
+                                        //     Boolean(formik.errors.video)
+                                        // }
+                                        // helperText={
+                                        //     formik.touched.video &&
+                                        //     formik.errors.video
+                                        // }
                                     />
                                 </Box>
                             )}

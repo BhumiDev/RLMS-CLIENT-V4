@@ -418,15 +418,15 @@ const MyCourses = (setCourseId) => {
                                             </Button> */}
 
                                         <Box mr={2}>
-                                            <FormControl>
-                                                <IconButton
+                                            {/* <FormControl> */}
+                                            {/* <IconButton
                                                     onClick={handleOpenUserMenu}
                                                     sx={{ p: 0 }}
                                                 >
                                                     <FilterList color="secondary" />{' '}
-                                                </IconButton>
+                                                </IconButton> */}
 
-                                                <Menu
+                                            {/* <Menu
                                                     sx={{ mt: '45px' }}
                                                     id="menu-appbar"
                                                     anchorEl={anchorElUser}
@@ -443,56 +443,55 @@ const MyCourses = (setCourseId) => {
                                                     onClose={
                                                         handleCloseUserMenu
                                                     }
-                                                >
-                                                    <MenuItem
-                                                        sx={{
-                                                            minWidth: 230
-                                                        }}
+                                                > */}
+                                            <MenuItem
+                                                sx={{
+                                                    minWidth: 230,
+                                                    top: '-32px'
+                                                }}
+                                            >
+                                                <FormControl fullWidth>
+                                                    <InputLabel id="category-select-label">
+                                                        Major Category
+                                                    </InputLabel>
+                                                    <Select
+                                                        labelId="category-select-label"
+                                                        id="demo-simple-select"
+                                                        name="majorCategory"
+                                                        value={selectedMajor}
+                                                        label="Major Category"
+                                                        onChange={
+                                                            handleCategories
+                                                        }
                                                     >
-                                                        <FormControl fullWidth>
-                                                            <InputLabel id="category-select-label">
-                                                                Major Category
-                                                            </InputLabel>
-                                                            <Select
-                                                                labelId="category-select-label"
-                                                                id="demo-simple-select"
-                                                                name="majorCategory"
-                                                                value={
-                                                                    selectedMajor
-                                                                }
-                                                                label="Major Category"
-                                                                onChange={
-                                                                    handleCategories
-                                                                }
-                                                            >
-                                                                {allCategories &&
-                                                                    allCategories?.map(
-                                                                        (
-                                                                            obj,
+                                                        {allCategories &&
+                                                            allCategories?.map(
+                                                                (
+                                                                    obj,
+                                                                    index
+                                                                ) => (
+                                                                    <MenuItem
+                                                                        value={
+                                                                            obj.categoryName
+                                                                        }
+                                                                        key={
                                                                             index
-                                                                        ) => (
-                                                                            <MenuItem
-                                                                                value={
-                                                                                    obj.categoryName
-                                                                                }
-                                                                                key={
-                                                                                    index
-                                                                                }
-                                                                                subcategories={
-                                                                                    obj.subCategories
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    obj.categoryName
-                                                                                }
-                                                                            </MenuItem>
-                                                                        )
-                                                                    )}
-                                                            </Select>
-                                                        </FormControl>
-                                                    </MenuItem>
-                                                </Menu>
-                                                {/* <Grid item>
+                                                                        }
+                                                                        subcategories={
+                                                                            obj.subCategories
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            obj.categoryName
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                    </Select>
+                                                </FormControl>
+                                            </MenuItem>
+                                            {/* </Menu> */}
+                                            {/* <Grid item>
                                     <FormControl fullWidth>
                                         <InputLabel id="subCategory">
                                             Sub Category
@@ -517,8 +516,8 @@ const MyCourses = (setCourseId) => {
                                         </Select>
                                     </FormControl>
                                 </Grid> */}
-                                                {/* </Select> */}
-                                            </FormControl>
+                                            {/* </Select> */}
+                                            {/* </FormControl> */}
                                         </Box>
                                         <ViewModule
                                             className="view-icon"

@@ -507,7 +507,7 @@ const ViewModule = () => {
 
         console.log('likes', response.data.data);
 
-        response.data.data.likes.map((x) => {
+        response?.data?.data?.likes?.map((x) => {
             if (x.userId === user?._id) {
                 console.log('userid in function', x.user);
                 setIsUser(true);
@@ -640,7 +640,7 @@ const ViewModule = () => {
         const timer = setInterval(() => {
             const temp = [...time];
 
-            time.map((item, index) => {
+            time?.map((item, index) => {
                 if (temp[index].time > 0) {
                     temp[index].time -= 1;
                 } else {
@@ -822,12 +822,12 @@ const ViewModule = () => {
                                 <Card style={{ marginBottom: '30px' }}>
                                     <SecondaryHeader
                                         title="Machines"
-                                        endText={machines.length}
+                                        endText={machines?.length}
                                         // endText={`${lectureNumber + 1}/${
                                         //     sections?.length
                                         // }`}
                                     />
-                                    {machines.length !== 0 ? (
+                                    {machines?.length !== 0 ? (
                                         machines?.map((machine) => {
                                             return (
                                                 <>
@@ -1273,7 +1273,7 @@ const ViewModule = () => {
                                             }
                                         />
                                     ))} */}
-                                        {consoleUrl.map((machine, index) => (
+                                        {consoleUrl?.map((machine, index) => (
                                             <Tab
                                                 value={`${index + 2}`}
                                                 label={
@@ -1546,10 +1546,10 @@ const ViewModule = () => {
                                     </>
                                 )}
                             </TabPanel>
-                            {machines.map((machine, index) => {
+                            {machines?.map((machine, index) => {
                                 return (
                                     <>
-                                        {consoleUrl.map(
+                                        {consoleUrl?.map(
                                             (console1, index) => (
                                                 <>
                                                     {console.log(
@@ -2041,7 +2041,7 @@ const ViewModule = () => {
                                                                             {showReply ===
                                                                                 comment && (
                                                                                 <>
-                                                                                    {comment.reply.map(
+                                                                                    {comment?.reply?.map(
                                                                                         (
                                                                                             item
                                                                                         ) => {

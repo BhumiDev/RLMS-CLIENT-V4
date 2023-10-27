@@ -79,6 +79,7 @@ const ViewCourse = () => {
 
     const [disabled, setDisabled] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(true);
+    const [submitReviewDisabled, setSubmitReviewDisabled] = useState(true);
 
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
@@ -107,11 +108,6 @@ const ViewCourse = () => {
         }
     }, [courseId, token]);
 
-    useEffect(() => {
-        getCourse();
-        getAllReviews();
-    }, [getCourse, open2, fake]);
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -119,6 +115,20 @@ const ViewCourse = () => {
     const handleClose = () => {
         setOpen(false);
     };
+    const handleReviewFieldChange = (e) => {
+        const updatedReview = e.target.value.replace(/^\s+/, '');
+
+        setReview(updatedReview);
+        setSubmitReviewDisabled(updatedReview === '');
+    };
+
+    // const handleReviewFieldChangeKeyDown = (e) => {
+    //     e.preventDefault(); // Prevent line break in the textarea
+    //     if (e.ctrlKey && e.key === 'Enter') {
+    //         handleReviewFieldChange(e)
+    //     }}
+
+    /////////////////////////////////////////////////////
 
     // const handleDelete = () => {
     //     console.log('courseId od delete button', courseId);
@@ -172,6 +182,11 @@ const ViewCourse = () => {
         setReview('');
         setRating(0);
     };
+    const handleGiveRating = (event, newValue) => {
+        const updatedReview = newValue;
+        setRating(updatedReview);
+        setSubmitDisabled(updatedReview === null);
+    };
 
     const getAllReviews = async () => {
         const res = await getReviews(courseId);
@@ -179,11 +194,28 @@ const ViewCourse = () => {
         setAllReviews(res.data.data);
     };
 
-    const updateReview = async (reviewId, data) => {
-        console.log('data and reviewId', data, reviewId);
-        const res = await editReview(data, reviewId);
+    const updateReview = async (reviewId, data, starsData) => {
+        console.log('data and reviewId', data, reviewId, starsData);
+        const res = await editReview(data, reviewId, starsData);
         console.log('res of edit api', res);
+        toast.success(res.data.message);
+        setFake(!fake);
     };
+    useEffect(() => {
+        updateReview();
+    }, [fake]);
+    const [showAllReviews, setShowAllReviews] = useState(false);
+
+    const visibleReviews = showAllReviews ? allReviews : allReviews.slice(0, 3);
+
+    const handleToggleReviews = () => {
+        setShowAllReviews(!showAllReviews);
+    };
+
+    useEffect(() => {
+        getCourse();
+        getAllReviews();
+    }, [getCourse, open2, fake, showAllReviews]);
 
     return (
         <>
@@ -479,12 +511,12 @@ const ViewCourse = () => {
                                                     onChange={(
                                                         event,
                                                         newValue
-                                                    ) => {
-                                                        setRating(newValue);
-                                                        setSubmitDisabled(
-                                                            !submitDisabled
-                                                        );
-                                                    }}
+                                                    ) =>
+                                                        handleGiveRating(
+                                                            event,
+                                                            newValue
+                                                        )
+                                                    }
                                                 />
                                                 <Grid
                                                     item
@@ -501,10 +533,8 @@ const ViewCourse = () => {
                                                         // size="small"
                                                         label="Enter Review"
                                                         value={review}
-                                                        onChange={(e) =>
-                                                            setReview(
-                                                                e.target.value
-                                                            )
+                                                        onChange={
+                                                            handleReviewFieldChange
                                                         }
                                                         height="200px !important"
                                                         disabled={
@@ -521,7 +551,7 @@ const ViewCourse = () => {
                                                         }}
                                                         onClick={postReview}
                                                         disabled={
-                                                            submitDisabled
+                                                            submitReviewDisabled
                                                         }
                                                     >
                                                         Submit
@@ -533,73 +563,126 @@ const ViewCourse = () => {
                                 </>
                             )}
                             <Grid mt={2}>
-                                {allReviews?.map((review) => {
-                                    return (
-                                        <>
-                                            <Grid
-                                                item
-                                                display="flex"
-                                                gap={2}
-                                                alignItems="center"
+                                {visibleReviews.map((review) => (
+                                    <React.Fragment key={review._id}>
+                                        <Grid
+                                            item
+                                            display="flex"
+                                            gap={2}
+                                            alignItems="center"
+                                        >
+                                            <Avatar
+                                                src={
+                                                    Apiconfig.url +
+                                                    review?.user?.profilePath
+                                                }
+                                            />
+                                            <Typography
+                                                variant="h6"
+                                                sx={{ fontSize: '13px' }}
                                             >
-                                                <Avatar
-                                                    src={
-                                                        Apiconfig.url +
-                                                        review?.user
-                                                            ?.profilePath
-                                                    }
-                                                />
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
-                                                        fontSize: '13px'
-                                                    }}
-                                                >
-                                                    {review.user.name}
-                                                </Typography>
+                                                {review.user.name}
+                                            </Typography>
+                                            {user?._id === review.user._id ? (
                                                 <Rating
                                                     size="small"
                                                     name="simple-controlled"
                                                     value={review.stars}
-                                                />
-                                            </Grid>
-                                            {user?._id === review.user._id ? (
-                                                <EdiText
-                                                    cancelOnUnfocus
-                                                    type="text"
-                                                    viewProps={{
-                                                        style: {
-                                                            fontSize: '14px',
-                                                            marginLeft: '65px'
-                                                        }
-                                                    }}
-                                                    onCancel={(v) =>
-                                                        console.log(
-                                                            'CANCELLED: ',
-                                                            v
-                                                        )
-                                                    }
-                                                    onSave={(v) =>
+                                                    readOnly={false}
+                                                    onChange={(
+                                                        event,
+                                                        starsData
+                                                    ) => {
                                                         updateReview(
                                                             review._id,
-                                                            v
-                                                        )
-                                                    }
-                                                    value={review.review}
+                                                            review.review,
+                                                            starsData
+                                                        );
+                                                    }}
                                                 />
                                             ) : (
-                                                <Typography
-                                                    variant="body1"
-                                                    sx={{
-                                                        marginLeft: 5
-                                                    }}
-                                                >
-                                                    {review.review}
-                                                </Typography>
+                                                <Rating
+                                                    size="small"
+                                                    name="simple-controlled"
+                                                    value={review.stars}
+                                                    readOnly={true}
+                                                />
                                             )}
-                                        </>
-                                    );
-                                })}
+                                        </Grid>
+                                        {user?._id === review.user._id ? (
+                                            <EdiText
+                                                cancelOnUnfocus
+                                                type="text"
+                                                viewProps={{
+                                                    style: {
+                                                        fontSize: '14px',
+                                                        marginLeft: '65px'
+                                                    }
+                                                }}
+                                                onCancel={(v) =>
+                                                    console.log(
+                                                        'CANCELLED: ',
+                                                        v
+                                                    )
+                                                }
+                                                onSave={(v) => {
+                                                    console.log('vvv', v);
+                                                    updateReview(
+                                                        review._id,
+                                                        v,
+                                                        review.stars
+                                                    );
+                                                }}
+                                                // Call updateReview when "Control + Enter" is pressed
+                                                onKeyDown={(e) => {
+                                                    if (
+                                                        e.ctrlKey &&
+                                                        e.key === 'Enter'
+                                                    ) {
+                                                        //   if (user?._id === review.user._id) {
+                                                        updateReview(
+                                                            review._id,
+                                                            review.review,
+                                                            review.stars
+                                                        );
+                                                        //   }
+                                                    }
+                                                }}
+                                                value={review.review}
+                                            />
+                                        ) : (
+                                            <Typography
+                                                variant="body1"
+                                                sx={{ marginLeft: 5 }}
+                                            >
+                                                {review.review}
+                                            </Typography>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end'
+                                    }}
+                                >
+                                    <Typography
+                                        variant="body2"
+                                        color="primary.light"
+                                        sx={{
+                                            fontSize: '13px !important',
+                                            fontWeight: 600,
+                                            textDecoration: 'underline',
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={handleToggleReviews}
+                                    >
+                                        {showAllReviews
+                                            ? 'See less reviews'
+                                            : 'See more reviews'}
+                                    </Typography>
+                                </Box>
                             </Grid>
                         </Box>
                     )}

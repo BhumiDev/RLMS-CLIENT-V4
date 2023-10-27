@@ -21,6 +21,8 @@ import { useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import Apiconfig from "../../../config/ApiConfig";
 import EditIcon from '@mui/icons-material/Edit';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ViewProfile = () => {
 
@@ -41,10 +43,29 @@ export const ViewProfile = () => {
     }
 
     const handleFileChange = (e) => {
-        console.log("name", e.target.files[0])
-        setImage(e.target.files[0])
-        const isEmptyPlaceholder = e.target.files[0] === "";
-        setDisableSave(isEmptyPlaceholder || !e.target.files[0])
+        if (
+            !(
+                e.target.files[0] &&
+                (e.target.files[0].type ===
+                    'image/jpeg' ||
+                    e.target.files[0].type ===
+                        'image/jpg' ||
+                    e.target.files[0].type ===
+                        'image/png')
+            )
+        ) {
+            // Show error toast
+            toast.error(
+                'Please! upload images only.'
+            );
+        } else {
+            // Set media if the condition is satisfied
+            console.log("name", e.target.files[0])
+            setImage(e.target.files[0])
+            const isEmptyPlaceholder = e.target.files[0] === "";
+            setDisableSave(isEmptyPlaceholder || !e.target.files[0])
+            setImage('');
+        }
     }
 
     const handleNameChange = (e) => {

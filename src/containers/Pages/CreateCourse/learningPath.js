@@ -44,7 +44,7 @@ const MenuProps = {
 };
 
 const columns = [
-    { field: 'id', headerName: 'ID', width: 250 },
+    { field: 'id', headerName: 'S No.', width: 250 },
     {
         field: 'name',
         headerName: 'Name',
@@ -80,7 +80,9 @@ export default function LearningPath() {
     const [category, setCategory] = useState([]);
     const [users, setUsers] = useState([{}]);
     const [rowData, setRowData] = useState([{}]);
+    // const [filteredCourses, setFilteredCourses] = useState([]);
     const [value, setValue] = useState(false);
+    // const [selectAll, setSelectAll] = useState(false);
     const [instructorDetails, setInstructorDetails] = useState('');
 
     const [selectedIds, setSelectedIds] = useState([]);
@@ -96,12 +98,13 @@ export default function LearningPath() {
         studentCategory().then((data) => setCategory(data));
         setDetails();
     }, [users]);
+    console.log('courses', courses);
 
     const setDetails = () => {
         if (users[0]?.name) {
-            const userDetails = users.map((value) => {
+            const userDetails = users.map((value, index) => {
                 let details = {
-                    id: value._id,
+                    id: index + 1,
                     name: value.name,
                     majorCategory: value.majorCategory,
                     subCategory: value.subCategory
@@ -112,12 +115,18 @@ export default function LearningPath() {
 
             setValue(true);
             setRowData(userDetails);
+            console.log('userDetails', userDetails);
         }
 
         if (courses[0].author) {
             setInstructorDetails(courses[0].author);
         }
     };
+
+    // Filter courses based on the category condition
+    const filteredCourses = courses.filter(
+        (course) => course.majorCategory === selected.category
+    );
 
     const createLearningPath = async () => {
         console.log(instructorDetails); //ins
@@ -311,7 +320,7 @@ export default function LearningPath() {
                     )}
                     MenuProps={MenuProps}
                 >
-                    {courses?.map((course) => (
+                    {filteredCourses?.map((course) => (
                         <MenuItem
                             key={course._id}
                             id={course._id}
@@ -345,7 +354,55 @@ export default function LearningPath() {
                             disableRowSelectionOnClick
                         />
                     </Box>
-                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                    <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        my={2}
+                        flexDirection="row"
+                        gap={2}
+                    >
+                        {/* <Button
+                            variant="outlined"
+                            color="secondary"
+                            // onClick={(e) =>{ 
+                            //     // setSelectAll(!selectAll)
+                            // }}
+                            onClick={() => {
+                                // Check if users.length is not 0 and the value is true
+                                if (users.length !== 0 && value) {
+                                    // Create an array containing all row IDs
+                                    const allRowIds = rowData.map((row) => row.id);
+                        
+                                    // Set the selectedIds state with all row IDs
+                                    setSelectedIds(allRowIds);
+                                }
+                            }}
+                            >
+                            Select all users
+                        </Button> */}
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => {
+                                if (users.length !== 0) {
+                                    // Check if any of the selectedIds are in allRowIds, and if so, remove them
+                                    const allRowIds = rowData.map(
+                                        (row) => row.id
+                                    );
+                                    const newSelectedIds = selectedIds.some(
+                                        (id) => allRowIds.includes(id)
+                                    )
+                                        ? [] // If some selectedIds are in allRowIds, clear the selection
+                                        : allRowIds; // Otherwise, select all users
+
+                                    setSelectedIds(newSelectedIds);
+                                }
+                            }}
+                        >
+                            {selectedIds.length === 0
+                                ? 'Select all users'
+                                : 'Deselect all users'}
+                        </Button>
                         <Button
                             variant="contained"
                             color="secondary"

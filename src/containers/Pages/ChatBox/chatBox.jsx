@@ -53,7 +53,7 @@ const Messenger = () => {
     const [media, setMedia] = useState('');
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
-    // const [usersList,setUsersList]=useState([]);
+    // const [usersList,setUsersList]=useState([])
     // const socket = useRef();
     // const user = jwt_decode(token);
     // const { user } = useContext(AuthContext);
@@ -65,6 +65,11 @@ const Messenger = () => {
     const [searchedUser, setSearchedUser] = useState([]);
     const [fake, setFake] = useState(false);
     const [value, setValue] = useState('1');
+
+    const handleMessageBox = (e) => {
+        const trimmedValue = e.target.value.replace(/^\s+/, '');
+        setNewMessage(trimmedValue);
+    };
 
     useEffect(() => {
         // console.log("call getmessege and 10.1.76.54 socket")
@@ -243,8 +248,8 @@ const Messenger = () => {
             sender: user._id,
             // text: newMessage,
             text: curr_msg,
-            media: mediaData.url,
-            mediaFormat: mediaData.resource_type,
+            media: mediaData?.url,
+            mediaFormat: mediaData?.resource_type,
             conversationId: currentChat._id
         };
 
@@ -287,6 +292,14 @@ const Messenger = () => {
             console.log(err);
         }
     };
+
+    // Add an event listener to the document
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            // Call the handleSubmit function when Control + Enter is pressed
+            handleSubmit(e);
+        }
+    });
 
     const debounce = (func) => {
         let timer;
@@ -572,17 +585,23 @@ const Messenger = () => {
                                                             <TextField
                                                                 multiline
                                                                 className="chatMessagesInput"
-                                                                placeholder="write something..."
+                                                                placeholder="Write something..."
                                                                 variant="filled"
-                                                                // fullWidth
                                                                 sx={{
-                                                                    width: '100%'
+                                                                    width: '100%',
+                                                                    '& textarea':
+                                                                        {
+                                                                            // Limit the height to a maximum of 3 rows
+                                                                            maxHeight:
+                                                                                '5em', // You can adjust the height as needed
+                                                                            // Allow scrolling within the textarea if content exceeds 3 rows
+                                                                            overflowY:
+                                                                                'auto'
+                                                                        }
                                                                 }}
-                                                                rows={2}
                                                                 onChange={(e) =>
-                                                                    setNewMessage(
-                                                                        e.target
-                                                                            .value
+                                                                    handleMessageBox(
+                                                                        e
                                                                     )
                                                                 }
                                                                 value={
@@ -603,14 +622,7 @@ const Messenger = () => {
                                                                                     gap: 10
                                                                                 }}
                                                                             >
-                                                                                {/* <button>
-                                                                    Upload a
-                                                                    file
-                                                                </button> */}
-                                                                                <IconButton
-                                                                                    className="btn"
-                                                                                    // onClick={handleClickShowPassword}
-                                                                                >
+                                                                                <IconButton className="btn">
                                                                                     <AttachFile />
                                                                                     <input
                                                                                         type="file"
@@ -627,24 +639,36 @@ const Messenger = () => {
                                                                                                 file
                                                                                             );
 
+                                                                                            const allowedMimeTypes =
+                                                                                                [
+                                                                                                    'image/jpeg',
+                                                                                                    'image/jpg',
+                                                                                                    'image/png',
+                                                                                                    'image/gif',
+                                                                                                    'image/bmp',
+                                                                                                    'image/webp',
+                                                                                                    'application/pdf',
+                                                                                                    'application/msword',
+                                                                                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                                                                                    'text/plain',
+                                                                                                    'application/zip'
+                                                                                                ];
+
                                                                                             if (
                                                                                                 !(
                                                                                                     file &&
-                                                                                                    (file.type ===
-                                                                                                        'image/jpeg' ||
-                                                                                                        file.type ===
-                                                                                                            'image/jpg' ||
-                                                                                                        file.type ===
-                                                                                                            'image/png')
+                                                                                                    allowedMimeTypes.includes(
+                                                                                                        file.type
+                                                                                                    )
                                                                                                 )
                                                                                             ) {
                                                                                                 // Show error toast
                                                                                                 toast.error(
-                                                                                                    'Please! upload images only.'
+                                                                                                    'Videos cannot be uploaded. Please upload valid files or images.'
                                                                                                 );
                                                                                             } else {
                                                                                                 // Set media if the condition is satisfied
-                                                                                                setMedia('');
+                                                                                                setMedia(file);
                                                                                             }
                                                                                         }}
                                                                                         required

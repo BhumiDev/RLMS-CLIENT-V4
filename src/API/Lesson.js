@@ -321,7 +321,7 @@ export const deleteSection = async (sectionId, toast) => {
             }
         }
     );
-    response.data.success && toast.success('Test Toast Success');
+    response.data.success && toast.success('Manual deleted successfully!');
 
     console.log('response of delete section api', response.data);
     return response;

@@ -140,15 +140,29 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
         console.log('img', img);
         let data = img.type;
         console.log('img type', data);
-        let result = data.substring(0, 5);
-        console.log('result', result);
-        if (result === 'image') {
+        // let result = data.substring(0, 5);
+        // console.log('result', result);
+        if (
+            !(
+                data &&
+                (data === 'image/jpeg' ||
+                    data === 'image/jpg' ||
+                    data === 'image/png')
+            )
+        ) {
+            // Show error toast
+            toast.error('Please! upload images only.');
+        } else {
             setThumbnail(img);
             return;
-        } else {
-            toast.error('Please upload image');
-            return;
         }
+        // if (result === 'image') {
+        //     setThumbnail(img);
+        //     return;
+        // } else {
+        //     toast.error('Please upload image');
+        //     return;
+        // }
     };
     const removeThumb = () => {
         setThumbnail('');
