@@ -52,6 +52,7 @@ const Messenger = () => {
     const [newMessage, setNewMessage] = useState('');
     const [media, setMedia] = useState('');
     const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [disableSendIcon, setDisableSendIcon] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
     // const [usersList,setUsersList]=useState([])
     // const socket = useRef();
@@ -225,6 +226,7 @@ const Messenger = () => {
     };
 
     const handleSubmit = async (e) => {
+        setDisableSendIcon(true);
         e.preventDefault();
         let mediaData = '';
         console.log('newMessage', newMessage);
@@ -288,6 +290,7 @@ const Messenger = () => {
             }
             setNewMessage('');
             setMedia('');
+            setDisableSendIcon(false);
         } catch (err) {
             console.log(err);
         }
@@ -711,6 +714,7 @@ const Messenger = () => {
                                                 /> */}
                                                             </div>
                                                             <IconButton
+                                                            disabled={disableSendIcon}
                                                                 aria-label="toggle password visibility"
                                                                 onClick={
                                                                     handleSubmit
