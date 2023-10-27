@@ -254,7 +254,7 @@ export default function LearningPath() {
                         fullWidth
                         name="title"
                         label="Title"
-                        value={selected.title}
+                        value={selected.title.replace(/^\s+/, '')}
                         onChange={handleChange}
                     />
                 </Box>
