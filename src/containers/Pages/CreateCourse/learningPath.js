@@ -128,9 +128,45 @@ export default function LearningPath() {
         (course) => course.majorCategory === selected.category
     );
 
+    // const createLearningPath = async () => {
+    //     console.log(instructorDetails); //ins
+    //     console.log(selectedIds); // student
+
+    //     const selectedCourseIds = [];
+    //     selected.courses.map((course) => selectedCourseIds.push(course.id));
+    //     let obj = {
+    //         instructor: instructorDetails,
+    //         students: selectedIds,
+    //         courses: selectedCourseIds,
+    //         title: selected.title
+    //     };
+
+    //     console.log('obj', obj);
+
+    //     try {
+    //         await creatingLearningPath(obj);
+    //         toast.success('Learning Path Created Successfully');
+    //         setUsers([{}]);
+    //         setSelected({
+    //             courses: [],
+    //             category: '',
+    //             title: ''
+    //         });
+    //     } catch (err) {
+    //         console.log('err', err);
+    //         toast.error("Learning Path Can't be Created");
+    //     }
+    // };
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
     const createLearningPath = async () => {
-        console.log(instructorDetails); //ins
-        console.log(selectedIds); // student
+        console.log(instructorDetails);
+        console.log(selectedIds);
+
+        if (selected.title.trim() === '') {
+            toast.error('Title is required');
+            return; // Do not proceed if the title is empty
+        }
 
         const selectedCourseIds = [];
         selected.courses.map((course) => selectedCourseIds.push(course.id));
@@ -217,6 +253,11 @@ export default function LearningPath() {
                 category: value
             }));
             getStudentByCategory(value).then((data) => setUsers(data));
+        } else if (name === 'title') {
+            setSelected((prevState) => ({
+                ...prevState,
+                title: value
+            }));
         } else {
             setSelected((prevState) => ({
                 ...prevState,
