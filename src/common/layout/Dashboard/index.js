@@ -1326,51 +1326,56 @@ const DashboardLayout = (props) => {
                         }}
                         id="search_field"
                     >
-                        <TextField
-                            size="small"
-                            variant="filled"
-                            placeholder="Search"
-                            onChange={(e) => {
-                                debounceOnChange(e);
-                            }}
-                            sx={{
-                                width: '100%',
-
-                                ...customStyle,
-
-                                [theme.breakpoints.down('md')]: {
-                                    '&:hover': {
-                                        width: '100% !important'
-                                    }
-                                }
-                            }}
-                            InputProps={{
-                                style: {
-                                    background: '#fff',
+                        {[
+                            '/dashboard/courses',
+                            '/dashboard/courses/all-courses',
+                            '/dashboard/courses/my-courses',
+                            '/dashboard/courses/mandatory-courses',
+                            '/dashboard/learning-path'
+                        ].includes(location.pathname) && (
+                            <TextField
+                                size="small"
+                                variant="filled"
+                                placeholder="Search"
+                                onChange={(e) => {
+                                    debounceOnChange(e);
+                                }}
+                                sx={{
                                     width: '100%',
-                                    height: '45px',
-                                    borderRadius: 4
-                                },
-                                inputProps: {
+                                    ...customStyle,
+                                    [theme.breakpoints.down('md')]: {
+                                        '&:hover': {
+                                            width: '100% !important'
+                                        }
+                                    }
+                                }}
+                                InputProps={{
                                     style: {
-                                        paddingTop: 0,
-                                        paddingBottom: 0,
-                                        color: '#474747'
+                                        background: '#fff',
+                                        width: '100%',
+                                        height: '45px',
+                                        borderRadius: 4
                                     },
-                                    className: 'custom-placeholder'
-                                }
-
-                                // endAdornment: (
-                                //     <InputAdornment position="end">
-                                //         <Search
-                                //             className="searchIcon"
-                                //             color="primary"
-                                //             onClick={handleSubmit}
-                                //         />
-                                //     </InputAdornment>
-                                // )
-                            }}
-                        />
+                                    inputProps: {
+                                        style: {
+                                            paddingTop: 0,
+                                            paddingBottom: 0,
+                                            color: '#474747'
+                                        },
+                                        className: 'custom-placeholder'
+                                    }
+                                    // endAdornment: (
+                                    //     <InputAdornment position="end">
+                                    //         <Search
+                                    //             className="searchIcon"
+                                    //             color="primary"
+                                    //             onClick={handleSubmit}
+                                    //         />
+                                    //     </InputAdornment>
+                                    // )
+                                }}
+                            />
+                        )}
                     </Box>
                 </Box>
             </Box>
