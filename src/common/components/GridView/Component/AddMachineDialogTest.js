@@ -18,8 +18,13 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { createMachine, getAllMachines } from '../../../../API/Machine';
-import { getAllImages, getAllNetworks } from '../../../../API/OpenStack';
+import { createMachine } from '../../../../API/Machine';
+import {
+    getAllFlavours,
+    getAllImages,
+    getAllNetworks
+} from '../../../../API/OpenStack';
+import { getLecturesBySection } from '../../../../API/Course';
 
 const AddMachineDialogTest = ({
     handleServer,
@@ -29,18 +34,46 @@ const AddMachineDialogTest = ({
     sections
 }) => {
     console.log('section', sections);
-
-    const [allMachines, setAllMachines] = useState([]);
+    const [allNetworks, setAllNetworks] = useState([]);
+    const [allImages, setAllImages] = useState([]);
+    const [allFlavours, setAllFlavours] = useState([]);
+    const [allLectures, setAllLectures] = useState([]);
     const [formData, setData] = useState({
+        networkId: '',
+        imageId: '',
+        name: '',
+        flavourId: '',
+        // numberOfMachines: "",
+        // password: "",
         sectionId: '',
-        machine: ''
+        lectureId: '',
+        time: ''
     });
 
     const handleSubmit = () => {
-        // createMachine(courseId, formData).then((response) =>
-        //   console.log("Machine created with response of", response)
-        // );
-        // handleClose();
+        const data = {
+            networkId: formData?.networkId,
+            imageId: formData?.imageId,
+            name: formData?.name,
+            flavourId: formData?.flavourId,
+            lectureId: formData?.lectureId,
+            time: formData?.time
+        };
+        createMachine(courseId, data).then((response) =>
+            console.log('Machine created with response of', response)
+        );
+        handleClose();
+        setData({
+            networkId: '',
+            imageId: '',
+            name: '',
+            flavourId: '',
+            // numberOfMachines: "",
+            // password: "",
+            sectionId: '',
+            lectureId: '',
+            time: ''
+        });
     };
 
     const handleChange = (e) => {
@@ -50,18 +83,25 @@ const AddMachineDialogTest = ({
         });
     };
 
-    const data = {
-        sectionId: formData?.sectionId,
-        ctf_id: formData?.machine?.ctf_id,
-        ctf_name: formData?.machine?.ctf_name
+    const getLectures = async () => {
+        console.log('sectionid', formData.sectionId);
+        if (formData?.sectionId) {
+            const res = await getLecturesBySection(formData?.sectionId);
+            console.log('response of get lecture', res);
+            setAllLectures(res);
+        }
     };
 
-    console.log('formDta', data);
+    console.log('formDta', formData);
     console.log('Course id in dialog', courseId);
     const setUpInitialValues = () => {
-        getAllMachines().then((response) => setAllMachines(response));
+        getAllNetworks().then((response) => setAllNetworks(response.data));
+        getAllImages().then((response) => setAllImages(response.data));
+        getAllFlavours().then((response) => setAllFlavours(response?.data));
     };
     useEffect(() => setUpInitialValues(), []);
+
+    useEffect(() => getLectures(), [formData?.sectionId]);
 
     return (
         <Dialog
@@ -75,10 +115,20 @@ const AddMachineDialogTest = ({
                 id="customized-dialog-title"
                 // onClose={handleClose}
             >
-                Image for
+                Add Machine
             </DialogTitle>
             <DialogContent dividers>
-                {/* -----------------------module dropdown--------------------- */}
+                <Stack my={2}>
+                    <TextField
+                        fullWidth
+                        label="Machine Name"
+                        name="name"
+                        value={formData.name}
+                        id="fullWidth"
+                        // style={{ minWidth: '500px' }}
+                        onChange={handleChange}
+                    />
+                </Stack>
                 <Stack my={2}>
                     <FormControl>
                         <InputLabel id="sectionId-label">Modules</InputLabel>
@@ -86,7 +136,7 @@ const AddMachineDialogTest = ({
                             labelId="sectionId-label"
                             id="sectionId"
                             name="sectionId"
-                            value={formData.module}
+                            value={formData.sectionId}
                             label="Module"
                             onChange={handleChange}
                         >
@@ -98,29 +148,133 @@ const AddMachineDialogTest = ({
                         </Select>
                     </FormControl>
                 </Stack>
-
-                {/* ---------------------machines dropdown-------------------- */}
+                {formData?.sectionId && (
+                    <Stack my={2}>
+                        <FormControl>
+                            <InputLabel id="lectureId-label">
+                                Lectures
+                            </InputLabel>
+                            <Select
+                                labelId="lectureId-label"
+                                id="lectureId"
+                                name="lectureId"
+                                value={formData.lectureId}
+                                label="Lecture"
+                                onChange={handleChange}
+                            >
+                                {allLectures?.map((lecture) => (
+                                    <MenuItem value={lecture._id}>
+                                        {lecture.title}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                )}
                 <Stack my={2}>
                     <FormControl>
-                        <InputLabel id="sectionId-label">Machines</InputLabel>
+                        <InputLabel id="network-label">Network</InputLabel>
                         <Select
-                            labelId="machine-label"
-                            id="machine"
-                            name="machine"
-                            value={formData.machine}
-                            label="Machines"
+                            labelId="network-label"
+                            id="network"
+                            name="networkId"
+                            value={formData.networkId}
+                            label="Network"
                             onChange={handleChange}
                         >
-                            {allMachines?.map((section) => (
-                                <MenuItem value={section}>
-                                    {section.ctf_name}
+                            {allNetworks.map((network) => (
+                                <MenuItem value={network.network_id}>
+                                    {network.network_name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                 </Stack>
+                <Stack my={2}>
+                    <FormControl>
+                        <InputLabel id="image-label">Image</InputLabel>
+                        <Select
+                            labelId="image-label"
+                            id="image"
+                            name="imageId"
+                            value={formData.imageId}
+                            label="Image"
+                            onChange={handleChange}
+                        >
+                            {allImages.map((image) => (
+                                <MenuItem value={image.image_id}>
+                                    {image.image_name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Stack>
+                <Stack my={2}>
+                    <FormControl>
+                        <InputLabel id="flavour-label">Flavor</InputLabel>
+                        <Select
+                            labelId="flavour-label"
+                            id="flavour"
+                            name="flavourId"
+                            value={formData.flavourId}
+                            label="Flavour"
+                            onChange={handleChange}
+                        >
+                            {allFlavours.map((flavor) => (
+                                <MenuItem value={flavor.flavor_id}>
+                                    {flavor.flavor_name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Stack>
+                {/* <Stack my={2}>
+                  <TextField
+                      fullWidth
+                      label="Description"
+                      name="description"
+                      id="fullWidth"
+                      style={{ minWidth: '500px' }}
+                      onChange={(e) => {
+                          handleServer(e);
+                      }}
+                  />
+              </Stack> */}
+                {/* <Stack direction="row" alignItems="center" my={2} gap={2}>
+          <Typography>No. of machines</Typography>
+          <TextField
+            fullWidth
+            id="outlined-basic"
+            label="Number of machines"
+            value={formData.numberOfMachines}
+            variant="outlined"
+            defaultValue="Enter the number"
+            name="numberOfMachines"
+            onChange={handleChange}
+          />
+        </Stack> */}
+                <Stack direction="row" alignItems="center" my={2} gap={2}>
+                    <TextField
+                        fullWidth
+                        id="outlined-basic"
+                        name="time"
+                        label="Time Duration"
+                        value={formData.time}
+                        variant="outlined"
+                        defaultValue="Enter the time duration"
+                        onChange={handleChange}
+                    />
+                </Stack>
+                {/* <TextField
+          fullWidth
+          label="Password"
+          value={formData.password}
+          name="password"
+          id="fullWidth"
+          // style={{ minWidth: '500px' }}
+          onChange={handleChange}
+        /> */}
             </DialogContent>
-
             <DialogActions>
                 <Button
                     autoFocus

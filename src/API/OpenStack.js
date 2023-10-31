@@ -12,36 +12,48 @@ export const getAllImages = async () => {
     const response = await Axios.get(ApiConfig.openStack.getAllImages);
     return response;
 };
+export const getAllFlavours = async () => {
+    console.log('Get all images called');
+    const response = await Axios.get(ApiConfig.openStack.getAllFlavours);
+    return response;
+};
 
 export const createMachine = async (data, dispatch) => {
-    dispatch(setCurrentScreenLoading(true));
+    //   dispatch(setCurrentScreenLoading(true));
     console.log('data to create machine', data);
-    const response = await Axios.post(`${ApiConfig.openStack.createMachine}`, {
-        name: data.name,
-        image_id: data.imageId,
-        flavor_id: data.flavourId,
-        networks: data.networkId,
-        password: data.password,
-        time: data.time
-    });
-    console.log('Response of create lab in view course', response);
 
-    const response2 = await Axios.get(
-        `${ApiConfig.openStack.createMachine}${response.data.id}`
+    const createGameResponse = await Axios.post(
+        `${ApiConfig.openStack.createInstance}`,
+        {
+            instance_name: data?.name,
+            instance_image_id: data?.imageId,
+            instance_flavor_id: data?.flavourId,
+            instance_network_id: data?.networkId
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
     );
-    console.log('response of start', response2.data[0].id);
-    const url = response2.data[0].console_url;
-    const responseId = response2.data[0].id;
-    // window.open(url, '_blank')
-    dispatch(setCurrentScreenLoading(false));
-    // navigate('/dashboard/lab', { state: { url, id: responseId } });
-    console.log('Response 2 of create machine', response2);
-    return response2;
+    console.log('response of create game', createGameResponse);
+
+    const gameId = createGameResponse?.data?.instance_id;
+    const getConsoleUrl = await Axios.get(
+        `${ApiConfig.openStack.getConsoleUrl}${gameId}`,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+    console.log('response of get console url', getConsoleUrl);
+    return getConsoleUrl?.data;
 };
 
 export const deleteMachine = async (id) => {
     const response = await Axios.delete(
-        `${ApiConfig.openStack.createMachine}${id}`
+        `${ApiConfig.openStack.deleteInstance}${id}`
     );
     console.log('del res', response);
     return response;

@@ -107,7 +107,6 @@ const ViewModule = () => {
     const authorId = location?.state?.authorId;
     const navigate = useNavigate();
     const theme = useTheme();
-
     const [sections, setSections] = useState(['']);
     const [questions, setQuestions] = useState();
     const [isLoading, setLoading] = useState();
@@ -352,16 +351,17 @@ const ViewModule = () => {
             });
 
             console.log('res of section', res);
-            setSections(res.data.data);
-            setMachines(res.data.machines?.vm);
-            setQuestions(res.data.questions.question);
-            setActive(res.data.data[0]);
+            setSections(res?.data.data);
+            setQuestions(res?.data.questions.question);
+            setActive(res?.data.data[0]);
+            setMachines(res?.data.data[0]?.vm);
         } catch (err) {
             console.log(err);
         }
     }, [token, id]);
 
     console.log('user', isUser);
+    console.log('machines', machines);
 
     const getLessonStatus = () => {
         getIndividualLectureCompletionStatus(authorId, courseId).then(
@@ -377,6 +377,7 @@ const ViewModule = () => {
         setLectureNumber(number);
         setHighlight(number);
         setActive(section);
+        setMachines(section?.vm);
     };
 
     useEffect(() => {
@@ -616,22 +617,38 @@ const ViewModule = () => {
         console.log('setting time in create lab', time, '||', data);
         setTime([
             ...time,
-            { time: data.time, id: data._id, name: data.name, isLoading: true }
+            {
+                time: data.time,
+                id: data._id,
+                name: data.name,
+                isLoading: true,
+                isDisabled: false
+            }
         ]);
         setValue('2');
 
         let machineDetails = await createMachine(data, dispatch);
         console.log('Machine-details', machineDetails);
-        setMachineDetails(machineDetails?.data[0]);
+        setMachineDetails(machineDetails);
 
         setConsoleUrl([
             ...consoleUrl,
             {
-                name: machineDetails?.data[0]?.name,
-                url: machineDetails?.data[0]?.console_url
+                name: data.name,
+                url: machineDetails?.url
             }
         ]);
-        setTime([...time, { isLoading: false }]);
+        setTime([
+            ...time,
+            {
+                time: data.time,
+                id: data._id,
+                name: data.name,
+                isLoading: false,
+                serverId: machineDetails?.server_id,
+                isDisabled: false
+            }
+        ]);
     };
 
     console.log('isRuning', isRunning);
@@ -644,8 +661,9 @@ const ViewModule = () => {
                 if (temp[index].time > 0) {
                     temp[index].time -= 1;
                 } else {
-                    console.log('api del called', item.id);
-                    deleteActiveMachine(item.id);
+                    console.log('api del called', item?.serverId);
+                    deleteActiveMachine(item?.serverId);
+                    temp[index].isDisabled = true;
                 }
             });
             console.log('setting time', temp);
@@ -662,11 +680,14 @@ const ViewModule = () => {
     console.log('time', time);
     useEffect(() => {}, [consoleUrl]);
 
-    const renderTest = () => <h1>Testing render</h1>;
     const renderConditionally = (console1, machine) => (
         <div className="should-render">
-            {console1.name == machine.name && (
-                <iframe src={console1.url} width="100%" height="500px"></iframe>
+            {console1?.name == machine.name && (
+                <iframe
+                    src={console1?.url}
+                    width="100%"
+                    height="500px"
+                ></iframe>
             )}
         </div>
     );
@@ -818,151 +839,6 @@ const ViewModule = () => {
                                             />
                                         </Box>
                                     ))}
-                                </Card>
-                                <Card style={{ marginBottom: '30px' }}>
-                                    <SecondaryHeader
-                                        title="Machines"
-                                        endText={machines?.length}
-                                        // endText={`${lectureNumber + 1}/${
-                                        //     sections?.length
-                                        // }`}
-                                    />
-                                    {machines?.length !== 0 ? (
-                                        machines?.map((machine) => {
-                                            return (
-                                                <>
-                                                    <Box
-                                                        display="flex"
-                                                        pb={1}
-                                                        justifyContent="space-between"
-                                                        alignItems="center"
-                                                        px={2}
-                                                    >
-                                                        <Typography>
-                                                            {machine?.name}
-                                                        </Typography>
-                                                        <Box
-                                                            display="flex"
-                                                            gap={2}
-                                                        >
-                                                            {isRunning &&
-                                                            time?.find(
-                                                                (item) =>
-                                                                    item?.name ===
-                                                                    machine?.name
-                                                            ) ? (
-                                                                <ClearIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'error.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        deleteActiveMachine(
-                                                                            machine?._id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            ) : (
-                                                                <PlayCircleFilledIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'secondary.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        createLab(
-                                                                            machine
-                                                                        )
-                                                                    }
-                                                                />
-                                                            )}
-                                                            <div>
-                                                                {user?.role ===
-                                                                    'instructor' && (
-                                                                    <DeleteIcon
-                                                                        sx={{
-                                                                            cursor: 'pointer',
-                                                                            color: 'error.main'
-                                                                        }}
-                                                                        onClick={
-                                                                            handleClickOpenDelete
-                                                                        }
-                                                                    />
-                                                                )}
-                                                                <Dialog
-                                                                    open={
-                                                                        openDelete
-                                                                    }
-                                                                    onClose={
-                                                                        handleCloseDelete
-                                                                    }
-                                                                    aria-labelledby="alert-dialog-title"
-                                                                    aria-describedby="alert-dialog-description"
-                                                                >
-                                                                    <DialogTitle id="alert-dialog-slide-title">
-                                                                        Are you
-                                                                        sure you
-                                                                        want to
-                                                                        delete
-                                                                        this
-                                                                        machine?
-                                                                    </DialogTitle>
-                                                                    <DialogActions>
-                                                                        <Button
-                                                                            onClick={
-                                                                                handleCloseDelete
-                                                                            }
-                                                                            sx={{
-                                                                                color: 'secondary.main'
-                                                                            }}
-                                                                        >
-                                                                            Cancel
-                                                                        </Button>
-                                                                        <Button
-                                                                            variant="outlined"
-                                                                            color="error"
-                                                                            onClick={() =>
-                                                                                deleteLab(
-                                                                                    machine?._id
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            {isLoading && (
-                                                                                <CircularProgress />
-                                                                            )}
-                                                                            Delete
-                                                                        </Button>
-                                                                    </DialogActions>
-                                                                </Dialog>
-                                                            </div>
-                                                        </Box>
-                                                    </Box>
-                                                </>
-                                            );
-                                        })
-                                    ) : (
-                                        <Typography pl={2} pb={1}>
-                                            No Machine Added
-                                        </Typography>
-                                    )}
-                                    {/* {sections?.map((section, index) => (
-                                        <Box
-                                            onClick={() =>
-                                                setActiveLesson(section)
-                                            }
-                                        >
-                                            <LessonName
-                                                name={section.title}
-                                                id={section._id}
-                                                lectureNumber={lectureNumber}
-                                                index={index}
-                                                questions={questions}
-                                                completedLectures={
-                                                    completedLectures
-                                                }
-                                                // activeLessonId={activeLesson?._id}
-                                            />
-                                        </Box>
-                                    ))} */}
                                 </Card>
                                 {/* <Button
                                     onClick={StartQuizHandler}
@@ -1273,6 +1149,7 @@ const ViewModule = () => {
                                             }
                                         />
                                     ))} */}
+                                        {/* {isRunning && <Tab value="2" label="Machine" />} */}
                                         {consoleUrl?.map((machine, index) => (
                                             <Tab
                                                 value={`${index + 2}`}
@@ -1295,7 +1172,7 @@ const ViewModule = () => {
                                                                         (
                                                                             timeObj
                                                                         ) =>
-                                                                            timeObj.name ===
+                                                                            timeObj?.name ===
                                                                             machine?.name
                                                                     )[0]?.time
                                                                 }
@@ -1546,113 +1423,267 @@ const ViewModule = () => {
                                     </>
                                 )}
                             </TabPanel>
-                            {machines?.map((machine, index) => {
+                            {/* <TabPanel value="2">
+                <iframe
+                  src="http://124.123.17.10:6080/vnc_auto.html?path=%3Ftoken%3Dee19541b-4923-4857-81c4-33f0ab843814&title=Windows10Pro_Snap(a4431615-6982-40bd-a458-3db745ddfb8b)"
+                  width="100%"
+                  height="500px"
+                ></iframe>
+              </TabPanel> */}
+                            {machines.map((machine, index) => {
                                 return (
                                     <>
-                                        {consoleUrl?.map(
-                                            (console1, index) => (
-                                                <>
-                                                    {console.log(
-                                                        'index',
-                                                        index + 2,
-                                                        value
+                                        {consoleUrl.map((console1, index) => (
+                                            <>
+                                                {console.log(
+                                                    'index',
+                                                    index + 2,
+                                                    value
+                                                )}
+                                                <TabPanel
+                                                    value={`${index + 2}`}
+                                                    index={index + 2}
+                                                >
+                                                    {renderConditionally(
+                                                        console1,
+                                                        machine,
+                                                        index
                                                     )}
-                                                    <TabPanel
-                                                        value={`${index + 2}`}
-                                                        index={index + 2}
-                                                    >
-                                                        {renderConditionally(
-                                                            console1,
-                                                            machine,
-                                                            index
-                                                        )}
-                                                    </TabPanel>
-                                                </>
-                                            )
-                                            // renderTest()
-                                        )}
+                                                </TabPanel>
+                                            </>
+                                        ))}
                                         {console.log(
                                             'Lodash',
                                             _.partition(consoleUrl, {
                                                 name: machine.name
                                             })
                                         )}
-                                        {/* {consoleUrl.length===0||consoleUrl} */}
+                                        {/* {consoleUrl.length === 0 || consoleUrl} */}
                                     </>
                                 );
                             })}
                         </TabContext>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            flex-direction={{
+                                md: 'row',
+                                sm: 'column',
+                                xs: 'column'
+                            }}
+                            width="100%"
+                        >
+                            <Box>
+                                {user?.role === 'instructor' && (
+                                    <>
+                                        <Grid
+                                            item
+                                            display="flex"
+                                            px={2}
+                                            gap={2}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    backgroundColor:
+                                                        'primary.borderGrey',
+                                                    borderRadius: '20px',
+                                                    padding: 1
+                                                }}
+                                            >
+                                                <Emoji
+                                                    emoji="angry-face"
+                                                    size="20"
+                                                />{' '}
+                                                {reactionCount[0]}
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    backgroundColor:
+                                                        'primary.borderGrey',
+                                                    borderRadius: '20px',
+                                                    padding: 1
+                                                }}
+                                            >
+                                                <Emoji
+                                                    emoji="crying-face"
+                                                    size="20"
+                                                />
+                                                {reactionCount[1]}
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    backgroundColor:
+                                                        'primary.borderGrey',
+                                                    borderRadius: '20px',
+                                                    padding: 1
+                                                }}
+                                            >
+                                                <Emoji
+                                                    emoji="expressionless-face"
+                                                    size="20"
+                                                />
+                                                {reactionCount[2]}
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    backgroundColor:
+                                                        'primary.borderGrey',
+                                                    borderRadius: '20px',
+                                                    padding: 1
+                                                }}
+                                            >
+                                                <Emoji
+                                                    emoji="grinning-face-with-big-eyes"
+                                                    size="20"
+                                                />
+                                                {reactionCount[3]}
+                                            </Box>
+                                            <Box
+                                                sx={{
+                                                    backgroundColor:
+                                                        'primary.borderGrey',
+                                                    borderRadius: '20px',
+                                                    padding: 1
+                                                }}
+                                            >
+                                                <Emoji
+                                                    emoji="smiling-face-with-heart-eyes"
+                                                    size="20"
+                                                />
+                                                {reactionCount[4]}
+                                            </Box>
+                                        </Grid>
+                                    </>
+                                )}
+                            </Box>
 
-                        {user?.role === 'instructor' && (
-                            <>
-                                <Grid item display="flex" px={2} gap={2}>
-                                    <Box
-                                        sx={{
-                                            backgroundColor:
-                                                'primary.borderGrey',
-                                            borderRadius: '20px',
-                                            padding: 1
-                                        }}
-                                    >
-                                        <Emoji emoji="angry-face" size="20" />{' '}
-                                        {reactionCount[0]}
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            backgroundColor:
-                                                'primary.borderGrey',
-                                            borderRadius: '20px',
-                                            padding: 1
-                                        }}
-                                    >
-                                        <Emoji emoji="crying-face" size="20" />
-                                        {reactionCount[1]}
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            backgroundColor:
-                                                'primary.borderGrey',
-                                            borderRadius: '20px',
-                                            padding: 1
-                                        }}
-                                    >
-                                        <Emoji
-                                            emoji="expressionless-face"
-                                            size="20"
-                                        />
-                                        {reactionCount[2]}
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            backgroundColor:
-                                                'primary.borderGrey',
-                                            borderRadius: '20px',
-                                            padding: 1
-                                        }}
-                                    >
-                                        <Emoji
-                                            emoji="grinning-face-with-big-eyes"
-                                            size="20"
-                                        />
-                                        {reactionCount[3]}
-                                    </Box>
-                                    <Box
-                                        sx={{
-                                            backgroundColor:
-                                                'primary.borderGrey',
-                                            borderRadius: '20px',
-                                            padding: 1
-                                        }}
-                                    >
-                                        <Emoji
-                                            emoji="smiling-face-with-heart-eyes"
-                                            size="20"
-                                        />
-                                        {reactionCount[4]}
-                                    </Box>
-                                </Grid>
-                            </>
-                        )}
+                            <Card
+                                style={{
+                                    marginBottom: '30px',
+                                    minWidth: '30%'
+                                }}
+                            >
+                                <SecondaryHeader
+                                    title="Machines"
+                                    endText={machines?.length}
+                                    // endText={`${lectureNumber + 1}/${
+                                    //     sections?.length
+                                    // }`}
+                                />
+                                {machines?.length !== 0 ? (
+                                    machines?.map((machine) => {
+                                        return (
+                                            <>
+                                                <Box
+                                                    display="flex"
+                                                    pb={1}
+                                                    justifyContent="space-between"
+                                                    alignItems="center"
+                                                    px={2}
+                                                >
+                                                    <Typography>
+                                                        {machine?.name}
+                                                    </Typography>
+                                                    <Box display="flex" gap={2}>
+                                                        {isRunning &&
+                                                        time?.find(
+                                                            (item) =>
+                                                                item?.name ===
+                                                                machine?.name
+                                                        ) ? (
+                                                            <ClearIcon
+                                                                sx={{
+                                                                    cursor: 'pointer',
+                                                                    color: 'error.main'
+                                                                }}
+                                                                onClick={() =>
+                                                                    deleteActiveMachine(
+                                                                        machine?._id
+                                                                    )
+                                                                }
+                                                            />
+                                                        ) : (
+                                                            <PlayCircleFilledIcon
+                                                                sx={{
+                                                                    cursor: 'pointer',
+                                                                    color: 'secondary.main'
+                                                                }}
+                                                                onClick={() =>
+                                                                    createLab(
+                                                                        machine
+                                                                    )
+                                                                }
+                                                            />
+                                                        )}
+                                                        <div>
+                                                            {user?.role ===
+                                                                'instructor' && (
+                                                                <DeleteIcon
+                                                                    sx={{
+                                                                        cursor: 'pointer',
+                                                                        color: 'error.main'
+                                                                    }}
+                                                                    onClick={
+                                                                        handleClickOpenDelete
+                                                                    }
+                                                                />
+                                                            )}
+                                                            <Dialog
+                                                                open={
+                                                                    openDelete
+                                                                }
+                                                                onClose={
+                                                                    handleCloseDelete
+                                                                }
+                                                                aria-labelledby="alert-dialog-title"
+                                                                aria-describedby="alert-dialog-description"
+                                                            >
+                                                                <DialogTitle id="alert-dialog-slide-title">
+                                                                    Are you sure
+                                                                    you want to
+                                                                    delete this
+                                                                    machine?
+                                                                </DialogTitle>
+                                                                <DialogActions>
+                                                                    <Button
+                                                                        onClick={
+                                                                            handleCloseDelete
+                                                                        }
+                                                                        sx={{
+                                                                            color: 'secondary.main'
+                                                                        }}
+                                                                    >
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="outlined"
+                                                                        color="error"
+                                                                        onClick={() =>
+                                                                            deleteLab(
+                                                                                machine?._id
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {isLoading && (
+                                                                            <CircularProgress />
+                                                                        )}
+                                                                        Delete
+                                                                    </Button>
+                                                                </DialogActions>
+                                                            </Dialog>
+                                                        </div>
+                                                    </Box>
+                                                </Box>
+                                            </>
+                                        );
+                                    })
+                                ) : (
+                                    <Typography pl={2} pb={1}>
+                                        No Machine Added
+                                    </Typography>
+                                )}
+                            </Card>
+                        </Box>
 
                         <Box mt={3}>
                             <Grid

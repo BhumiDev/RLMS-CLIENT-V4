@@ -1,12 +1,13 @@
 // export default Apiconfig;
 
-export const url = 'http://10.1.76.169:5000';
+// export const url = 'http://10.1.76.169:5000';
 // export const url = 'http://192.168.1.43:5000';
 
-// export const url = 'http://localhost:5000';
+export const url = 'http://10.1.76.169:5000';
 
 // export const OpenStackUrl = 'http://10.1.76.3:8000';
-export const OpenStackUrl = 'http://124.123.17.69:8000';
+// export const OpenStackUrl = "http://124.123.17.12:7000";
+export const OpenStackUrl = 'http://10.1.76.53:8000';
 
 const Apiconfig = {
     auth: {
@@ -50,7 +51,8 @@ const Apiconfig = {
         getScreenTimeOfCourseForStudent: `${url}/screentime/getScreeTimeForStudent`,
         createNotes: `${url}/notes/createNotes`,
         getNotes: `${url}/notes/getNotes`,
-        editNotes: `${url}/notes/editNotes`
+        editNotes: `${url}/notes/editNotes`,
+        getLectureBySection: `${url}/lecture/lecturesBySection`
     },
     section: {
         createSection: `${url}/section/create`,
@@ -149,9 +151,12 @@ const Apiconfig = {
         liveClassesForStudents: `${url}/live/studentLiveClasses`
     },
     openStack: {
-        getAllNetworks: `${OpenStackUrl}/api/resources/networks`,
-        getAllImages: `${OpenStackUrl}/api/resources/images`,
-        createMachine: `${OpenStackUrl}/api/resources/servers/`
+        getAllNetworks: `${OpenStackUrl}/api/listnetworks/`,
+        getAllImages: `${OpenStackUrl}/api/listimages/`,
+        getAllFlavours: `${OpenStackUrl}/api/listflavors/`,
+        createInstance: `${OpenStackUrl}/api/create_instance/`,
+        getConsoleUrl: `${OpenStackUrl}/api/console_url/`,
+        deleteInstance: `${OpenStackUrl}/api/deleteinstance/`
     },
     learningPath: {
         createLearningPath: `${url}/learningpath/create`,
