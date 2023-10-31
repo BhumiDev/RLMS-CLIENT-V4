@@ -247,12 +247,12 @@ const Messenger = () => {
         //     curr_msg = url;
         // }
         const message = {
-            sender: user._id,
+            sender: user?._id,
             // text: newMessage,
             text: curr_msg,
             media: mediaData?.url,
             mediaFormat: mediaData?.resource_type,
-            conversationId: currentChat._id
+            conversationId: currentChat?._id
         };
 
         console.log('messagessd', message);
@@ -260,22 +260,22 @@ const Messenger = () => {
         // const receiverId = currentChat.members.find(
         //   (member) => member !== user._id
         // );
-        const receiverId = currentChat.members.filter(
+        const receiverId = currentChat?.members?.filter(
             (member) =>
-                member !== user._id &&
+                member !== user?._id &&
                 typeof member !== 'object' &&
                 member != null
         );
-        console.log('reciever id', receiverId, user._id);
+        console.log('reciever id', receiverId, user?._id);
         // const receiverId = currentChat.members
         /// when group chat so you have to send id of every person in group in reciever id
         currSocket &&
             currSocket.emit('sendMessage', {
-                senderId: user._id,
+                senderId: user?._id,
                 receiverId,
                 text: newMessage,
-                media: mediaData.url,
-                mediaFormat: mediaData.resource_type,
+                media: mediaData?.url,
+                mediaFormat: mediaData?.resource_type,
                 conversationId: currentChat._id
             });
 
@@ -297,8 +297,8 @@ const Messenger = () => {
     };
 
     // Add an event listener to the document
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'Enter') {
+    document?.addEventListener('keydown', (e) => {
+        if (e?.ctrlKey && e?.key === 'Enter') {
             // Call the handleSubmit function when Control + Enter is pressed
             handleSubmit(e);
         }
@@ -376,7 +376,7 @@ const Messenger = () => {
     useEffect(() => {
         // scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         let container = document.getElementById('chatContainer');
-        container.scrollTop = container.scrollHeight;
+        container.scrollTop = container?.scrollHeight;
     }, [messages]);
 
     const handleTabChange = (event, newValue) => {
