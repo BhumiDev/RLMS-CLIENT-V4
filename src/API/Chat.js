@@ -64,6 +64,7 @@ export const postMessage = async (message) => {
         return res;
     } catch (err) {
         console.log('err', err);
+        // toast.error("")
     }
 };
 

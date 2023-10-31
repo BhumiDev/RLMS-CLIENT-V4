@@ -45,7 +45,7 @@ const Manual = () => {
                   isError: false,
                   message: ''
               });
-        setManual(e.target.value);
+        setManual(e.target.value.replace(/^\s+/, ''));
     };
     const handleDeleteManual = async () => {
         await deleteManual(sectionId, dispatch);

@@ -395,112 +395,103 @@ const MyCourses = (setCourseId) => {
                                 mt={{ xs: 1.5 }}
                                 md={user?.role === 'student' && 12}
                             >
-                                {data?.length !== 0 && (
+                                {/* {data?.length !== 0 && ( */}
+                                <Box
+                                    textAlign="end"
+                                    mb={3}
+                                    pr={{ md: 0, sm: 3 }}
+                                >
                                     <Box
-                                        textAlign="end"
-                                        mb={3}
-                                        pr={{ md: 0, sm: 3 }}
+                                        mt={4}
+                                        sx={{
+                                            [theme.breakpoints.down('sm')]: {
+                                                display: 'none'
+                                            },
+                                            Zindex: 200,
+                                            display: 'flex',
+                                            justifyContent: 'flex-end'
+                                        }}
                                     >
-                                        <Box
-                                            mt={4}
-                                            sx={{
-                                                [theme.breakpoints.down('sm')]:
-                                                    {
-                                                        display: 'none'
-                                                    },
-                                                Zindex: 200,
-                                                display: 'flex',
-                                                justifyContent: 'flex-end'
-                                            }}
-                                        >
-                                            {/* <BasicExampleDataGrid /> */}
-                                            {/* <Button onClick={filterAllCategories} color="secondary" variant='outlined'>
+                                        {/* <BasicExampleDataGrid /> */}
+                                        {/* <Button onClick={filterAllCategories} color="secondary" variant='outlined'>
                                                 All
                                             </Button> */}
 
-                                            <Box mr={2}>
-                                                <FormControl>
-                                                    <IconButton
-                                                        onClick={
-                                                            handleOpenUserMenu
-                                                        }
-                                                        sx={{ p: 0 }}
-                                                    >
-                                                        <FilterList color="secondary" />{' '}
-                                                    </IconButton>
+                                        <Box mr={2}>
+                                            {/* <FormControl> */}
+                                            {/* <IconButton
+                                                    onClick={handleOpenUserMenu}
+                                                    sx={{ p: 0 }}
+                                                >
+                                                    <FilterList color="secondary" />{' '}
+                                                </IconButton> */}
 
-                                                    <Menu
-                                                        sx={{ mt: '45px' }}
-                                                        id="menu-appbar"
-                                                        anchorEl={anchorElUser}
-                                                        anchorOrigin={{
-                                                            vertical: 'top',
-                                                            horizontal: 'right'
-                                                        }}
-                                                        keepMounted
-                                                        transformOrigin={{
-                                                            vertical: 'top',
-                                                            horizontal: 'right'
-                                                        }}
-                                                        open={Boolean(
-                                                            anchorElUser
-                                                        )}
-                                                        onClose={
-                                                            handleCloseUserMenu
+                                            {/* <Menu
+                                                    sx={{ mt: '45px' }}
+                                                    id="menu-appbar"
+                                                    anchorEl={anchorElUser}
+                                                    anchorOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right'
+                                                    }}
+                                                    keepMounted
+                                                    transformOrigin={{
+                                                        vertical: 'top',
+                                                        horizontal: 'right'
+                                                    }}
+                                                    open={Boolean(anchorElUser)}
+                                                    onClose={
+                                                        handleCloseUserMenu
+                                                    }
+                                                > */}
+                                            <MenuItem
+                                                sx={{
+                                                    minWidth: 230,
+                                                    top: '-32px'
+                                                }}
+                                            >
+                                                <FormControl fullWidth>
+                                                    <InputLabel id="category-select-label">
+                                                        Major Category
+                                                    </InputLabel>
+                                                    <Select
+                                                        labelId="category-select-label"
+                                                        id="demo-simple-select"
+                                                        name="majorCategory"
+                                                        value={selectedMajor}
+                                                        label="Major Category"
+                                                        onChange={
+                                                            handleCategories
                                                         }
                                                     >
-                                                        <MenuItem
-                                                            sx={{
-                                                                minWidth: 230
-                                                            }}
-                                                        >
-                                                            <FormControl
-                                                                fullWidth
-                                                            >
-                                                                <InputLabel id="category-select-label">
-                                                                    Major
-                                                                    Category
-                                                                </InputLabel>
-                                                                <Select
-                                                                    labelId="category-select-label"
-                                                                    id="demo-simple-select"
-                                                                    name="majorCategory"
-                                                                    value={
-                                                                        selectedMajor
-                                                                    }
-                                                                    label="Major Category"
-                                                                    onChange={
-                                                                        handleCategories
-                                                                    }
-                                                                >
-                                                                    {allCategories &&
-                                                                        allCategories?.map(
-                                                                            (
-                                                                                obj,
-                                                                                index
-                                                                            ) => (
-                                                                                <MenuItem
-                                                                                    value={
-                                                                                        obj.categoryName
-                                                                                    }
-                                                                                    key={
-                                                                                        index
-                                                                                    }
-                                                                                    subcategories={
-                                                                                        obj.subCategories
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        obj.categoryName
-                                                                                    }
-                                                                                </MenuItem>
-                                                                            )
-                                                                        )}
-                                                                </Select>
-                                                            </FormControl>
-                                                        </MenuItem>
-                                                    </Menu>
-                                                    {/* <Grid item>
+                                                        {allCategories &&
+                                                            allCategories?.map(
+                                                                (
+                                                                    obj,
+                                                                    index
+                                                                ) => (
+                                                                    <MenuItem
+                                                                        value={
+                                                                            obj.categoryName
+                                                                        }
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        subcategories={
+                                                                            obj.subCategories
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            obj.categoryName
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                    </Select>
+                                                </FormControl>
+                                            </MenuItem>
+                                            {/* </Menu> */}
+                                            {/* <Grid item>
                                     <FormControl fullWidth>
                                         <InputLabel id="subCategory">
                                             Sub Category
@@ -525,42 +516,42 @@ const MyCourses = (setCourseId) => {
                                         </Select>
                                     </FormControl>
                                 </Grid> */}
-                                                    {/* </Select> */}
-                                                </FormControl>
-                                            </Box>
-                                            <ViewModule
-                                                className="view-icon"
-                                                sx={
-                                                    dataView === 'gridView'
-                                                        ? {
-                                                              color: 'secondary.main'
-                                                          }
-                                                        : {
-                                                              color: 'primary.light'
-                                                          }
-                                                }
-                                                onClick={() =>
-                                                    handleView('gridView')
-                                                }
-                                            />
-                                            <ViewList
-                                                className="view-icon listIcon"
-                                                sx={
-                                                    dataView === 'listView'
-                                                        ? {
-                                                              color: 'secondary.main'
-                                                          }
-                                                        : {
-                                                              color: 'primary.light'
-                                                          }
-                                                }
-                                                onClick={() =>
-                                                    handleView('listView')
-                                                }
-                                            />
+                                            {/* </Select> */}
+                                            {/* </FormControl> */}
                                         </Box>
+                                        <ViewModule
+                                            className="view-icon"
+                                            sx={
+                                                dataView === 'gridView'
+                                                    ? {
+                                                          color: 'secondary.main'
+                                                      }
+                                                    : {
+                                                          color: 'primary.light'
+                                                      }
+                                            }
+                                            onClick={() =>
+                                                handleView('gridView')
+                                            }
+                                        />
+                                        <ViewList
+                                            className="view-icon listIcon"
+                                            sx={
+                                                dataView === 'listView'
+                                                    ? {
+                                                          color: 'secondary.main'
+                                                      }
+                                                    : {
+                                                          color: 'primary.light'
+                                                      }
+                                            }
+                                            onClick={() =>
+                                                handleView('listView')
+                                            }
+                                        />
                                     </Box>
-                                )}
+                                </Box>
+                                {/* // )} */}
                                 {dataView === 'gridView' ? (
                                     isLoading ? (
                                         <Box textAlign="center">

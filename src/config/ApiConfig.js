@@ -1,7 +1,7 @@
 // export default Apiconfig;
 
-// export const url = "http://10.1.76.100:5000";
-// export const url = 'https://backendpxp.bhumiitech.com';
+// export const url = 'http://10.1.76.169:5000';
+// export const url = 'http://192.168.1.43:5000';
 
 export const url = 'http://10.1.76.169:5000';
 
@@ -64,6 +64,7 @@ const Apiconfig = {
         editQuestion: `${url}/section/editQuestion`,
         getAnswer: `${url}/section/getAnswer`,
         delete: `${url}/section/delete`,
+        deleteSection: `${url}/section/deleteSection`,
         createLectureExcercise: `${url}/lecture/createLectureExcercise`,
         getLectureExcercises: `${url}/lecture/getLectureExcercise`,
         submitLectureQuizAnswers: `${url}/lecture/submitAnswersToExcercise`,

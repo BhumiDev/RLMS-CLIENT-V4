@@ -99,7 +99,7 @@ export const createCourse = async (
     token = localStorage.getItem('token');
     console.log('Token', token);
     if (thumbnail === '' || thumbnail === null) {
-        toast.error('cant create course');
+        toast.error('cannot create course');
     } else {
         const response = await Axios.post(
             ApiConfig.course.createCourse,
@@ -117,6 +117,7 @@ export const createCourse = async (
             store.dispatch,
             response.data.data._id
         );
+        toast.success('Course overview created successfully!');
         localStorage.setItem('courseId', response.data.data._id);
         store.dispatch(getCurrentCourse(response.data.data));
         store.dispatch(setShowAddButtons(false));
@@ -744,6 +745,25 @@ export const getCurrentUser = async () => {
     return response;
 };
 
+// export const editProfilephoto = async (excelfile, userName) => {
+//     const formData = new FormData();
+//     console.log('excelfile', excelfile, userName);
+//     if (excelfile) formData.append('excelfile', excelfile);
+//     if (userName) {
+//         formData.append('userName', userName);
+//     }
+
+//     console.log('data', formData);
+//     const token = localStorage.getItem('token');
+//     let response = await Axios.post(`${ApiConfig.users.editUser}`, formData, {
+//         headers: {
+//             Accept: '*',
+//             Authorization: `Bearer ${token}`,
+//             'Content-Type': 'multipart/form-data'
+//         }
+//     });
+//     return response;
+// };
 export const editProfilephoto = async (excelfile, userName) => {
     const formData = new FormData();
     console.log('excelfile', excelfile, userName);
@@ -754,14 +774,31 @@ export const editProfilephoto = async (excelfile, userName) => {
 
     console.log('data', formData);
     const token = localStorage.getItem('token');
-    let response = await Axios.post(`${ApiConfig.users.editUser}`, formData, {
-        headers: {
-            Accept: '*',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-        }
-    });
-    return response;
+
+    try {
+        let response = await Axios.post(
+            `${ApiConfig.users.editUser}`,
+            formData,
+            {
+                headers: {
+                    Accept: '*',
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+
+        // Show success toast
+        toast.success('Profile updated successfully');
+        return response;
+    } catch (error) {
+        // Show error toast
+        toast.error(
+            'Error updating profile.Please! check your file extension.'
+        );
+
+        throw error; // Rethrow the error so that it can be handled by the caller if needed
+    }
 };
 
 export const createReviews = async (data, courseId) => {
@@ -793,13 +830,12 @@ export const getReviews = async (courseId) => {
     return response;
 };
 
-export const editReview = async (data, reviewId) => {
+export const editReview = async (data, reviewId, starsData) => {
+    console.log('datata', data, reviewId);
     const token = localStorage.getItem('token');
     const response = await Axios.put(
         `${Apiconfig.reviews.editReviews}/${reviewId}`,
-        {
-            review: data
-        },
+        { stars: starsData, review: data },
         {
             headers: {
                 Accept: '*',

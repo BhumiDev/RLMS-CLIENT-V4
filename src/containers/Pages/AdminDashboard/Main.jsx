@@ -250,7 +250,7 @@ const Main = () => {
                             style={{ textTransform: 'none' }}
                             startIcon={<DownloadIcon />}
                         >
-                            DOWNLOAD REPORT
+                            PRINT REPORT
                         </Button>
                         <Button
                             size='small'
@@ -273,7 +273,7 @@ const Main = () => {
                             style={{ textTransform: 'none' }}
                             endIcon={<DownloadIcon />}
                         >
-                            DOWNLOAD REPORT
+                            PRINT REPORT
                         </Button>
                         <Grid display='flex' flexDirection='column'>
                             <Button

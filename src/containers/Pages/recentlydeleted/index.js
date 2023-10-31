@@ -12,7 +12,7 @@ export const RecentlyDeletedCourses = () => {
     const getData = async () => {
         let response = await getRecentlyDeletedCourses();
         console.log('ghata ka data', response.data.data);
-        setData(response.data.data);
+        setData(response.data.data.reverse());
     };
 
     useEffect(() => {

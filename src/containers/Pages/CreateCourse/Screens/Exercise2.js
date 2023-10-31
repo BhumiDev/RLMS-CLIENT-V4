@@ -93,15 +93,18 @@ const Exercise = (props) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        const trimmedValue = value.replace(/^\s+/, '');
+        const trimmedName = name.replace(/^\s+/, '');
+
         console.log('value to be changed', name);
         // const newOptions = [...formData.options];
-        if (name.slice(0, 6) === 'option') {
+        if (trimmedName.slice(0, 6) === 'option') {
             setFormData({
                 ...formData,
-                options: { ...formData.options, [name]: value }
+                options: { ...formData.options, [trimmedName]: trimmedValue }
             });
         } else {
-            setFormData({ ...formData, [name]: value });
+            setFormData({ ...formData, [trimmedName]: trimmedValue });
         }
     };
 

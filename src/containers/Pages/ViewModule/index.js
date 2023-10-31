@@ -508,7 +508,7 @@ const ViewModule = () => {
 
         console.log('likes', response.data.data);
 
-        response.data.data.likes.map((x) => {
+        response?.data?.data?.likes?.map((x) => {
             if (x.userId === user?._id) {
                 console.log('userid in function', x.user);
                 setIsUser(true);
@@ -840,7 +840,6 @@ const ViewModule = () => {
                                         </Box>
                                     ))}
                                 </Card>
-
                                 {/* <Button
                                     onClick={StartQuizHandler}
                                     variant="contained"
@@ -2073,7 +2072,7 @@ const ViewModule = () => {
                                                                             {showReply ===
                                                                                 comment && (
                                                                                 <>
-                                                                                    {comment.reply.map(
+                                                                                    {comment?.reply?.map(
                                                                                         (
                                                                                             item
                                                                                         ) => {
@@ -2279,9 +2278,14 @@ const ViewModule = () => {
                                             <TextField
                                                 label="Leave a comment"
                                                 value={comments}
-                                                onChange={(e) =>
-                                                    setComment(e.target.value)
-                                                }
+                                                onChange={(e) => {
+                                                    const trimmedValue =
+                                                        e.target.value.replace(
+                                                            /^\s+/,
+                                                            ''
+                                                        );
+                                                    setComment(trimmedValue);
+                                                }}
                                                 fullWidth
                                                 InputProps={{
                                                     endAdornment: (

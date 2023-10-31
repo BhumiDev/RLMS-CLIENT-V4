@@ -21,13 +21,16 @@ import Link from '@mui/material/Link';
 import { Button, Grid, Typography } from '@mui/material';
 import ApiConfig, { url } from '../config/ApiConfig';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import jwtDecode from 'jwt-decode';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadExcelDialog from './uploadExcelDialog';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useTheme } from '@emotion/react';
 
 const ScheduleLiveClasses = () => {
+    const theme = useTheme();
     const [alpha, setAlpha] = React.useState();
     const [courses, setCourse] = React.useState('');
     const [data, setData] = React.useState();
@@ -37,22 +40,27 @@ const ScheduleLiveClasses = () => {
     const [agendas, setAgenda] = React.useState('');
     const [date, setDate] = React.useState('');
     const [time, setTime] = React.useState('');
+    const [openDelete, setOpenDelete] = React.useState(false);
     const [cour, setCourses] = React.useState();
+    const [scheduleLiveDIsable, setScheduleLiveDIsable] = React.useState(true);
     const token = localStorage.getItem('token');
-    const [reload, setReload] = useState(true)
+    const [reload, setReload] = useState(true);
     let user = token && jwtDecode(token);
 
     useEffect(() => {
-        console.log('reload', reload)
-    }, [reload])
+        console.log('reload', reload);
+    }, [reload]);
     const handleChange = (event) => {
-        console.log(event.target.value);
+        console.log('handleChange', event.target.value);
         setCourse(event.target.value);
         for (let i = 0; i < cour.length; i++) {
             if (cour[i].courseName == event.target.value) {
                 setcategory(cour[i].majorCategory);
             }
         }
+
+        // const isEmptyPlaceholder = event.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleLive = async (id) => {
@@ -103,6 +111,7 @@ const ScheduleLiveClasses = () => {
             const res = await Axios.delete(
                 `${url}/live/deleteLiveClasses/${id}`
             );
+            setOpenDelete(false);
         } catch (err) {
             console.log(err);
         }
@@ -114,6 +123,10 @@ const ScheduleLiveClasses = () => {
 
     const handleChangeTitle = (event) => {
         setTitle(event.target.value);
+        const isEmptyPlaceholder = event.target.value === '';
+        setScheduleLiveDIsable(
+            isEmptyPlaceholder || !event.target.value.trim()
+        );
     };
 
     const handleChangeInstructor = (event) => {
@@ -122,17 +135,28 @@ const ScheduleLiveClasses = () => {
 
     const handleChangeAgenda = (event) => {
         setAgenda(event.target.value);
+        // const isEmptyPlaceholder = event.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleChangeDate = (e) => {
         setDate(e.target.value);
+        // const isEmptyPlaceholder = e.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !e.target.value.trim())
     };
 
     const handleChangeTime = (e) => {
         setTime(e.target.value);
+        // const isEmptyPlaceholder = e.target.value === "";
+        // setScheduleLiveDIsable(isEmptyPlaceholder || !e.target.value.trim())
     };
 
     const handleClickOpen = async () => {
+        if (!title || !agendas || !date || !time || !courses) {
+            // Display a toast or error message to inform the user to fill in all required fields.
+            toast.error('Please! fill in all fields as they are required.', { autoClose: 3000 });
+            return;
+        }
         setOpen(true);
         console.log('arsh from live');
         const userId = token && jwtDecode(token);
@@ -163,11 +187,19 @@ const ScheduleLiveClasses = () => {
         );
         console.log('RESPONSE', response);
         setReload(!reload);
-        setTitle("");
-        setDate("");
-        setTime("");
-        setCourse("");
-        setAgenda("");
+        setTitle('');
+        setDate('');
+        setTime('');
+        setCourse('');
+        setAgenda('');
+    };
+
+    const handleClickOpenDelete = () => {
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
     };
 
     const handleClose = () => {
@@ -206,6 +238,8 @@ const ScheduleLiveClasses = () => {
                             width: { md: '100%', sm: '97%', xs: '90%' }
                         }}
                         onChange={handleChangeTitle}
+                        
+                        required // Add required attribute
                     />
 
                     <TextField
@@ -221,6 +255,8 @@ const ScheduleLiveClasses = () => {
                         multiline
                         rows={8}
                         onChange={handleChangeAgenda}
+                        
+                        required // Add required attribute
                     />
                     <Stack direction="row" mt={2}>
                         {/*  <Stack component="form" noValidate spacing={3} direction="row" mr={4}> */}
@@ -247,6 +283,8 @@ const ScheduleLiveClasses = () => {
                                     shrink: true
                                 }}
                                 onChange={handleChangeDate}
+                                
+                        required // Add required attribute
                             />
                             <TextField
                                 mt={2}
@@ -265,6 +303,8 @@ const ScheduleLiveClasses = () => {
                                     width: { md: 150, sm: '97%', xs: '100%' }
                                 }}
                                 onChange={handleChangeTime}
+                                
+                        required // Add required attribute
                             />
                         </Stack>
                     </Stack>
@@ -285,6 +325,8 @@ const ScheduleLiveClasses = () => {
                                 // sx={{ width: '100%'}}
                                 defaultValue="Select course(s)"
                                 onChange={handleChange}
+                                
+                        required // Add required attribute
                             >
                                 {cour?.map((item) => (
                                     <MenuItem
@@ -311,18 +353,30 @@ const ScheduleLiveClasses = () => {
                     <div>
                         {/* dialog box */}
                         {/* <Button onClick={handleClickOpen} variant="contained" sx={{backgroundColor:"secondary.main"}}> */}
-                        <Box display='flex' gap={2}>
+                        <Box display="flex" gap={2}>
                             <Button
                                 onClick={handleClickOpen}
-                                size='small'
+                                size="small"
                                 variant="contained"
                                 color="secondary"
                                 sx={{ marginLeft: '8px' }}
+                                disabled={scheduleLiveDIsable}
                             >
                                 SCHEDULE LIVE
                             </Button>
-                            <UploadExcelDialog setReload={setReload} reload={reload} />
+                            <UploadExcelDialog
+                                setReload={setReload}
+                                reload={reload}
+                            />
                         </Box>
+                        <Typography
+                            variant="caption"
+                            sx={{ ml: '5px', fontSize:"10px" }}
+                            // style={{ color: 'red' }}
+                        >
+                            *Please fill all the fields. Otherwise, the
+                            class will not be scheduled.
+                        </Typography>
                         <Dialog
                             open={open}
                             onClose={handleClose}
@@ -408,13 +462,48 @@ const ScheduleLiveClasses = () => {
                                     align="center"
                                     height="30px"
                                     variant="contained"
-                                    onClick={() => {
-                                        deleteclass(item._id);
-                                    }}
+                                    onClick={handleClickOpenDelete}
                                     color="secondary"
                                 >
                                     <DeleteIcon />
                                 </Button>
+                                <Dialog
+                                    open={openDelete}
+                                    onClose={handleCloseDelete}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            Are you sure you want to delete this
+                                            scheduled class ?
+                                        </DialogContentText>
+                                    </DialogContent>
+
+                                    <DialogActions>
+                                        <Button
+                                            onClick={handleCloseDelete}
+                                            autoFocus
+                                            variant="outlined"
+                                            size="small"
+                                            color="secondary"
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                deleteclass(item._id);
+                                            }}
+                                            autoFocus
+                                            variant="contained"
+                                            color="error"
+                                            size="small"
+                                        >
+                                            Delete
+                                            <DeleteIcon />
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Stack>
                             <Stack direction="row" justifyContent="center">
                                 <Button
@@ -429,7 +518,7 @@ const ScheduleLiveClasses = () => {
                             </Stack>
 
                             <Box sx={{ minWidth: 120 }}>
-                                <FormControl fullWidth>
+                                {/* <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">
                                         calendar sync
                                     </InputLabel>
@@ -462,6 +551,62 @@ const ScheduleLiveClasses = () => {
                                             >
                                                 yahoo sync
                                             </Button>
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl> */}
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">
+                                        calendar sync
+                                    </InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        label="calendar sync"
+                                        defaultValue={10} // Set the default value to one of the available values
+                                    >
+                                        {/* <MenuItem
+                                            value={5}
+                                            // onClick={() =>
+                                            //     window.open(
+                                            //         google(item),
+                                            //         '_blank'
+                                            //     )
+                                            // }
+                                        >
+                                           <Typography sx={{color:theme.palette.text.disabled}}>Select a Calender</Typography>
+                                        </MenuItem> */}
+                                        <MenuItem
+                                            value={10}
+                                            onClick={() =>
+                                                window.open(
+                                                    google(item),
+                                                    '_blank'
+                                                )
+                                            }
+                                        >
+                                            Google Sync
+                                        </MenuItem>
+                                        <MenuItem
+                                            value={20}
+                                            onClick={() =>
+                                                window.open(
+                                                    outlook(item),
+                                                    '_blank'
+                                                )
+                                            }
+                                        >
+                                            Outlook Sync
+                                        </MenuItem>
+                                        <MenuItem
+                                            value={30}
+                                            onClick={() =>
+                                                window.open(
+                                                    yahoo(item),
+                                                    '_blank'
+                                                )
+                                            }
+                                        >
+                                            Yahoo Sync
                                         </MenuItem>
                                     </Select>
                                 </FormControl>

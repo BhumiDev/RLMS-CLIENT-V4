@@ -62,7 +62,7 @@ const Dashboard = () => {
             );
             console.log('response', res);
 
-            setData(res.data.data);
+            setData(res.data.data.reverse());
         } catch (err) {
             console.log(err);
         }
@@ -188,23 +188,30 @@ const Dashboard = () => {
                                 Upcoming Live Sessions
                             </Typography>
                         </Stack>
-
-                        {itemData?.map((item) => (
-                            <Box
-                                key={item.id}
-                                width={{
-                                    xl: '80%',
-                                    lg: '80%',
-                                    md: '100%',
-                                    xs: '100%',
-                                    sm: '100%'
-                                }}
-                            >
-                                {/* <Box key={item.id} style={{ marginRight: '43px' }}> */}
-                                {console.log('item', item)}
-                                <Right item={item} />
-                            </Box>
-                        ))}
+                        <Stack
+                            sx={{
+                                overflow: 'scroll',
+                                overflowX: 'hidden',
+                                height: '75vh'
+                            }}
+                        >
+                            {itemData?.map((item) => (
+                                <Box
+                                    key={item.id}
+                                    width={{
+                                        xl: '80%',
+                                        lg: '80%',
+                                        md: '100%',
+                                        xs: '100%',
+                                        sm: '100%'
+                                    }}
+                                >
+                                    {/* <Box key={item.id} style={{ marginRight: '43px' }}> */}
+                                    {console.log('item', item)}
+                                    <Right item={item} />
+                                </Box>
+                            ))}
+                        </Stack>
                     </Card>
                 </Grid>
             </Grid>

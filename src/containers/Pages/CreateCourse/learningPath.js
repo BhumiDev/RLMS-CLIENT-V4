@@ -44,7 +44,7 @@ const MenuProps = {
 };
 
 const columns = [
-    { field: 'id', headerName: 'ID', width: 250 },
+    { field: 'id', headerName: 'S No.', width: 250 },
     {
         field: 'name',
         headerName: 'Name',
@@ -80,7 +80,9 @@ export default function LearningPath() {
     const [category, setCategory] = useState([]);
     const [users, setUsers] = useState([{}]);
     const [rowData, setRowData] = useState([{}]);
+    // const [filteredCourses, setFilteredCourses] = useState([]);
     const [value, setValue] = useState(false);
+    // const [selectAll, setSelectAll] = useState(false);
     const [instructorDetails, setInstructorDetails] = useState('');
 
     const [selectedIds, setSelectedIds] = useState([]);
@@ -96,12 +98,13 @@ export default function LearningPath() {
         studentCategory().then((data) => setCategory(data));
         setDetails();
     }, [users]);
+    console.log('courses', courses);
 
     const setDetails = () => {
         if (users[0]?.name) {
-            const userDetails = users.map((value) => {
+            const userDetails = users.map((value, index) => {
                 let details = {
-                    id: value._id,
+                    id: index + 1,
                     name: value.name,
                     majorCategory: value.majorCategory,
                     subCategory: value.subCategory
@@ -112,6 +115,7 @@ export default function LearningPath() {
 
             setValue(true);
             setRowData(userDetails);
+            console.log('userDetails', userDetails);
         }
 
         if (courses[0].author) {
@@ -119,9 +123,50 @@ export default function LearningPath() {
         }
     };
 
+    // Filter courses based on the category condition
+    const filteredCourses = courses.filter(
+        (course) => course.majorCategory === selected.category
+    );
+
+    // const createLearningPath = async () => {
+    //     console.log(instructorDetails); //ins
+    //     console.log(selectedIds); // student
+
+    //     const selectedCourseIds = [];
+    //     selected.courses.map((course) => selectedCourseIds.push(course.id));
+    //     let obj = {
+    //         instructor: instructorDetails,
+    //         students: selectedIds,
+    //         courses: selectedCourseIds,
+    //         title: selected.title
+    //     };
+
+    //     console.log('obj', obj);
+
+    //     try {
+    //         await creatingLearningPath(obj);
+    //         toast.success('Learning Path Created Successfully');
+    //         setUsers([{}]);
+    //         setSelected({
+    //             courses: [],
+    //             category: '',
+    //             title: ''
+    //         });
+    //     } catch (err) {
+    //         console.log('err', err);
+    //         toast.error("Learning Path Can't be Created");
+    //     }
+    // };
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
     const createLearningPath = async () => {
-        console.log(instructorDetails); //ins
-        console.log(selectedIds); // student
+        console.log(instructorDetails);
+        console.log(selectedIds);
+
+        if (selected.title.trim() === '') {
+            toast.error('Title is required');
+            return; // Do not proceed if the title is empty
+        }
 
         const selectedCourseIds = [];
         selected.courses.map((course) => selectedCourseIds.push(course.id));
@@ -149,29 +194,75 @@ export default function LearningPath() {
         }
     };
 
+    // const handleChange = (event) => {
+    //     const {
+    //         target: { name, value }
+    //     } = event;
+    //     console.log('value', value);
+
+    //     const obj = {
+    //         name: value[value.length - 1].courseName,
+    //         id: value[value.length - 1]._id
+    //     };
+
+    //     if (name === 'courses') {
+    //         selected.courses.findIndex((x) => x.id === obj.id) == -1
+    //             ? selected.courses.push(obj)
+    //             : console.log('course already choosen');
+
+    //         // console.log('setting selected');
+    //         setSelected({ ...selected }, selected);
+    //     } else if (name === 'category') {
+    //         setSelected({ ...selected, category: value });
+    //         getStudentByCategory(value).then((data) => setUsers(data));
+    //     } else {
+    //         console.log("selecteddd", selected)
+    //         setSelected({ ...selected, title: value });
+    //     }
+    // };
     const handleChange = (event) => {
         const {
             target: { name, value }
         } = event;
-        console.log('value', value);
-
-        const obj = {
-            name: value[value.length - 1].courseName,
-            id: value[value.length - 1]._id
-        };
 
         if (name === 'courses') {
-            selected.courses.findIndex((x) => x.id === obj.id) == -1
-                ? selected.courses.push(obj)
-                : console.log('course already choosen');
+            // Get the last character of the value
+            const lastCharacter = value[value.length - 1];
 
-            // console.log('setting selected');
-            setSelected({ ...selected }, selected);
+            // Create the object with the correct properties
+            const obj = {
+                name: lastCharacter.courseName,
+                id: lastCharacter._id
+            };
+
+            // Check if the id already exists in the selected.courses array
+            const index = selected.courses.findIndex((x) => x.id === obj.id);
+
+            if (index === -1) {
+                // If not, push the new object
+                setSelected((prevState) => ({
+                    ...prevState,
+                    courses: [...prevState.courses, obj]
+                }));
+            } else {
+                console.log('Course already chosen');
+            }
         } else if (name === 'category') {
-            setSelected({ ...selected, category: value });
+            setSelected((prevState) => ({
+                ...prevState,
+                category: value
+            }));
             getStudentByCategory(value).then((data) => setUsers(data));
+        } else if (name === 'title') {
+            setSelected((prevState) => ({
+                ...prevState,
+                title: value
+            }));
         } else {
-            setSelected({ ...selected, title: value });
+            setSelected((prevState) => ({
+                ...prevState,
+                title: value
+            }));
         }
     };
 
@@ -204,7 +295,7 @@ export default function LearningPath() {
                         fullWidth
                         name="title"
                         label="Title"
-                        value={selected.title}
+                        value={selected.title.replace(/^\s+/, '')}
                         onChange={handleChange}
                     />
                 </Box>
@@ -270,7 +361,7 @@ export default function LearningPath() {
                     )}
                     MenuProps={MenuProps}
                 >
-                    {courses?.map((course) => (
+                    {filteredCourses?.map((course) => (
                         <MenuItem
                             key={course._id}
                             id={course._id}
@@ -281,8 +372,7 @@ export default function LearningPath() {
                     ))}
                 </Select>
             </FormControl>
-
-            {value && (
+            {users.length !== 0 && value && (
                 <div>
                     <Box sx={{ height: 400, width: '100%' }}>
                         <DataGrid
@@ -305,7 +395,55 @@ export default function LearningPath() {
                             disableRowSelectionOnClick
                         />
                     </Box>
-                    <Box display="flex" justifyContent="flex-end" mt={2}>
+                    <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        my={2}
+                        flexDirection="row"
+                        gap={2}
+                    >
+                        {/* <Button
+                            variant="outlined"
+                            color="secondary"
+                            // onClick={(e) =>{ 
+                            //     // setSelectAll(!selectAll)
+                            // }}
+                            onClick={() => {
+                                // Check if users.length is not 0 and the value is true
+                                if (users.length !== 0 && value) {
+                                    // Create an array containing all row IDs
+                                    const allRowIds = rowData.map((row) => row.id);
+                        
+                                    // Set the selectedIds state with all row IDs
+                                    setSelectedIds(allRowIds);
+                                }
+                            }}
+                            >
+                            Select all users
+                        </Button> */}
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => {
+                                if (users.length !== 0) {
+                                    // Check if any of the selectedIds are in allRowIds, and if so, remove them
+                                    const allRowIds = rowData.map(
+                                        (row) => row.id
+                                    );
+                                    const newSelectedIds = selectedIds.some(
+                                        (id) => allRowIds.includes(id)
+                                    )
+                                        ? [] // If some selectedIds are in allRowIds, clear the selection
+                                        : allRowIds; // Otherwise, select all users
+
+                                    setSelectedIds(newSelectedIds);
+                                }
+                            }}
+                        >
+                            {selectedIds.length === 0
+                                ? 'Select all users'
+                                : 'Deselect all users'}
+                        </Button>
                         <Button
                             variant="contained"
                             color="secondary"

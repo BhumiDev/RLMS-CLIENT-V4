@@ -46,7 +46,7 @@ export const AttendanceDetails = () => {
                     justifyContent="center"
                 >
                     <Typography
-                        variant="h5"
+                        variant="h3"
                         color="text.primary"
                         sx={{
                             fontWeight: 600
@@ -57,14 +57,15 @@ export const AttendanceDetails = () => {
                         justifyContent="center"
                         gap={1}
                     >
-                        <GroupsIcon /> Attendance Details
+                        <GroupsIcon sx={{ fontSize: '40px' }} /> Attendance Details
                     </Typography>
                 </Box>
 
                 {/* Search user textfield */}
 
                 <Box display="flex" gap={2} justifyContent="flex-end" mt={3} flexDirection={{ md: 'row', sm: 'row', xs: 'column' }}>
-                    <TextField
+                    {/* do not need search by user because it is already showing results for a particular user */}
+                    {/* <TextField
                         label="Search User"
                         value={searchValue}
                         onChange={(e) => handleChange(e)}
@@ -75,7 +76,7 @@ export const AttendanceDetails = () => {
                                 </InputAdornment>
                             )
                         }}
-                    />
+                    /> */}
                 </Box>
 
                 {/* table starts */}
@@ -111,7 +112,7 @@ export const AttendanceDetails = () => {
                                         }}
                                     >
                                         <TableCell component="th" scope="row">
-                                            {row?.loginDate}
+                                            {new Date(row?.loginDate).toLocaleDateString()}
                                         </TableCell>
                                         <TableCell component="th" scope="row">
                                             {row?.studentId}

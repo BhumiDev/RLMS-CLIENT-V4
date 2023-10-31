@@ -32,6 +32,8 @@ const Login = () => {
     const location = useLocation();
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setLoading] = useState(false);
+    const [errorCount, setErrorCount] = useState(0); // New state to track error count
+    const [isLoginButtonDisabled, setLoginButtonDisabled] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const theme = useTheme();
     const navigate = useNavigate();
@@ -54,10 +56,63 @@ const Login = () => {
         onSubmit: (values) => {
             setLoading(true);
             store.dispatch(
-                login(values, setLoading, navigate, location, toast)
+                login(
+                    values,
+                    setLoading,
+                    navigate,
+                    location,
+                    toast,
+                    handleLoginError
+                )
             );
         }
     });
+
+    // const handleLoginError = () => {
+    //     setErrorCount((prevCount) => prevCount + 1);
+
+    //     // Disable login button after 5 toast errors
+    //     if (errorCount >= 4) {
+    //         // formik.setFieldValue('userId', ''); // Optionally, clear userId
+    //         // formik.setFieldValue('password', ''); // Optionally, clear password
+    //         formik.setFieldError('userId', 'Login button disabled due to too many login attempts.');
+    //         formik.setFieldError('password', 'Login button disabled due to too many login attempts.');
+    //     }
+    // };
+
+    // // Enable the login button when the user changes values in userId or password TextField
+    // const handleInputChange = (e) => {
+    //     if (errorCount >= 4) {
+    //         setErrorCount(0);
+    //     }
+    //     formik.handleChange(e);
+    // };
+
+    const handleLoginError = () => {
+        setErrorCount((prevCount) => prevCount + 1);
+
+        // Disable login button after 5 toast errors
+        if (errorCount >= 0) {
+            formik.setFieldError(
+                'userId',
+                'Please re-check your userID credentials.'
+            );
+            formik.setFieldError(
+                'password',
+                'Please re-check your Password credentials.'
+            );
+            setLoginButtonDisabled(true);
+        }
+    };
+
+    // Enable the login button when the user changes values in userId or password TextField
+    const handleInputChange = (e) => {
+        if (errorCount >= 0) {
+            setErrorCount(0);
+            setLoginButtonDisabled(false); // Enable the login button
+        }
+        formik.handleChange(e);
+    };
 
     return (
         <Box
@@ -71,7 +126,6 @@ const Login = () => {
             color="primary"
         >
             <Card sx={{ width: '100%' }}>
-                {/* mx={{ xs: 4, md: 9 }} */}
                 <Box px={{ xs: 2, md: 5 }}>
                     <CardContent sx={{ pt: 10 }}>
                         <Typography
@@ -94,7 +148,10 @@ const Login = () => {
                                         fullWidth
                                         color="secondary"
                                         value={formik.values.userId}
-                                        onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            handleInputChange(e);
+                                            formik.handleChange(e);
+                                        }}
                                         error={
                                             formik.touched.userId &&
                                             Boolean(formik.errors.userId)
@@ -118,7 +175,10 @@ const Login = () => {
                                         fullWidth
                                         color="secondary"
                                         value={formik.values.password}
-                                        onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            handleInputChange(e);
+                                            formik.handleChange(e);
+                                        }}
                                         error={
                                             formik.touched.password &&
                                             Boolean(formik.errors.password)
@@ -145,7 +205,7 @@ const Login = () => {
                                                 </InputAdornment>
                                             )
                                         }}
-                                    />{' '}
+                                    />
                                 </Box>
                                 <Box textAlign="end">
                                     <Link to="/forgot-password">
@@ -159,13 +219,13 @@ const Login = () => {
                                 </Box>
 
                                 <Box textAlign="center" mt={15}>
-                                    {' '}
                                     <Button
                                         type="submit"
                                         variant="contained"
                                         color="secondary"
                                         size="large"
                                         sx={{ width: '176px' }}
+                                        disabled={isLoginButtonDisabled} // Disable the button conditionally
                                     >
                                         {isLoading && (
                                             <CircularProgress

@@ -140,15 +140,29 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
         console.log('img', img);
         let data = img.type;
         console.log('img type', data);
-        let result = data.substring(0, 5);
-        console.log('result', result);
-        if (result === 'image') {
+        // let result = data.substring(0, 5);
+        // console.log('result', result);
+        if (
+            !(
+                data &&
+                (data === 'image/jpeg' ||
+                    data === 'image/jpg' ||
+                    data === 'image/png')
+            )
+        ) {
+            // Show error toast
+            toast.error('Please! upload images only.');
+        } else {
             setThumbnail(img);
             return;
-        } else {
-            toast.error('Please upload image');
-            return;
         }
+        // if (result === 'image') {
+        //     setThumbnail(img);
+        //     return;
+        // } else {
+        //     toast.error('Please upload image');
+        //     return;
+        // }
     };
     const removeThumb = () => {
         setThumbnail('');
@@ -239,7 +253,19 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
                                         name="courseCode"
                                         variant="outlined"
                                         value={formik.values.courseCode}
-                                        onChange={formik.handleChange}
+                                        // onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            const trimmedValue =
+                                                e.target.value.replace(
+                                                    /^\s+/,
+                                                    ''
+                                                ); // Trim spaces before any character
+                                            formik.handleChange(e);
+                                            formik.setFieldValue(
+                                                'courseCode',
+                                                trimmedValue
+                                            );
+                                        }}
                                         error={
                                             formik.touched.courseCode &&
                                             Boolean(formik.errors.courseCode)
@@ -258,7 +284,18 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
                                         variant="outlined"
                                         inputProps={{ maxLength: 50 }}
                                         value={formik.values.courseName}
-                                        onChange={formik.handleChange}
+                                        onChange={(e) => {
+                                            const trimmedValue =
+                                                e.target.value.replace(
+                                                    /^\s+/,
+                                                    ''
+                                                ); // Trim spaces before any character
+                                            formik.handleChange(e);
+                                            formik.setFieldValue(
+                                                'courseName',
+                                                trimmedValue
+                                            );
+                                        }}
                                         error={
                                             formik.touched.courseName &&
                                             Boolean(formik.errors.courseName)

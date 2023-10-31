@@ -21,6 +21,8 @@ import { useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import Apiconfig from "../../../config/ApiConfig";
 import EditIcon from '@mui/icons-material/Edit';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const ViewProfile = () => {
 
@@ -31,12 +33,46 @@ export const ViewProfile = () => {
     const [userName, setUserName] = useState("");
 
     const [open, setOpen] = useState(false);
+    const [disableSave, setDisableSave] = useState(true);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const getUser = async () => {
         const res = await getCurrentUser();
         setUser(res?.data?.data)
+    }
+
+    const handleFileChange = (e) => {
+        if (
+            !(
+                e.target.files[0] &&
+                (e.target.files[0].type ===
+                    'image/jpeg' ||
+                    e.target.files[0].type ===
+                        'image/jpg' ||
+                    e.target.files[0].type ===
+                        'image/png')
+            )
+        ) {
+            // Show error toast
+            toast.error(
+                'Please! upload images only.'
+            );
+        } else {
+            // Set media if the condition is satisfied
+            console.log("name", e.target.files[0])
+            setImage(e.target.files[0])
+            const isEmptyPlaceholder = e.target.files[0] === "";
+            setDisableSave(isEmptyPlaceholder || !e.target.files[0])
+            setImage('');
+        }
+    }
+
+    const handleNameChange = (e) => {
+       
+        setUserName(e.target.value)
+        const isEmptyPlaceholder = e.target.value === "";
+        setDisableSave(isEmptyPlaceholder || !e.target.value.trim())
     }
 
     const formData = new FormData();
@@ -121,20 +157,21 @@ export const ViewProfile = () => {
                                 label="Update Profile Photo"
                                 type='file'
                                 InputLabelProps={{ shrink: true }}
-                                onChange={(e) => setImage(e.target.files[0])}
+                                onChange={handleFileChange}
+                                helperText="Image should be in .jpeg, .jpg or .png"
                             />
                             <TextField
                                 value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
+                                onChange={handleNameChange}
                                 fullWidth
                                 label="Update Username"
                             />
                         </Grid>
                         <Grid display="flex" justifyContent='flex-end' mt={2} gap={2}>
-                            <Button variant="outlined" sx={{ color: 'secondary.main' }} onClick={handleClose}>
+                            <Button variant="outlined" color='error'onClick={handleClose}>
                                 Cancel
                             </Button>
-                            <Button variant="contained" sx={{ backgroundColor: 'secondary.main' }} onClick={editPhoto}>
+                            <Button variant="contained" sx={{ backgroundColor: 'secondary.main' }} disabled={disableSave} onClick={editPhoto}>
                                 Save
                             </Button>
                         </Grid>
