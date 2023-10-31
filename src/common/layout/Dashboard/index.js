@@ -268,7 +268,7 @@ const DashboardLayout = (props) => {
             let data = await searchCourse(e.target.value);
             navigate('/dashboard/search', { state: data });
         } else {
-            navigate('/dashboard');
+            navigate(-1);
         }
     };
 
@@ -1331,7 +1331,9 @@ const DashboardLayout = (props) => {
                             '/dashboard/courses/all-courses',
                             '/dashboard/courses/my-courses',
                             '/dashboard/courses/mandatory-courses',
-                            '/dashboard/learning-path'
+                            '/dashboard/learning-path',
+                            '/dashboard/courses/recently-deleted',
+                            '/dashboard/search'
                         ].includes(location.pathname) && (
                             <TextField
                                 size="small"
