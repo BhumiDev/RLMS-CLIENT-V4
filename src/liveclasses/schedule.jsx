@@ -28,6 +28,7 @@ import UploadExcelDialog from './uploadExcelDialog';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useTheme } from '@emotion/react';
+import moment from 'moment/moment';
 
 const ScheduleLiveClasses = () => {
     const theme = useTheme();
@@ -89,7 +90,6 @@ const ScheduleLiveClasses = () => {
             );
             console.log('response of get all live classes', res);
             setData(res.data.data);
-
             const res2 = await Axios.get(
                 `${ApiConfig.course.myCoursesofInstructor}/${user?._id}`,
                 {
@@ -100,6 +100,7 @@ const ScheduleLiveClasses = () => {
             );
 
             setCourses(res2.data.data);
+
         } catch (err) {
             console.log(err);
         }
@@ -122,7 +123,7 @@ const ScheduleLiveClasses = () => {
     }, [open, alpha, reload]);
 
     const handleChangeTitle = (event) => {
-        setTitle(event.target.value);
+        setTitle(event.target.value.replace(/^\s+/, ''));
         const isEmptyPlaceholder = event.target.value === '';
         setScheduleLiveDIsable(
             isEmptyPlaceholder || !event.target.value.trim()
@@ -134,13 +135,16 @@ const ScheduleLiveClasses = () => {
     };
 
     const handleChangeAgenda = (event) => {
-        setAgenda(event.target.value);
+        setAgenda(event.target.value.replace(/^\s+/, ''));
         // const isEmptyPlaceholder = event.target.value === "";
         // setScheduleLiveDIsable(isEmptyPlaceholder || !event.target.value.trim())
     };
 
     const handleChangeDate = (e) => {
+        console.log("date", date);
+        // console.log("date moment", moment(date).toISOString());
         setDate(e.target.value);
+        // console.log("date1", moment(date).toISOString())
         // const isEmptyPlaceholder = e.target.value === "";
         // setScheduleLiveDIsable(isEmptyPlaceholder || !e.target.value.trim())
     };
@@ -171,7 +175,7 @@ const ScheduleLiveClasses = () => {
                 title,
                 url: murl,
                 instructor: userId.userName,
-                setdate: date,
+                setDate: moment(date).toISOString(),
                 settime: time,
                 course: courses,
                 agenda: agendas,
@@ -431,10 +435,10 @@ const ScheduleLiveClasses = () => {
                                 spacing={2}
                             >
                                 <Typography variant="subtitle2">
-                                    date:{item.setdate}
+                                    date:{moment(item.setDate).format('YYYY-MM-DD')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    time:{item.settime}
+                                    time:{moment(item.setDate).format('h:mm a')}
                                 </Typography>
                             </Stack>
                             <Stack

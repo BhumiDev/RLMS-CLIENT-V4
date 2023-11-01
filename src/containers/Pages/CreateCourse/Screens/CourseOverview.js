@@ -448,7 +448,9 @@ const CourseOverView = ({ setOverview, setCourseId, toggleUpdate }) => {
                                                                 removeThumb
                                                             }
                                                             sx={{
-                                                                mr: 1
+                                                                mr: 1,
+                                                                maxWidth:
+                                                                    '200px'
                                                             }}
                                                         />
                                                     )}

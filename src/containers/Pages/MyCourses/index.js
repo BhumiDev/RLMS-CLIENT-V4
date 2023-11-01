@@ -464,6 +464,10 @@ const MyCourses = (setCourseId) => {
                                                             handleCategories
                                                         }
                                                     >
+                                                        {/* <MenuItem value="All">
+                                                            All
+                                                        </MenuItem>{' '} */}
+                                                        {/* Add an "All" option */}
                                                         {allCategories &&
                                                             allCategories?.map(
                                                                 (

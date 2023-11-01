@@ -1,10 +1,11 @@
-import { Box, Button, CircularProgress, Grid, InputLabel, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Grid, IconButton, InputLabel, Stack, TextField, Typography } from "@mui/material"
 import AddIcon from '@mui/icons-material/Add';
 import BreadCrumb from "../../../common/components/Breadcrumb";
 import { AddQuestionBreadcrumb } from "../../../utils/StaticData/Breadcrumbs/Course";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { addAssessmentQuestions } from "../../../API/Course";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from "react-redux";
 
 
@@ -23,13 +24,15 @@ export const AddAssessmentQuestions = () => {
 
     const handleChange = (e, index) => {
         const { name, value } = e.target;
+        const trimmedValue = value.replace(/^\s+/, '');
+        const trimmedName = name.replace(/^\s+/, '');
         const data = [...questions];
 
-        if (name.slice(0, 6) === 'option') {
-            data[index].options[name] = value;
+        if (trimmedName.slice(0, 6) === 'option') {
+            data[index].options[trimmedName] = trimmedValue;
             setQuestions(data);
         } else {
-            data[index][name] = value;
+            data[index][trimmedName] = trimmedValue;
             setQuestions(data);
         }
     };
@@ -90,6 +93,25 @@ export const AddAssessmentQuestions = () => {
         // );
     };
 
+    // const deleteQuestion = (index) => {
+    //     if (formData.questions.length > 1) {
+    //         const updatedQuestions = [...formData.questions];
+    //         updatedQuestions.splice(index, 1);
+
+    //         setFormData((prevFormData) => ({
+    //             ...prevFormData,
+    //             questions: updatedQuestions
+    //         }));
+    //     }
+    // };
+    const deleteQuestion = (index) => {
+        if (questions.length > 1) {
+          const updatedQuestions = [...questions];
+          updatedQuestions.splice(index, 1);
+          setQuestions(updatedQuestions);
+        }
+      };
+
     const [top, setTop] = useState(true);
 
     useEffect(() => {
@@ -135,10 +157,11 @@ export const AddAssessmentQuestions = () => {
                             {questions?.map((question, index) => {
                                 return (
                                     <Box my={4} display="flex" flexDirection='column' gap={4}>
+
                                         <Grid item display="flex" alignItems='center' justifyContent='space-between' gap={2} md={12}>
-                                            <Typography variant="h5" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Ques {index + 1} :</Typography>
+                                            <Typography variant="h5" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'110px' }}>Ques {index + 1} :</Typography>
                                             <TextField
-                                                sx={{ width: { md: '92%', sm: '84%', xs: '70%', xl: '93.5%' } }}
+                                                sx={{ width: '100%'  }}
                                                 name="question"
                                                 multiline
                                                 label='Enter question here'
@@ -147,10 +170,31 @@ export const AddAssessmentQuestions = () => {
                                                     handleChange(e, index);
                                                 }}
                                             />
+                                        <Stack
+                                               sx={{
+                                                 justifyContent: 'end',
+                                                 alignItems: 'end',
+                                               }}
+                                             >
+                                               <IconButton
+                                                 aria-label="delete"
+                                                 onClick={() => {
+                                                   console.log('deleteQuestion', index);
+                                                   deleteQuestion(index);
+                                                 }}
+                                                 disabled={questions?.length <= 1}
+                                               >
+                                                 <DeleteIcon
+                                                   style={{
+                                                     color: 'red',
+                                                   }}
+                                                 />
+                                               </IconButton>
+                                             </Stack>
                                         </Grid>
                                         <Box display="flex" flexDirection='column' gap={2}>
                                             <Grid item display="flex" alignItems='center' gap={4.5} md={12}>
-                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Option 1 :</Typography>
+                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'90px' }}>Option 1 :</Typography>
                                                 <TextField
                                                     sx={{ width: '60%' }}
                                                     name="option1"
@@ -163,7 +207,7 @@ export const AddAssessmentQuestions = () => {
                                                 />
                                             </Grid>
                                             <Grid item display="flex" alignItems='center' gap={4} md={12}>
-                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Option 2 :</Typography>
+                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'95px' }}>Option 2 :</Typography>
                                                 <TextField
                                                     sx={{ width: '60%' }}
                                                     name="option2"
@@ -176,7 +220,7 @@ export const AddAssessmentQuestions = () => {
                                                 />
                                             </Grid>
                                             <Grid item display="flex" alignItems='center' gap={4} md={12}>
-                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Option 3 :</Typography>
+                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'95px' }}>Option 3 :</Typography>
                                                 <TextField
                                                     sx={{ width: '60%' }}
                                                     name="option3"
@@ -189,7 +233,7 @@ export const AddAssessmentQuestions = () => {
                                                 />
                                             </Grid>
                                             <Grid item display="flex" alignItems='center' gap={4} md={12}>
-                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Option 4 :</Typography>
+                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'95px' }}>Option 4 :</Typography>
                                                 <TextField
                                                     sx={{ width: '60%' }}
                                                     name="option4"
@@ -202,7 +246,7 @@ export const AddAssessmentQuestions = () => {
                                                 />
                                             </Grid>
                                             <Grid item display="flex" alignItems='center' gap={5.3} md={12}>
-                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600 }}>Answer : </Typography>
+                                                <Typography variant="subtitle1" color='secondary.onDarkContrastText' sx={{ fontWeight: 600, minWidth:'85px' }}>Answer : </Typography>
                                                 <TextField
                                                     sx={{ width: '60%' }}
                                                     name="answer"

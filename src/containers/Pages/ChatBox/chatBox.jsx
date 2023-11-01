@@ -374,7 +374,8 @@ const Messenger = () => {
     };
 
     useEffect(() => {
-        // scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+        // scrollRef.current?.scrollIntoView({ behavious: 'smooth' });
+        scrollRef.current?.scrollIntoView({ block: 'end' });
         let container = document.getElementById('chatContainer');
         container.scrollTop = container?.scrollHeight;
     }, [messages]);

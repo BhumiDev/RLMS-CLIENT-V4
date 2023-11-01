@@ -99,6 +99,7 @@ export default function LearningPath() {
         setDetails();
     }, [users]);
     console.log('courses', courses);
+    console.log('userss', users);
 
     const setDetails = () => {
         if (users[0]?.name) {
@@ -160,19 +161,34 @@ export default function LearningPath() {
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     const createLearningPath = async () => {
-        console.log(instructorDetails);
-        console.log(selectedIds);
+        console.log('instructorDetails', instructorDetails);
+        console.log('selectedIds', selectedIds);
+        console.log('selected.courses', selected.courses);
+        // console.log("selectedCourseIds", selectedCourseIds);
 
         if (selected.title.trim() === '') {
             toast.error('Title is required');
             return; // Do not proceed if the title is empty
         }
+        // if(selected.courses === []) {
+        //     toast.error('Courses is required');
+        //     return; // Do not proceed if the title is empty
+        // }
+        if (!Array.isArray(selected.courses) || selected.courses.length === 0) {
+            toast.error('Courses is required');
+            return; // Do not proceed if the courses array is empty
+        }
 
         const selectedCourseIds = [];
         selected.courses.map((course) => selectedCourseIds.push(course.id));
+        // Extract _id from selectedIds and store them in an array
+        const selectedUserIds = selectedIds.map(
+            (selectedId) => users[selectedId - 1]._id
+        );
+
         let obj = {
             instructor: instructorDetails,
-            students: selectedIds,
+            students: selectedUserIds,
             courses: selectedCourseIds,
             title: selected.title
         };
@@ -246,6 +262,7 @@ export default function LearningPath() {
                 }));
             } else {
                 console.log('Course already chosen');
+                toast.success('Course already chosen');
             }
         } else if (name === 'category') {
             setSelected((prevState) => ({
