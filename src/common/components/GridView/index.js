@@ -62,6 +62,7 @@ const GridView = ({
     console.log('data is', data);
 
     const [allReviews, setAllReviews] = useState([]);
+    const [deleteCourseId, setDeleteCourseId] = useState([]);
 
     const [courseId, setCourseId] = useState('');
     const [sections, setSections] = useState([]);
@@ -111,7 +112,8 @@ const GridView = ({
 
     const [open, setOpen] = useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (course) => {
+        setDeleteCourseId(course);
         setOpen(true);
     };
 
@@ -516,13 +518,16 @@ const GridView = ({
                                                 '/dashboard/courses/recently-deleted' && (
                                                 <>
                                                     <Grid item>
-                                                        <div>
+                                                        <Box>
                                                             <Button
                                                                 variant="outlined"
                                                                 color="secondary"
-                                                                onClick={
-                                                                    handleClickOpen
-                                                                }
+                                                                onClick={() => {
+                                                                    // console.log("course._id1", course._id, course)
+                                                                    handleClickOpen(
+                                                                        course
+                                                                    );
+                                                                }}
                                                             >
                                                                 Delete
                                                                 Permanently{' '}
@@ -577,8 +582,12 @@ const GridView = ({
                                                                         color="error"
                                                                         variant="contained"
                                                                         onClick={() => {
+                                                                            console.log(
+                                                                                'course._id',
+                                                                                deleteCourseId?._id
+                                                                            );
                                                                             handleDeletePermanently(
-                                                                                course._id
+                                                                                deleteCourseId?._id
                                                                             );
                                                                         }}
                                                                         autoFocus
@@ -588,7 +597,7 @@ const GridView = ({
                                                                     </Button>
                                                                 </DialogActions>
                                                             </Dialog>
-                                                        </div>
+                                                        </Box>
                                                         {/* <Button
                                                     color="secondary"
                                                     variant="outlined"
@@ -603,9 +612,14 @@ const GridView = ({
                                                             color="secondary"
                                                             variant="outlined"
                                                             onClick={() => {
-                                                                handleRecover(
-                                                                    course._id
+                                                                console.log(
+                                                                    'course._id recover',
+                                                                    course._id,
+                                                                    course
                                                                 );
+                                                                // handleRecover(
+                                                                //     course._id
+                                                                // );
                                                             }}
                                                         >
                                                             Recover{' '}
