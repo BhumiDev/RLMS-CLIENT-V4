@@ -262,9 +262,13 @@ export default function LearningPath() {
                 }));
             } else {
                 console.log('Course already chosen');
-                toast.success('Course already chosen');
+                // toast.success('Course already chosen');
             }
         } else if (name === 'category') {
+            setSelected((prevState) => ({
+                ...prevState,
+                courses: []
+            }));
             setSelected((prevState) => ({
                 ...prevState,
                 category: value
@@ -344,7 +348,7 @@ export default function LearningPath() {
                 </Box>
             </Box>
 
-            <FormControl sx={{ m: 1, width: 950 }}>
+            <FormControl sx={{ m: 1, maxWidth: 'md', width: '100%' }}>
                 <InputLabel id="demo-multiple-checkbox-label">
                     Select Courses
                 </InputLabel>
