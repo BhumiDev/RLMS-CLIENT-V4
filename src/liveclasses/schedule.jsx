@@ -30,6 +30,14 @@ import { useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import moment from 'moment/moment';
 
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight:"12rem",
+      },
+    },
+  };
+
 const ScheduleLiveClasses = () => {
     const theme = useTheme();
     const [alpha, setAlpha] = React.useState();
@@ -329,7 +337,7 @@ const ScheduleLiveClasses = () => {
                                 // sx={{ width: '100%'}}
                                 defaultValue="Select course(s)"
                                 onChange={handleChange}
-                                
+                                MenuProps={MenuProps}
                         required // Add required attribute
                             >
                                 {cour?.map((item) => (

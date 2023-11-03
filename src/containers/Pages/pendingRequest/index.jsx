@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import * as React from 'react';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import { PinDropSharp } from '@mui/icons-material';
 import { findAllRequestOfInstructor, acceptRequest, declineRequest } from '../../../API/Request';
 import Avatar from '../../../assets/avatar.svg';
 import EnrollStudentWithExcel from './enrollStudentWithExcel';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -34,6 +35,11 @@ const PendingRequest = ({ fun, fake }) => {
         setDisabled(false);
         setOpen(false);
     };
+const handleDialogClose = () => {
+    setDisabled(false);
+    setOpen(false);
+}
+
     const handleDeclineRequest = async () => {
         console.log("DAta on decline req", Data._id);
         setDisabled(true);
@@ -85,11 +91,25 @@ const PendingRequest = ({ fun, fake }) => {
 
                 >
                     <DialogTitle id="alert-dialog-title">
+                        <Stack direction="column">
                         <Stack direction="row">
                             <img src={Avatar} width='32px' alt='avatar' />
                             <Typography sx={{ ml: 1 }} variant='h4'>
                                 {Data?.studentId.name}
                             </Typography>
+                        </Stack>
+                           <IconButton
+                            aria-label="close"
+                            onClick={handleDialogClose}
+                            sx={{
+                                position: 'absolute',
+                                right: 8,
+                                top: 8,
+                                color: (theme) => theme.palette.error.main
+                            }}
+                           >
+                           <CloseIcon />
+                           </IconButton>
                         </Stack>
                     </DialogTitle>
                     <DialogContent>
@@ -107,7 +127,7 @@ const PendingRequest = ({ fun, fake }) => {
                 </Dialog>
             </div>
             <EnrollStudentWithExcel/>
-            <Stack direction="row" >
+            <Stack direction="row" justifyContent="space-between" >
                 
                 <Typography variant="body1">Pending Requests</Typography>
                 {pending?.request?.length > 0 && <Button color='secondary' size='small'>Accept all</Button>}
@@ -141,10 +161,10 @@ const PendingRequest = ({ fun, fake }) => {
     )
 };
 
-PendingRequest.propTypes = {
-    fun: PropTypes.func.isRequired,
-    fake: PropTypes.bool.isRequired
-};
+// PendingRequest.propTypes = {
+//     fun: PropTypes.func.isRequired,
+//     fake: PropTypes.bool.isRequired
+// };
 
 export default PendingRequest;
 

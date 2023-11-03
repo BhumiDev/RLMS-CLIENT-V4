@@ -11,7 +11,8 @@ import {
     TextField,
     Slide,
     InputAdornment,
-    Avatar
+    Avatar,
+    Stack
 } from '@mui/material';
 import OtherHousesOutlinedIcon from '@mui/icons-material/OtherHousesOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
@@ -159,7 +160,7 @@ export const ForumComponent = ({ data, fake, setFake }) => {
                     <Typography variant="h5">No data found</Typography>
                 </Box>
             ) : (
-                <>
+                <Stack sx={{maxHeight:"60vh", overflow:"scroll", overflowX:"hidden"}}>
                     {data &&
                         Array.from(data)
                             .reverse()
@@ -825,7 +826,7 @@ export const ForumComponent = ({ data, fake, setFake }) => {
                                     </>
                                 );
                             })}
-                </>
+                </Stack>
             )}
         </>
     );
