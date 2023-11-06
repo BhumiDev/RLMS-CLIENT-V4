@@ -141,11 +141,12 @@ const handleDialogClose = () => {
 
                 pending?.request?.map((item) => (
 
-                    <Stack direction="row" alignItems='center' spacing={1} mb={2} mt={1} onClick={() => { handleDialog(item) }}>
+                    <Stack direction="row" alignItems='center' spacing={1} mb={2} mt={1} onClick={() => { handleDialog(item) }} >
 
-                        <><img src={Avatar} width='32px' alt='avatar' />
+                        <><img src={Avatar} width='32px' alt='avatar' style={{cursor:"pointer"}}/>
                             <Typography
                                 variant="body1"
+                                sx={{cursor:"pointer"}}
                             >{item.studentId.name}</Typography>
                         </>
 
