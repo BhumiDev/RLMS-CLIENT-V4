@@ -1556,133 +1556,139 @@ const ViewModule = () => {
                                     </>
                                 )}
                             </Box>
-
-                            <Card
-                                style={{
-                                    marginBottom: '30px',
-                                    minWidth: '30%'
-                                }}
-                            >
-                                <SecondaryHeader
-                                    title="Machines"
-                                    endText={machines?.length}
-                                    // endText={`${lectureNumber + 1}/${
-                                    //     sections?.length
-                                    // }`}
-                                />
-                                {machines?.length !== 0 ? (
-                                    machines?.map((machine) => {
-                                        return (
-                                            <>
-                                                <Box
-                                                    display="flex"
-                                                    pb={1}
-                                                    justifyContent="space-between"
-                                                    alignItems="center"
-                                                    px={2}
-                                                >
-                                                    <Typography>
-                                                        {machine?.name}
-                                                    </Typography>
-                                                    <Box display="flex" gap={2}>
-                                                        {isRunning &&
-                                                        time?.find(
-                                                            (item) =>
-                                                                item?.name ===
-                                                                machine?.name
-                                                        ) ? (
-                                                            <ClearIcon
-                                                                sx={{
-                                                                    cursor: 'pointer',
-                                                                    color: 'error.main'
-                                                                }}
-                                                                onClick={() =>
-                                                                    deleteActiveMachine(
-                                                                        machine?._id
-                                                                    )
-                                                                }
-                                                            />
-                                                        ) : (
-                                                            <PlayCircleFilledIcon
-                                                                sx={{
-                                                                    cursor: 'pointer',
-                                                                    color: 'secondary.main'
-                                                                }}
-                                                                onClick={() =>
-                                                                    createLab(
-                                                                        machine
-                                                                    )
-                                                                }
-                                                            />
-                                                        )}
-                                                        <div>
-                                                            {user?.role ===
-                                                                'instructor' && (
-                                                                <DeleteIcon
+                            {access ? (
+                                <Card
+                                    style={{
+                                        marginBottom: '30px',
+                                        minWidth: '30%'
+                                    }}
+                                >
+                                    <SecondaryHeader
+                                        title="Machines"
+                                        endText={machines?.length}
+                                        // endText={`${lectureNumber + 1}/${
+                                        //     sections?.length
+                                        // }`}
+                                    />
+                                    {machines?.length !== 0 ? (
+                                        machines?.map((machine) => {
+                                            return (
+                                                <>
+                                                    <Box
+                                                        display="flex"
+                                                        pb={1}
+                                                        justifyContent="space-between"
+                                                        alignItems="center"
+                                                        px={2}
+                                                    >
+                                                        <Typography>
+                                                            {machine?.name}
+                                                        </Typography>
+                                                        <Box
+                                                            display="flex"
+                                                            gap={2}
+                                                        >
+                                                            {isRunning &&
+                                                            time?.find(
+                                                                (item) =>
+                                                                    item?.name ===
+                                                                    machine?.name
+                                                            ) ? (
+                                                                <ClearIcon
                                                                     sx={{
                                                                         cursor: 'pointer',
                                                                         color: 'error.main'
                                                                     }}
-                                                                    onClick={
-                                                                        handleClickOpenDelete
+                                                                    onClick={() =>
+                                                                        deleteActiveMachine(
+                                                                            machine?._id
+                                                                        )
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                <PlayCircleFilledIcon
+                                                                    sx={{
+                                                                        cursor: 'pointer',
+                                                                        color: 'secondary.main'
+                                                                    }}
+                                                                    onClick={() =>
+                                                                        createLab(
+                                                                            machine
+                                                                        )
                                                                     }
                                                                 />
                                                             )}
-                                                            <Dialog
-                                                                open={
-                                                                    openDelete
-                                                                }
-                                                                onClose={
-                                                                    handleCloseDelete
-                                                                }
-                                                                aria-labelledby="alert-dialog-title"
-                                                                aria-describedby="alert-dialog-description"
-                                                            >
-                                                                <DialogTitle id="alert-dialog-slide-title">
-                                                                    Are you sure
-                                                                    you want to
-                                                                    delete this
-                                                                    machine?
-                                                                </DialogTitle>
-                                                                <DialogActions>
-                                                                    <Button
-                                                                        onClick={
-                                                                            handleCloseDelete
-                                                                        }
+                                                            <div>
+                                                                {user?.role ===
+                                                                    'instructor' && (
+                                                                    <DeleteIcon
                                                                         sx={{
-                                                                            color: 'secondary.main'
+                                                                            cursor: 'pointer',
+                                                                            color: 'error.main'
                                                                         }}
-                                                                    >
-                                                                        Cancel
-                                                                    </Button>
-                                                                    <Button
-                                                                        variant="outlined"
-                                                                        color="error"
-                                                                        onClick={() =>
-                                                                            deleteLab(
-                                                                                machine?._id
-                                                                            )
+                                                                        onClick={
+                                                                            handleClickOpenDelete
                                                                         }
-                                                                    >
-                                                                        {isLoading && (
-                                                                            <CircularProgress />
-                                                                        )}
-                                                                        Delete
-                                                                    </Button>
-                                                                </DialogActions>
-                                                            </Dialog>
-                                                        </div>
+                                                                    />
+                                                                )}
+                                                                <Dialog
+                                                                    open={
+                                                                        openDelete
+                                                                    }
+                                                                    onClose={
+                                                                        handleCloseDelete
+                                                                    }
+                                                                    aria-labelledby="alert-dialog-title"
+                                                                    aria-describedby="alert-dialog-description"
+                                                                >
+                                                                    <DialogTitle id="alert-dialog-slide-title">
+                                                                        Are you
+                                                                        sure you
+                                                                        want to
+                                                                        delete
+                                                                        this
+                                                                        machine?
+                                                                    </DialogTitle>
+                                                                    <DialogActions>
+                                                                        <Button
+                                                                            onClick={
+                                                                                handleCloseDelete
+                                                                            }
+                                                                            sx={{
+                                                                                color: 'secondary.main'
+                                                                            }}
+                                                                        >
+                                                                            Cancel
+                                                                        </Button>
+                                                                        <Button
+                                                                            variant="outlined"
+                                                                            color="error"
+                                                                            onClick={() =>
+                                                                                deleteLab(
+                                                                                    machine?._id
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            {isLoading && (
+                                                                                <CircularProgress />
+                                                                            )}
+                                                                            Delete
+                                                                        </Button>
+                                                                    </DialogActions>
+                                                                </Dialog>
+                                                            </div>
+                                                        </Box>
                                                     </Box>
-                                                </Box>
-                                            </>
-                                        );
-                                    })
-                                ) : (
-                                    <Typography pl={2} pb={1}>
-                                        No Machine Added
-                                    </Typography>
-                                )}
-                            </Card>
+                                                </>
+                                            );
+                                        })
+                                    ) : (
+                                        <Typography pl={2} pb={1}>
+                                            No Machine Added
+                                        </Typography>
+                                    )}
+                                </Card>
+                            ) : null}
                         </Box>
 
                         <Box mt={3}>

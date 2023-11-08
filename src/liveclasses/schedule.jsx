@@ -223,6 +223,21 @@ const ScheduleLiveClasses = () => {
         toast.success('Url Copied', { autoClose: 1000 });
     };
 
+    function convertTo12HourFormat(timeString) {
+        const [hours, minutes] = timeString.split(':');
+        let period = 'AM';
+        let hour = parseInt(hours);
+    
+        if (hour >= 12) {
+            period = 'PM';
+            if (hour > 12) {
+                hour -= 12;
+            }
+        }
+    
+        return `${hour}:${minutes} ${period}`;
+    }
+
     return (
         <Grid
             container
@@ -446,7 +461,9 @@ const ScheduleLiveClasses = () => {
                                     date:{moment(item.setDate).format('YYYY-MM-DD')}
                                 </Typography>
                                 <Typography variant="subtitle2">
-                                    time:{moment(item.setDate).format('h:mm a')}
+                                    time:
+                                    {convertTo12HourFormat(item.settime)}
+                                    {/* {moment(item.settime).format('h:mm a')} */}
                                 </Typography>
                             </Stack>
                             <Stack
