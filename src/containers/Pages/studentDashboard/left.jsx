@@ -256,7 +256,7 @@ const Left = () => {
                                 <Typography variant="h4" mt={8} fontWeight={1000}>
                                     Suggested Courses
                                 </Typography>
-                                <Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"75vh"}}>
+                                <Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"100vh"}}>
                                 {suggestedCourses?.slice(0, itemsToShow).map((item, i) => (
                                     <Box key={i} mb={6} mt={6}>
                                         <ListView item={item} />
@@ -311,14 +311,15 @@ const Left = () => {
                         )
                     }
 
-<Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"75vh"}}>
+<Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"100vh"}}>
                     {data?.slice(0, recentItemsToShow).map((item, i) => (
                             <Box key={i} mb={6} mt={6}>
                                 <ListView item={item} myCourse />
                             </Box>
                         ))}
                            </Stack>
-                     <Box display='flex' justifyContent='flex-end' sx={{mb:6}}>
+                           {user?.role === 'student' ?
+                     (<Box display='flex' justifyContent='flex-end' sx={{mb:6}}>
                                     {recentItemsToShow === 3 ?
 
                                         <Button
@@ -337,7 +338,7 @@ const Left = () => {
                                             Show Less
                                         </Button>
                                     }
-                                </Box>
+                                </Box>) : null }
  </Grid>
 
 
