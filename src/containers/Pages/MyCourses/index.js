@@ -447,7 +447,8 @@ const MyCourses = (setCourseId) => {
                                             <MenuItem
                                                 sx={{
                                                     minWidth: 230,
-                                                    top: '-32px'
+                                                    maxWidth: 280,
+                                                    top: 1
                                                 }}
                                             >
                                                 <FormControl fullWidth>
@@ -460,10 +461,20 @@ const MyCourses = (setCourseId) => {
                                                         name="majorCategory"
                                                         value={selectedMajor}
                                                         label="Major Category"
+                                                        sx={{
+                                                            alignItems:
+                                                                'center',
+                                                            justifyContent:
+                                                                'center'
+                                                        }}
                                                         onChange={
                                                             handleCategories
                                                         }
                                                     >
+                                                        {/* <MenuItem value="All">
+                                                            All
+                                                        </MenuItem>{' '} */}
+                                                        {/* Add an "All" option */}
                                                         {allCategories &&
                                                             allCategories?.map(
                                                                 (
@@ -472,17 +483,17 @@ const MyCourses = (setCourseId) => {
                                                                 ) => (
                                                                     <MenuItem
                                                                         value={
-                                                                            obj.categoryName
+                                                                            obj?.categoryName
                                                                         }
                                                                         key={
                                                                             index
                                                                         }
                                                                         subcategories={
-                                                                            obj.subCategories
+                                                                            obj?.subCategories
                                                                         }
                                                                     >
                                                                         {
-                                                                            obj.categoryName
+                                                                            obj?.categoryName
                                                                         }
                                                                     </MenuItem>
                                                                 )

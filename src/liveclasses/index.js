@@ -32,6 +32,7 @@ import { GridSearchIcon } from '@mui/x-data-grid';
 import ApiConfig from '../config/ApiConfig';
 import { Link } from 'react-router-dom';
 import live from '../assets/images/liveClasses.png';
+import moment from 'moment/moment';
 
 const token = localStorage.getItem('token');
 
@@ -268,12 +269,16 @@ const LiveClasses = () => {
                                                 <TodayIcon fontSize="xs" />
                                                 <Typography variant="body2">
                                                     {' '}
-                                                    {item.setdate}{' '}
+                                                    {moment(
+                                                        item.setDate
+                                                    ).format('YYYY-MM-DD')}{' '}
                                                 </Typography>
                                                 <AccessTimeFilledIcon fontSize="xs" />
                                                 <Typography variant="body2">
                                                     {' '}
-                                                    {item.settime}{' '}
+                                                    {moment(
+                                                        item.setDate
+                                                    ).format('h:mm a')}{' '}
                                                 </Typography>
                                             </Box>
                                         </Grid>

@@ -1430,10 +1430,10 @@ const ViewModule = () => {
                   height="500px"
                 ></iframe>
               </TabPanel> */}
-                            {machines.map((machine, index) => {
+                            {machines?.map((machine, index) => {
                                 return (
                                     <>
-                                        {consoleUrl.map((console1, index) => (
+                                        {consoleUrl?.map((console1, index) => (
                                             <>
                                                 {console.log(
                                                     'index',

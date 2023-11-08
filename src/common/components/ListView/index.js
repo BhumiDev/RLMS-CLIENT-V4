@@ -162,10 +162,10 @@ const ListView = ({
                         </Box>
                         <Box display="flex">
                             <Typography variant="body2">
-                                {course.sections.length} Lessons
+                                {course.sections.length} Modules
                             </Typography>
                             <Typography variant="body2" sx={{ mx: 2 }}>
-                                {handleTotalSection(course.sections)} videos
+                                {handleTotalSection(course.sections)} Lessons
                                 {/* <p>{handleTotalSection(course.sections)} Videos</p> */}
                             </Typography>
                         </Box>

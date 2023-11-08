@@ -11,6 +11,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import Apiconfig from '../../../config/ApiConfig';
+import moment from 'moment/moment';
 
 
 
@@ -54,7 +55,7 @@ const Right = ({ item }) => {
                             variant="subtitle2"
                         >
                             <EventIcon sx={{ fontSize: '13px', marginTop: '3px' }} />
-                            &nbsp;{item.setdate}
+                            &nbsp;{moment(item.setDate).format('YYYY-MM-DD')}
                         </Stack>
                     </Typography>
                 </Stack>
@@ -62,7 +63,7 @@ const Right = ({ item }) => {
                     <Box sx={{ width: 120 }}>
                         <Stack variant="subtitle2" direction="row" sx={{ fontSize: '13px' }}>
                             <WatchLaterIcon sx={{ fontSize: '13px', marginTop: '3px' }} />
-                            &nbsp;{item.settime}
+                            &nbsp;{moment(item.setDate).format('h:mm a')}
                         </Stack>
                     </Box>
                 </Stack>

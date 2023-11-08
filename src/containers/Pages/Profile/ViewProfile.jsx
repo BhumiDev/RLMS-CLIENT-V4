@@ -35,7 +35,10 @@ export const ViewProfile = () => {
     const [open, setOpen] = useState(false);
     const [disableSave, setDisableSave] = useState(true);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () =>{
+        setImage('');
+        setUserName('');
+         setOpen(false)};
 
     const getUser = async () => {
         const res = await getCurrentUser();
@@ -64,7 +67,7 @@ export const ViewProfile = () => {
             setImage(e.target.files[0])
             const isEmptyPlaceholder = e.target.files[0] === "";
             setDisableSave(isEmptyPlaceholder || !e.target.files[0])
-            setImage('');
+            // setImage('');
         }
     }
 
@@ -83,6 +86,8 @@ export const ViewProfile = () => {
         e.preventDefault();
         const res = await editProfilephoto(image, userName);
         console.log("res", res)
+        setImage('');
+        setUserName('');
         setFake(!fake);
         setOpen(false)
     }

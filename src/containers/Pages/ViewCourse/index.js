@@ -484,9 +484,13 @@ const ViewCourse = () => {
                                 justifyContent="space-between"
                                 mb={3}
                             >
-                                <Typography>
-                                    {allReviews?.length} reviews
-                                </Typography>
+                                {allReviews?.length === 0 ? (
+                                    'No reviews yet!'
+                                ) : (
+                                    <Typography>
+                                        {allReviews?.length} reviews
+                                    </Typography>
+                                )}
                                 {fromMyCourse !== 'allCourse' && (
                                     <Button
                                         color="secondary"
@@ -667,21 +671,25 @@ const ViewCourse = () => {
                                         justifyContent: 'flex-end'
                                     }}
                                 >
-                                    <Typography
-                                        variant="body2"
-                                        color="primary.light"
-                                        sx={{
-                                            fontSize: '13px !important',
-                                            fontWeight: 600,
-                                            textDecoration: 'underline',
-                                            cursor: 'pointer'
-                                        }}
-                                        onClick={handleToggleReviews}
-                                    >
-                                        {showAllReviews
-                                            ? 'See less reviews'
-                                            : 'See more reviews'}
-                                    </Typography>
+                                    {allReviews?.length === 0 ? (
+                                        ''
+                                    ) : (
+                                        <Typography
+                                            variant="body2"
+                                            color="primary.light"
+                                            sx={{
+                                                fontSize: '13px !important',
+                                                fontWeight: 600,
+                                                textDecoration: 'underline',
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={handleToggleReviews}
+                                        >
+                                            {showAllReviews
+                                                ? 'See less reviews'
+                                                : 'See more reviews'}
+                                        </Typography>
+                                    )}
                                 </Box>
                             </Grid>
                         </Box>
