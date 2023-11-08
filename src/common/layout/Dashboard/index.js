@@ -1331,7 +1331,7 @@ const DashboardLayout = (props) => {
                             '/dashboard/courses/all-courses',
                             '/dashboard/courses/my-courses',
                             '/dashboard/courses/mandatory-courses',
-                            '/dashboard/learning-path',
+                            // '/dashboard/learning-path',
                             '/dashboard/courses/recently-deleted',
                             '/dashboard/search'
                         ].includes(location.pathname) && (
