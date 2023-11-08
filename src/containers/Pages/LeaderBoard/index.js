@@ -57,6 +57,14 @@ function LinearProgressWithLabel(props) {
     );
 }
 
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: '20rem'
+        }
+    }
+};
+
 export const LeaderBoard = () => {
     const token = localStorage.getItem('token');
     const user = token && jwtDecode(token);
@@ -133,7 +141,7 @@ export const LeaderBoard = () => {
     console.log('select course', selectCourse);
 
     const handleSearchChange = (e) => {
-        setSearched(e.target.value.toLowerCase());
+        setSearched(e.target.value.replace(/^\s+/, '').toLowerCase());
         // const filtered = studentsEnrolledInThisCourse.filter((item) => {
         //     if (!e.target.value) return true;
         //     if (item?._doc?.name
@@ -196,6 +204,7 @@ export const LeaderBoard = () => {
                                 value={selectCourse}
                                 onChange={handleSelectCourse}
                                 label="Courses"
+                                MenuProps={MenuProps}
                             >
                                 {/* <MenuItem value="all">All Courses</MenuItem> */}
                                 {allCourses?.map((course) => (

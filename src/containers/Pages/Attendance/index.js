@@ -90,7 +90,7 @@ export const Attendance = () => {
     }, []);
 
     const handleChange = (e) => {
-        setSearchValue(e.target.value.toLowerCase());
+        setSearchValue(e.target.value.replace(/^\s+/, '').toLowerCase());
     };
 
     useEffect(() => {
@@ -298,7 +298,26 @@ export const Attendance = () => {
 
                 {/* table starts */}
                 <Box my={5}>
-                    {filteredData?.length > 0 ? (
+                    {filteredData?.filter((item) => {
+                        //filtering the whole data according to value in search input
+                        if (!searchValue) return true;
+                        if (
+                            item.data[0].studentId
+                                .toLowerCase()
+                                .includes(searchValue) ||
+                            item.data[0].studentId
+                                .toUpperCase()
+                                .includes(searchValue) ||
+                            item.data[0].userName
+                                .toLowerCase()
+                                .includes(searchValue) ||
+                            item.data[0].userName
+                                .toUpperCase()
+                                .includes(searchValue)
+                        )
+                            return true;
+                    }).length > 0 ? (
+                        // {filteredData.length > 0 ? (
                         <TableContainer component={Paper}>
                             <Table
                                 sx={{ minWidth: 650 }}
