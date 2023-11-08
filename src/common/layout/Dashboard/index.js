@@ -215,10 +215,12 @@ const DashboardLayout = (props) => {
     const handleClose1 = () => {
         setShow(false);
         store.dispatch(settoggleTheme(prevThemes));
+        store.dispatch(storePrevThemes(null));
     };
 
     const setTheme = () => {
         setShow(false);
+        store.dispatch(storePrevThemes(null));
     };
 
     const handleTheme = (theme) => {

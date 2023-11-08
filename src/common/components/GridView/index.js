@@ -612,14 +612,9 @@ const GridView = ({
                                                             color="secondary"
                                                             variant="outlined"
                                                             onClick={() => {
-                                                                console.log(
-                                                                    'course._id recover',
-                                                                    course._id,
-                                                                    course
+                                                                handleRecover(
+                                                                    course._id
                                                                 );
-                                                                // handleRecover(
-                                                                //     course._id
-                                                                // );
                                                             }}
                                                         >
                                                             Recover{' '}

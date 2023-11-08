@@ -67,7 +67,7 @@ const LiveClasses = () => {
                 }
             );
 
-            setData(res.data.data.slice(0, 4));
+            setData(res.data.data.reverse().slice(0, 4));
 
             const res2 = await Axios.get(`${ApiConfig.course.getAllCourses}`);
 
@@ -84,6 +84,22 @@ const LiveClasses = () => {
     const handleMeeting = (e) => {
         setMeeting(e.target.value);
     };
+
+    function convertTo12HourFormat(timeString) {
+        const [hours, minutes] = timeString.split(':');
+        let period = 'AM';
+        let hour = parseInt(hours);
+
+        if (hour >= 12) {
+            period = 'PM';
+            if (hour > 12) {
+                hour -= 12;
+            }
+        }
+
+        return `${hour}:${minutes} ${period}`;
+    }
+
     return (
         <Grid
             container
@@ -276,9 +292,9 @@ const LiveClasses = () => {
                                                 <AccessTimeFilledIcon fontSize="xs" />
                                                 <Typography variant="body2">
                                                     {' '}
-                                                    {moment(
-                                                        item.setDate
-                                                    ).format('h:mm a')}{' '}
+                                                    {convertTo12HourFormat(
+                                                        item.settime
+                                                    )}{' '}
                                                 </Typography>
                                             </Box>
                                         </Grid>

@@ -47,6 +47,7 @@ const Left = () => {
 
     const [suggestedCourses, setSuggestedCourses] = useState([]);
     const [itemsToShow, setItemsToShow] = useState(3);
+    const [recentItemsToShow, setRecentItemsToShow] = useState(3);
 
     const showMore = () => {
         setItemsToShow(suggestedCourses.length);
@@ -54,6 +55,14 @@ const Left = () => {
 
     const showLess = () => {
         setItemsToShow(3);
+    }
+
+    const showMoreRecent = () => {
+        setRecentItemsToShow(data.length);
+    }
+
+    const showLessRecent = () => {
+        setRecentItemsToShow(3);
     }
 
 
@@ -247,11 +256,13 @@ const Left = () => {
                                 <Typography variant="h4" mt={8} fontWeight={1000}>
                                     Suggested Courses
                                 </Typography>
+                                <Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"75vh"}}>
                                 {suggestedCourses?.slice(0, itemsToShow).map((item, i) => (
                                     <Box key={i} mb={6} mt={6}>
                                         <ListView item={item} />
                                     </Box>
                                 ))}
+                                </Stack>
                                 <Box display='flex' justifyContent='flex-end'>
                                     {itemsToShow === 3 ?
 
@@ -275,6 +286,7 @@ const Left = () => {
                             </Grid>
                         </>
                     }
+ <Grid item>
 
                     {
                         user.role === "instructor" ? (
@@ -299,15 +311,34 @@ const Left = () => {
                         )
                     }
 
-
-                    {
-                        data?.map((item, i) => (
+<Stack  sx={{height:"100%", overflow:"scroll", overflowX:"hidden", maxHeight:"75vh"}}>
+                    {data?.slice(0, recentItemsToShow).map((item, i) => (
                             <Box key={i} mb={6} mt={6}>
                                 <ListView item={item} myCourse />
                             </Box>
-                        ))
+                        ))}
+                           </Stack>
+                     <Box display='flex' justifyContent='flex-end' sx={{mb:6}}>
+                                    {recentItemsToShow === 3 ?
 
-                    }
+                                        <Button
+                                            variant='text'
+                                            color='secondary'
+                                            onClick={showMoreRecent}
+                                        >
+                                            Show More
+                                        </Button>
+                                        :
+                                        <Button
+                                            variant='text'
+                                            color='secondary'
+                                            onClick={showLessRecent}
+                                        >
+                                            Show Less
+                                        </Button>
+                                    }
+                                </Box>
+ </Grid>
 
 
 

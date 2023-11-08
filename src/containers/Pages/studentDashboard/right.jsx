@@ -21,6 +21,22 @@ const Right = ({ item }) => {
     const urlhandle = () => {
         window.open(item.url)
     }
+
+    function convertTo12HourFormat(timeString) {
+        const [hours, minutes] = timeString.split(':');
+        let period = 'AM';
+        let hour = parseInt(hours);
+    
+        if (hour >= 12) {
+            period = 'PM';
+            if (hour > 12) {
+                hour -= 12;
+            }
+        }
+    
+        return `${hour}:${minutes} ${period}`;
+    }
+
     return (
 
         <Card md={3} sx={{ borderRadius: 0.5, mb: 3, boxShadow: 3 }}>
@@ -63,7 +79,7 @@ const Right = ({ item }) => {
                     <Box sx={{ width: 120 }}>
                         <Stack variant="subtitle2" direction="row" sx={{ fontSize: '13px' }}>
                             <WatchLaterIcon sx={{ fontSize: '13px', marginTop: '3px' }} />
-                            &nbsp;{moment(item.setDate).format('h:mm a')}
+                            &nbsp;{convertTo12HourFormat(item.settime)}
                         </Stack>
                     </Box>
                 </Stack>
