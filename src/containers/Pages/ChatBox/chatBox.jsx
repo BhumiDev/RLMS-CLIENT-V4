@@ -430,7 +430,10 @@ const Messenger = () => {
                                     <Stack
                                         sx={{
                                             flexDirection: 'column',
-                                            alignItems: 'start'
+                                            alignItems: 'start',
+                                            maxHeight:"16rem",
+                                            overflow:"scroll",
+                                            overflowX:"hidden"
                                         }}
                                     >
                                         {searchedUser.map((data, i) => (

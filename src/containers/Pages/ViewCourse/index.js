@@ -15,7 +15,8 @@ import {
     TextField,
     Rating,
     Avatar,
-    CircularProgress
+    CircularProgress,
+    Stack
 } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
@@ -365,9 +366,17 @@ const ViewCourse = () => {
                                 <Typography variant="h4" sx={{ mb: 2 }}>
                                     <b>Description</b>
                                 </Typography>
-                                <Typography variant="body1">
-                                    {parse(`${course?.description}`)}
-                                </Typography>
+                                <Stack
+                                    sx={{
+                                        overflow: 'scroll',
+                                        overflowX: 'hidden',
+                                        maxHeight: '20rem'
+                                    }}
+                                >
+                                    <Typography variant="body1">
+                                        {parse(`${course?.description}`)}
+                                    </Typography>
+                                </Stack>
                                 {/* <Typography variant="body1" sx={{ my: 2 }}>
                             {' '}
                             <b>Prerequisites</b>

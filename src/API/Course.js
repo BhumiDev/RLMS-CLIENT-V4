@@ -281,7 +281,13 @@ export const myCoursesOfStudent = async (setData, setIsloading) => {
 //     setData(arr);
 // };
 
-export const myCourses = async (setData, page, setCount, setIsloading) => {
+export const myCourses = async (
+    setData,
+    page,
+    setCount,
+    setIsloading,
+    setTempData
+) => {
     const token = localStorage.getItem('token');
     // console.log('inside my course of student');
     let user = token && jwtDecode(token);
@@ -300,6 +306,7 @@ export const myCourses = async (setData, page, setCount, setIsloading) => {
     // let arr = response.data.studentEnrollCourses;
 
     setData(response.data.data);
+    setTempData(response.data.data);
     setCount(response.data.total_pages);
     setIsloading(false);
 };
@@ -308,7 +315,8 @@ export const myCoursesofInstructor = async (
     setData,
     page,
     setCount,
-    setIsloading
+    setIsloading,
+    setTempData
 ) => {
     token = localStorage.getItem('token');
     console.log('Token', token);
@@ -330,6 +338,7 @@ export const myCoursesofInstructor = async (
     console.log('FILTERED ARRAY,', filteredArray);
     setCount(response.data.total_pages);
     setData(filteredArray);
+    setTempData(filteredArray);
 };
 
 export const getRecentCourses = async () => {
