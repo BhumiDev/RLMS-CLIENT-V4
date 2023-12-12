@@ -2345,12 +2345,22 @@ const ViewModule = () => {
                                     <Typography variant="h4" mb={2}>
                                         <strong>Description</strong>
                                     </Typography>
-                                    <Typography
-                                        color="text.primary"
-                                        textAlign="justify"
+                                    <Stack
+                                        sx={{
+                                            overflow: 'scroll',
+                                            overflowX: 'hidden',
+                                            maxHeight: '25rem'
+                                        }}
                                     >
-                                        {parse(`${activeLesson?.description}`)}
-                                    </Typography>
+                                        <Typography
+                                            color="text.primary"
+                                            textAlign="justify"
+                                        >
+                                            {parse(
+                                                `${activeLesson?.description}`
+                                            )}
+                                        </Typography>
+                                    </Stack>
                                 </Grid>
                             )}
                             {access && user.role === 'student' && (

@@ -93,7 +93,7 @@ const Survey = () => {
                 <Dialog
                     open={open}
                     onClose={handleClose}
-                    maxWidth="xs"
+                    maxWidth="md"
                     fullWidth
                     TransitionComponent={Transition}
                     keepMounted

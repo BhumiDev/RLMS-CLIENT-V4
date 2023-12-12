@@ -58,11 +58,22 @@ import { allCoursesBreadcrumb } from '../../../utils/StaticData/Breadcrumbs/Cour
 // import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 // import { useDemoData } from '@mui/x-data-grid-generator';
 
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: '20rem',
+            maxWidth: '20rem'
+            // overflow:"scroll",
+        }
+    }
+};
+
 const MyCourses = (setCourseId) => {
     const { courseId } = useParams();
     const [dataView, setView] = useState('gridView');
     const [filter, setFilter] = useState('');
     const [data, setData] = useState([]);
+    const [tempData, setTempData] = useState([]);
     const [isLoading, setIsloading] = useState(false);
     const [value, setValue] = useState('1');
     const [page, setPage] = useState(1);
@@ -87,27 +98,62 @@ const MyCourses = (setCourseId) => {
         setAnchorElUser(null);
     };
 
+    // const handleCategories = async (e) => {
+    //     // handleChange(e);
+    //     // if (e.target.name === 'subCategory') {
+    //     //     setSelectedSubCat(e.target.value);
+    //     // } else if (e.target.name === 'majorCategory') {
+    //     setSelectedMajor(e.target.value);
+    //     const res = await getCourseByMajorCategory(e.target.value);
+
+    //     console.log('res of majorcategory', res);
+    //     console.log("prev data1", res)
+    //     console.log("prev data", data)
+    //     setData(res);
+    //     // console.log("prev data1", data)
+    //     setAnchorElUser(null);
+    //     //     const filtreredSub = allCategories.filter(
+    //         //         (cat) => cat.categoryName === e.target.value
+    //         //     );
+    //         //     console.log('Filtered category', filtreredSub[0]);
+    //         //     // setCategoryId(filtreredSub[0]);
+
+    //         //     // getCourseBySubCategory(filtreredSub[0]._id).then((response) =>
+    //         //     //     setAllSubCategory(response)
+    //         //     // );
+    //         // }
+    //     };
+    console.log('prev1 data2', data);
     const handleCategories = async (e) => {
-        // handleChange(e);
-        // if (e.target.name === 'subCategory') {
-        //     setSelectedSubCat(e.target.value);
-        // } else if (e.target.name === 'majorCategory') {
         setSelectedMajor(e.target.value);
+
+        // Assuming getCourseByMajorCategory returns an array of objects
         const res = await getCourseByMajorCategory(e.target.value);
+        console.log('tempData', tempData);
+        setData(tempData);
 
         console.log('res of majorcategory', res);
-        setData(res);
-        setAnchorElUser(null);
-        //     const filtreredSub = allCategories.filter(
-        //         (cat) => cat.categoryName === e.target.value
-        //     );
-        //     console.log('Filtered category', filtreredSub[0]);
-        //     // setCategoryId(filtreredSub[0]);
+        console.log('sprev data 1', res);
+        console.log('prev1 dataq', data);
+        // const tempData = tempData;
 
-        //     // getCourseBySubCategory(filtreredSub[0]._id).then((response) =>
-        //     //     setAllSubCategory(response)
-        //     // );
-        // }
+        // Compare '_id' field and create an array with objects having the same '_id' field value
+        const newData = tempData
+            ?.map((itemObj) => {
+                const matchingResObj = res?.find(
+                    (item) => item?._id === itemObj?._id
+                );
+                console.log('prev data2', matchingResObj);
+                return matchingResObj;
+            })
+            .filter(Boolean); // Use filter(Boolean) to remove undefined values
+
+        console.log('sprev data 2', newData);
+
+        // Set newData to setData
+        // setTempData(data);
+        setData(newData);
+        setAnchorElUser(null);
     };
 
     // const filterAllCategories = () => {
@@ -127,15 +173,22 @@ const MyCourses = (setCourseId) => {
     useEffect(() => {
         fetchMajorCategories();
     }, []);
+
     // useEffect(() => { fetchSubCategories() },[]);
 
     useEffect(() => {
         // setIsloading(true);
         console.log('page in mycourse', page);
         user.role === 'student'
-            ? myCourses(setData, page, setCount, setIsloading)
-            : myCoursesofInstructor(setData, page, setCount, setIsloading);
-    }, [user.role, page]);
+            ? myCourses(setData, page, setCount, setIsloading, setTempData)
+            : myCoursesofInstructor(
+                  setData,
+                  page,
+                  setCount,
+                  setIsloading,
+                  setTempData
+              );
+    }, [user.role]);
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
@@ -470,6 +523,7 @@ const MyCourses = (setCourseId) => {
                                                         onChange={
                                                             handleCategories
                                                         }
+                                                        MenuProps={MenuProps}
                                                     >
                                                         {/* <MenuItem value="All">
                                                             All
