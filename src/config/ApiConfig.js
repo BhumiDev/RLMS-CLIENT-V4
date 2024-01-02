@@ -3,11 +3,13 @@
 // export const url = 'http://10.1.76.169:5000';
 // export const url = 'http://192.168.1.43:5000';
 
-export const url = 'http://10.1.76.169:5000';
+// export const url = 'http://10.1.76.169:5000';
+export const url = 'https://b2cbackend.bhumiitech.com';
 
 // export const OpenStackUrl = 'http://10.1.76.3:8000';
 // export const OpenStackUrl = "http://124.123.17.12:7000";
-export const OpenStackUrl = 'http://10.1.76.53:8000';
+// export const OpenStackUrl = 'http://10.1.76.53:8000';
+export const OpenStackUrl = 'https://api.bhumiitech.com';
 
 const Apiconfig = {
     auth: {
