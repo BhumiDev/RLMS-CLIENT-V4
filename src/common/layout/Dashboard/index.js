@@ -17,7 +17,8 @@ import {
     Grid,
     DialogTitle,
     DialogContent,
-    Badge
+    Badge,
+    Stack
     // Container
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -214,8 +215,10 @@ const DashboardLayout = (props) => {
 
     const handleClose1 = () => {
         setShow(false);
-        store.dispatch(settoggleTheme(prevThemes));
-        store.dispatch(storePrevThemes(null));
+        handleTheme('light');
+        setTheme;
+        // store.dispatch(settoggleTheme(prevThemes));
+        // store.dispatch(storePrevThemes(null));
     };
 
     const setTheme = () => {
@@ -527,7 +530,7 @@ const DashboardLayout = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose1} sx={{ color: 'error.main' }}>
-                        Cancel
+                        Set Default Theme
                     </Button>
                     <Button
                         onClick={setTheme}
