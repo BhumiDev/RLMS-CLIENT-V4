@@ -1593,8 +1593,7 @@ const ViewModule = () => {
                                                                 (item) =>
                                                                     item?.name ===
                                                                     machine?.name
-                                                            ) ? // <ClearIcon
-                                                            //     sx={{
+                                                            ) ? //     sx={{ // <ClearIcon
                                                             //         cursor: 'pointer',
                                                             //         color: 'error.main'
                                                             //     }}
@@ -1607,7 +1606,7 @@ const ViewModule = () => {
                                                             null : (
                                                                 <a
                                                                     target="_blank"
-                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?._id}`}
+                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?.ctf}`}
                                                                 >
                                                                     <PlayCircleFilledIcon
                                                                         sx={{
