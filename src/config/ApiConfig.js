@@ -158,7 +158,8 @@ const Apiconfig = {
         getAllFlavours: `${OpenStackUrl}/api/listflavors/`,
         createInstance: `${OpenStackUrl}/api/create_instance/`,
         getConsoleUrl: `${OpenStackUrl}/api/console_url/`,
-        deleteInstance: `${OpenStackUrl}/api/deleteinstance/`
+        deleteInstance: `${OpenStackUrl}/api/deleteinstance/`,
+        getAllGameList: `https://rangestormbackend.bhumiitech.com/api/ctf/game/ctf_list/`
     },
     learningPath: {
         createLearningPath: `${url}/learningpath/create`,

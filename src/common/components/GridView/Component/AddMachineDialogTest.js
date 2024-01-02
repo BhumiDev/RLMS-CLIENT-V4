@@ -21,6 +21,7 @@ import { useEffect } from 'react';
 import { createMachine } from '../../../../API/Machine';
 import {
     getAllFlavours,
+    getAllGameList,
     getAllImages,
     getAllNetworks
 } from '../../../../API/OpenStack';
@@ -34,45 +35,73 @@ const AddMachineDialogTest = ({
     sections
 }) => {
     console.log('section', sections);
-    const [allNetworks, setAllNetworks] = useState([]);
-    const [allImages, setAllImages] = useState([]);
-    const [allFlavours, setAllFlavours] = useState([]);
-    const [allLectures, setAllLectures] = useState([]);
+    // const [allNetworks, setAllNetworks] = useState([]);
+    // const [allImages, setAllImages] = useState([]);
+    // const [allFlavours, setAllFlavours] = useState([]);
+    // const [allLectures, setAllLectures] = useState([]);
+    const [allGameList, setAllGameList] = useState([]);
     const [formData, setData] = useState({
-        networkId: '',
-        imageId: '',
+        // networkId: '',
+        // imageId: '',
         name: '',
-        flavourId: '',
-        // numberOfMachines: "",
-        // password: "",
-        sectionId: '',
-        lectureId: '',
-        time: ''
+        // flavourId: '',
+        // // numberOfMachines: "",
+        // // password: "",
+        // sectionId: '',
+        // lectureId: '',
+        ctfId: ''
+        // time: ''
     });
 
+    // const handleSubmit = () => {
+    //     const data = {
+    //         // networkId: formData?.networkId,
+    //         // imageId: formData?.imageId,
+    //         name: formData?.name,
+    //         ctf: formData?.ctfId,
+    //         // flavourId: formData?.flavourId,
+    //         // lectureId: formData?.lectureId,
+    //         // time: formData?.time
+    //     };
+
+    //     console.log("data", data)
+    //     // createMachine(courseId, data).then((response) =>
+    //     //     console.log('Machine created with response of', response)
+    //     // );
+    //     handleClose();
+    //     setData({
+    //         // networkId: '',
+    //         // imageId: '',
+    //         name: '',
+    //         // flavourId: '',
+    //         ctfId:'',
+    //         // numberOfMachines: "",
+    //         // password: "",
+    //         // sectionId: '',
+    //         // lectureId: '',
+    //         // time: ''
+    //     });
+    // };
     const handleSubmit = () => {
+        const selectedCtfId = formData.ctfId;
+        const selectedCtf = allGameList.find(
+            (ctf) => ctf.ctf_id === selectedCtfId
+        );
+
         const data = {
-            networkId: formData?.networkId,
-            imageId: formData?.imageId,
-            name: formData?.name,
-            flavourId: formData?.flavourId,
-            lectureId: formData?.lectureId,
-            time: formData?.time
+            name: selectedCtf ? selectedCtf.ctf_name : '', // Set the name to ctf_name if found, otherwise empty string
+            ctf: selectedCtfId
         };
+
+        console.log('data', data);
+        // create machine api
         createMachine(courseId, data).then((response) =>
             console.log('Machine created with response of', response)
         );
         handleClose();
         setData({
-            networkId: '',
-            imageId: '',
             name: '',
-            flavourId: '',
-            // numberOfMachines: "",
-            // password: "",
-            sectionId: '',
-            lectureId: '',
-            time: ''
+            ctfId: ''
         });
     };
 
@@ -83,25 +112,27 @@ const AddMachineDialogTest = ({
         });
     };
 
-    const getLectures = async () => {
-        console.log('sectionid', formData.sectionId);
-        if (formData?.sectionId) {
-            const res = await getLecturesBySection(formData?.sectionId);
-            console.log('response of get lecture', res);
-            setAllLectures(res);
-        }
-    };
+    // const getLectures = async () => {
+    //     console.log('sectionid', formData.sectionId);
+    //     if (formData?.sectionId) {
+    //         const res = await getLecturesBySection(formData?.sectionId);
+    //         console.log('response of get lecture', res);
+    //         setAllLectures(res);
+    //     }
+    // };
 
     console.log('formDta', formData);
     console.log('Course id in dialog', courseId);
     const setUpInitialValues = () => {
-        getAllNetworks().then((response) => setAllNetworks(response.data));
-        getAllImages().then((response) => setAllImages(response.data));
-        getAllFlavours().then((response) => setAllFlavours(response?.data));
+        // getAllNetworks().then((response) => setAllNetworks(response.data));
+        // getAllImages().then((response) => setAllImages(response.data));
+        // getAllFlavours().then((response) => setAllFlavours(response?.data));
+        getAllGameList().then((response) => setAllGameList(response.data));
     };
     useEffect(() => setUpInitialValues(), []);
+    console.log('allGameList', allGameList);
 
-    useEffect(() => getLectures(), [formData?.sectionId]);
+    // useEffect(() => getLectures(), [formData?.sectionId]);
 
     return (
         <Dialog
@@ -118,7 +149,7 @@ const AddMachineDialogTest = ({
                 Add Machine
             </DialogTitle>
             <DialogContent dividers>
-                <Stack my={2}>
+                {/* <Stack my={2}>
                     <TextField
                         fullWidth
                         label="Machine Name"
@@ -128,8 +159,9 @@ const AddMachineDialogTest = ({
                         // style={{ minWidth: '500px' }}
                         onChange={handleChange}
                     />
-                </Stack>
-                <Stack my={2}>
+                </Stack> */}
+
+                {/* <Stack my={2}>
                     <FormControl>
                         <InputLabel id="sectionId-label">Modules</InputLabel>
                         <Select
@@ -170,27 +202,27 @@ const AddMachineDialogTest = ({
                             </Select>
                         </FormControl>
                     </Stack>
-                )}
+                )} */}
                 <Stack my={2}>
                     <FormControl>
-                        <InputLabel id="network-label">Network</InputLabel>
+                        <InputLabel id="ctf-label">Labs</InputLabel>
                         <Select
-                            labelId="network-label"
-                            id="network"
-                            name="networkId"
-                            value={formData.networkId}
-                            label="Network"
+                            labelId="ctf-label"
+                            id="ctf"
+                            name="ctfId"
+                            value={formData.ctfId}
+                            label="Labs"
                             onChange={handleChange}
                         >
-                            {allNetworks.map((network) => (
-                                <MenuItem value={network.network_id}>
-                                    {network.network_name}
+                            {allGameList.map((ctf) => (
+                                <MenuItem value={ctf.ctf_id}>
+                                    {ctf.ctf_name}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
                 </Stack>
-                <Stack my={2}>
+                {/* <Stack my={2}>
                     <FormControl>
                         <InputLabel id="image-label">Image</InputLabel>
                         <Select
@@ -227,7 +259,8 @@ const AddMachineDialogTest = ({
                             ))}
                         </Select>
                     </FormControl>
-                </Stack>
+                </Stack> */}
+
                 {/* <Stack my={2}>
                   <TextField
                       fullWidth
@@ -253,7 +286,7 @@ const AddMachineDialogTest = ({
             onChange={handleChange}
           />
         </Stack> */}
-                <Stack direction="row" alignItems="center" my={2} gap={2}>
+                {/* <Stack direction="row" alignItems="center" my={2} gap={2}>
                     <TextField
                         fullWidth
                         id="outlined-basic"
@@ -264,7 +297,7 @@ const AddMachineDialogTest = ({
                         defaultValue="Enter the time duration"
                         onChange={handleChange}
                     />
-                </Stack>
+                </Stack> */}
                 {/* <TextField
           fullWidth
           label="Password"
