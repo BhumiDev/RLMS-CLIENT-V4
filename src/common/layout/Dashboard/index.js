@@ -17,7 +17,8 @@ import {
     Grid,
     DialogTitle,
     DialogContent,
-    Badge
+    Badge,
+    Stack
     // Container
 } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
@@ -214,8 +215,10 @@ const DashboardLayout = (props) => {
 
     const handleClose1 = () => {
         setShow(false);
-        store.dispatch(settoggleTheme(prevThemes));
-        store.dispatch(storePrevThemes(null));
+        handleTheme('light');
+        setTheme;
+        // store.dispatch(settoggleTheme(prevThemes));
+        // store.dispatch(storePrevThemes(null));
     };
 
     const setTheme = () => {
@@ -475,68 +478,86 @@ const DashboardLayout = (props) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-slide-title">
-                    select your preferred theme
-                </DialogTitle>
-                <DialogContent>
-                    <Button
-                        onClick={() => handleTheme('light')}
-                        variant="text"
-                        sx={{ color: '#3498db' }}
+                <Stack sx={{ p: 1 }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            justifyContent: 'flex-end',
+                            width: '100%'
+                        }}
                     >
-                        Default
-                    </Button>
-                    <Button
-                        onClick={() => handleTheme('dark')}
-                        variant="text"
-                        sx={{ color: '#bb86fc' }}
-                    >
-                        Dark
-                    </Button>
-                    <Button
-                        onClick={() => handleTheme('pink')}
-                        variant="text"
-                        sx={{ color: '#FF74B1' }}
-                    >
-                        Roseate
-                    </Button>
-                    <Button
-                        onClick={() => handleTheme('humid')}
-                        variant="text"
-                        sx={{ color: '#F7D060' }}
-                    >
-                        Amber
-                    </Button>
-                    <Button
-                        onClick={() => handleTheme('saffron')}
-                        variant="text"
-                        sx={{ color: '#F46C1F' }}
-                    >
-                        Autumn
-                    </Button>
-                    <Button
-                        onClick={() => handleTheme('gradient')}
-                        // variant="filled"
-                        // sx={{background:"linear-gradient(86.52deg, #493071 32.24%, #54C1BA 135.46%)"}}
-                        variant="text"
-                        sx={{ color: '#0250AB' }}
-                    >
-                        Ramp
-                        {/* <Typography sx={{color: "#ffffff"}}> </Typography> */}
-                    </Button>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose1} sx={{ color: 'error.main' }}>
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={setTheme}
-                        variant="outlined"
-                        color="secondary"
-                    >
-                        Set Theme
-                    </Button>
-                </DialogActions>
+                        <CloseIcon
+                            onClick={() => setShow(false)}
+                            sx={{ cursor: 'pointer', color: '#404252' }}
+                        />
+                    </Box>
+                    <DialogTitle id="alert-dialog-slide-title">
+                        select your preferred theme
+                    </DialogTitle>
+                    <DialogContent>
+                        <Button
+                            onClick={() => handleTheme('light')}
+                            variant="text"
+                            sx={{ color: '#3498db' }}
+                        >
+                            Default
+                        </Button>
+                        <Button
+                            onClick={() => handleTheme('dark')}
+                            variant="text"
+                            sx={{ color: '#bb86fc' }}
+                        >
+                            Dark
+                        </Button>
+                        <Button
+                            onClick={() => handleTheme('pink')}
+                            variant="text"
+                            sx={{ color: '#FF74B1' }}
+                        >
+                            Roseate
+                        </Button>
+                        <Button
+                            onClick={() => handleTheme('humid')}
+                            variant="text"
+                            sx={{ color: '#F7D060' }}
+                        >
+                            Amber
+                        </Button>
+                        <Button
+                            onClick={() => handleTheme('saffron')}
+                            variant="text"
+                            sx={{ color: '#F46C1F' }}
+                        >
+                            Autumn
+                        </Button>
+                        <Button
+                            onClick={() => handleTheme('gradient')}
+                            // variant="filled"
+                            // sx={{background:"linear-gradient(86.52deg, #493071 32.24%, #54C1BA 135.46%)"}}
+                            variant="text"
+                            sx={{ color: '#0250AB' }}
+                        >
+                            Ramp
+                            {/* <Typography sx={{color: "#ffffff"}}> </Typography> */}
+                        </Button>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={handleClose1}
+                            sx={{ color: 'error.main' }}
+                        >
+                            Set Default Theme
+                        </Button>
+                        <Button
+                            onClick={setTheme}
+                            variant="outlined"
+                            color="secondary"
+                        >
+                            Set Theme
+                        </Button>
+                    </DialogActions>
+                </Stack>
             </Dialog>
             <AppBar
                 position="static"

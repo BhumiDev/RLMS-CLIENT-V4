@@ -57,11 +57,18 @@ export const ViewProfile = () => {
                         'image/png')
             )
         ) {
+            setImage('')
             // Show error toast
             toast.error(
                 'Please! upload images only.'
             );
-        } else {
+        } else if ( e.target.files[0] &&
+            (e.target.files[0].type ===
+                'image/jpeg' ||
+                e.target.files[0].type ===
+                    'image/jpg' ||
+                e.target.files[0].type ===
+                    'image/png')) {
             // Set media if the condition is satisfied
             console.log("name", e.target.files[0])
             setImage(e.target.files[0])
@@ -83,13 +90,15 @@ export const ViewProfile = () => {
     formData.append("userName", userName);
 
     const editPhoto = async (e) => {
-        e.preventDefault();
-        const res = await editProfilephoto(image, userName);
-        console.log("res", res)
-        setImage('');
-        setUserName('');
-        setFake(!fake);
-        setOpen(false)
+        if (image !== '' || userName !=='') {
+            e.preventDefault();
+            const res = await editProfilephoto(image, userName);
+            console.log("res", res)
+            setImage('');
+            setUserName('');
+            setFake(!fake);
+            setOpen(false)
+        }
     }
 
     useEffect(() => {
