@@ -1606,20 +1606,24 @@ const ViewModule = () => {
                                                                     }
                                                                 />
                                                             ) : (
-                                                                <PlayCircleFilledIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'secondary.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        createLab(
-                                                                            machine
-                                                                        )
-                                                                    }
-                                                                />
+                                                                <a
+                                                                    target="_blank"
+                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?._id}`}
+                                                                >
+                                                                    <PlayCircleFilledIcon
+                                                                        sx={{
+                                                                            cursor: 'pointer',
+                                                                            color: 'secondary.main'
+                                                                        }}
+                                                                        //    onClick={() => {
+                                                                        // Your onClick logic here if needed
+                                                                        // createLab(machine);
+                                                                        //    }}
+                                                                    />
+                                                                </a>
                                                             )}
                                                             <div>
-                                                                {user?.role ===
+                                                                {/* {user?.role ===
                                                                     'instructor' && (
                                                                     <DeleteIcon
                                                                         sx={{
@@ -1630,7 +1634,7 @@ const ViewModule = () => {
                                                                             handleClickOpenDelete
                                                                         }
                                                                     />
-                                                                )}
+                                                                )} */}
                                                                 <Dialog
                                                                     open={
                                                                         openDelete
