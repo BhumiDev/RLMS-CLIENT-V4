@@ -38,7 +38,7 @@ const AddMachineDialogTest = ({
     // const [allNetworks, setAllNetworks] = useState([]);
     // const [allImages, setAllImages] = useState([]);
     // const [allFlavours, setAllFlavours] = useState([]);
-    // const [allLectures, setAllLectures] = useState([]);
+    const [allLectures, setAllLectures] = useState([]);
     const [allGameList, setAllGameList] = useState([]);
     const [formData, setData] = useState({
         // networkId: '',
@@ -47,8 +47,8 @@ const AddMachineDialogTest = ({
         // flavourId: '',
         // // numberOfMachines: "",
         // // password: "",
-        // sectionId: '',
-        // lectureId: '',
+        sectionId: '',
+        lectureId: '',
         ctfId: ''
         // time: ''
     });
@@ -90,7 +90,8 @@ const AddMachineDialogTest = ({
 
         const data = {
             name: selectedCtf ? selectedCtf.ctf_name : '', // Set the name to ctf_name if found, otherwise empty string
-            ctf: selectedCtfId
+            ctf: selectedCtfId,
+            lectureId: formData?.lectureId
         };
 
         console.log('data', data);
@@ -101,7 +102,9 @@ const AddMachineDialogTest = ({
         handleClose();
         setData({
             name: '',
-            ctfId: ''
+            ctfId: '',
+            sectionId: '',
+            lectureId: ''
         });
     };
 
@@ -112,14 +115,14 @@ const AddMachineDialogTest = ({
         });
     };
 
-    // const getLectures = async () => {
-    //     console.log('sectionid', formData.sectionId);
-    //     if (formData?.sectionId) {
-    //         const res = await getLecturesBySection(formData?.sectionId);
-    //         console.log('response of get lecture', res);
-    //         setAllLectures(res);
-    //     }
-    // };
+    const getLectures = async () => {
+        console.log('sectionid', formData.sectionId);
+        if (formData?.sectionId) {
+            const res = await getLecturesBySection(formData?.sectionId);
+            console.log('response of get lecture', res);
+            setAllLectures(res);
+        }
+    };
 
     console.log('formDta', formData);
     console.log('Course id in dialog', courseId);
@@ -132,7 +135,7 @@ const AddMachineDialogTest = ({
     useEffect(() => setUpInitialValues(), []);
     console.log('allGameList', allGameList);
 
-    // useEffect(() => getLectures(), [formData?.sectionId]);
+    useEffect(() => getLectures(), [formData?.sectionId]);
 
     return (
         <Dialog
@@ -161,7 +164,7 @@ const AddMachineDialogTest = ({
                     />
                 </Stack> */}
 
-                {/* <Stack my={2}>
+                <Stack my={2}>
                     <FormControl>
                         <InputLabel id="sectionId-label">Modules</InputLabel>
                         <Select
@@ -202,7 +205,7 @@ const AddMachineDialogTest = ({
                             </Select>
                         </FormControl>
                     </Stack>
-                )} */}
+                )}
                 <Stack my={2}>
                     <FormControl>
                         <InputLabel id="ctf-label">Labs</InputLabel>
@@ -320,7 +323,15 @@ const AddMachineDialogTest = ({
                 </Button>
                 <Button
                     autoFocus
-                    onClick={handleClose}
+                    onClick={() => {
+                        handleClose();
+                        setData({
+                            name: '',
+                            ctfId: '',
+                            sectionId: '',
+                            lectureId: ''
+                        });
+                    }}
                     variant="outlined"
                     color="error"
                     size="small"
