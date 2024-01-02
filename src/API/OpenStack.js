@@ -7,6 +7,11 @@ export const getAllNetworks = async () => {
     const response = await Axios.get(ApiConfig.openStack.getAllNetworks);
     return response;
 };
+export const getAllGameList = async () => {
+    console.log('Get all getAllGameList called');
+    const response = await Axios.get(ApiConfig.openStack.getAllGameList);
+    return response;
+};
 export const getAllImages = async () => {
     console.log('Get all images called');
     const response = await Axios.get(ApiConfig.openStack.getAllImages);
