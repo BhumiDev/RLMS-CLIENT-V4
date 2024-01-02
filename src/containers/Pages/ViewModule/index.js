@@ -1593,19 +1593,18 @@ const ViewModule = () => {
                                                                 (item) =>
                                                                     item?.name ===
                                                                     machine?.name
-                                                            ) ? (
-                                                                <ClearIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'error.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        deleteActiveMachine(
-                                                                            machine?._id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            ) : (
+                                                            ) ? // <ClearIcon
+                                                            //     sx={{
+                                                            //         cursor: 'pointer',
+                                                            //         color: 'error.main'
+                                                            //     }}
+                                                            //     onClick={() =>
+                                                            //         deleteActiveMachine(
+                                                            //             machine?._id
+                                                            //         )
+                                                            //     }
+                                                            // />
+                                                            null : (
                                                                 <a
                                                                     target="_blank"
                                                                     href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?._id}`}
