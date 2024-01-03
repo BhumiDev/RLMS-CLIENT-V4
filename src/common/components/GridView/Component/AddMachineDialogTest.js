@@ -89,12 +89,12 @@ const AddMachineDialogTest = ({
         );
 
         const data = {
-            name: selectedCtf ? selectedCtf.ctf_name : '', // Set the name to ctf_name if found, otherwise empty string
-            ctf: selectedCtfId,
+            ctf_name: selectedCtf ? selectedCtf.ctf_name : '', // Set the name to ctf_name if found, otherwise empty string
+            ctf_id: selectedCtfId,
             lectureId: formData?.lectureId
         };
 
-        console.log('data', data);
+        console.log('data', data, courseId);
         // create machine api
         createMachine(courseId, data).then((response) =>
             console.log('Machine created with response of', response)

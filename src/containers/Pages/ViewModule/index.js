@@ -1582,7 +1582,7 @@ const ViewModule = () => {
                                                         px={2}
                                                     >
                                                         <Typography>
-                                                            {machine?.name}
+                                                            {machine?.ctf_name}
                                                         </Typography>
                                                         <Box
                                                             display="flex"
@@ -1592,34 +1592,35 @@ const ViewModule = () => {
                                                             time?.find(
                                                                 (item) =>
                                                                     item?.name ===
-                                                                    machine?.name
-                                                            ) ? (
-                                                                <ClearIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'error.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        deleteActiveMachine(
-                                                                            machine?._id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            ) : (
-                                                                <PlayCircleFilledIcon
-                                                                    sx={{
-                                                                        cursor: 'pointer',
-                                                                        color: 'secondary.main'
-                                                                    }}
-                                                                    onClick={() =>
-                                                                        createLab(
-                                                                            machine
-                                                                        )
-                                                                    }
-                                                                />
+                                                                    machine?.ctf_name
+                                                            ) ? //         cursor: 'pointer', //     sx={{ // <ClearIcon
+                                                            //         color: 'error.main'
+                                                            //     }}
+                                                            //     onClick={() =>
+                                                            //         deleteActiveMachine(
+                                                            //             machine?._id
+                                                            //         )
+                                                            //     }
+                                                            // />
+                                                            null : (
+                                                                <a
+                                                                    target="_blank"
+                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?.ctf_id}`}
+                                                                >
+                                                                    <PlayCircleFilledIcon
+                                                                        sx={{
+                                                                            cursor: 'pointer',
+                                                                            color: 'secondary.main'
+                                                                        }}
+                                                                        //    onClick={() => {
+                                                                        // Your onClick logic here if needed
+                                                                        // createLab(machine);
+                                                                        //    }}
+                                                                    />
+                                                                </a>
                                                             )}
                                                             <div>
-                                                                {user?.role ===
+                                                                {/* {user?.role ===
                                                                     'instructor' && (
                                                                     <DeleteIcon
                                                                         sx={{
@@ -1630,8 +1631,8 @@ const ViewModule = () => {
                                                                             handleClickOpenDelete
                                                                         }
                                                                     />
-                                                                )}
-                                                                <Dialog
+                                                                )} */}
+                                                                {/* <Dialog
                                                                     open={
                                                                         openDelete
                                                                     }
@@ -1675,7 +1676,7 @@ const ViewModule = () => {
                                                                             Delete
                                                                         </Button>
                                                                     </DialogActions>
-                                                                </Dialog>
+                                                                </Dialog> */}
                                                             </div>
                                                         </Box>
                                                     </Box>
