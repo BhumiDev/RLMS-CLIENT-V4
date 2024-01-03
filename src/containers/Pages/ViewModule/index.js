@@ -1582,7 +1582,7 @@ const ViewModule = () => {
                                                         px={2}
                                                     >
                                                         <Typography>
-                                                            {machine?.name}
+                                                            {machine?.ctf_name}
                                                         </Typography>
                                                         <Box
                                                             display="flex"
@@ -1592,9 +1592,8 @@ const ViewModule = () => {
                                                             time?.find(
                                                                 (item) =>
                                                                     item?.name ===
-                                                                    machine?.name
-                                                            ) ? //     sx={{ // <ClearIcon
-                                                            //         cursor: 'pointer',
+                                                                    machine?.ctf_name
+                                                            ) ? //         cursor: 'pointer', //     sx={{ // <ClearIcon
                                                             //         color: 'error.main'
                                                             //     }}
                                                             //     onClick={() =>
@@ -1606,7 +1605,7 @@ const ViewModule = () => {
                                                             null : (
                                                                 <a
                                                                     target="_blank"
-                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?.ctf}`}
+                                                                    href={`https://rangestorm.bhumiitech.com/categories/gamedetails/${machine?.ctf_id}`}
                                                                 >
                                                                     <PlayCircleFilledIcon
                                                                         sx={{
@@ -1633,7 +1632,7 @@ const ViewModule = () => {
                                                                         }
                                                                     />
                                                                 )} */}
-                                                                <Dialog
+                                                                {/* <Dialog
                                                                     open={
                                                                         openDelete
                                                                     }
@@ -1677,7 +1676,7 @@ const ViewModule = () => {
                                                                             Delete
                                                                         </Button>
                                                                     </DialogActions>
-                                                                </Dialog>
+                                                                </Dialog> */}
                                                             </div>
                                                         </Box>
                                                     </Box>
